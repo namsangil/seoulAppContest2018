@@ -1,14 +1,13 @@
 package appcontest.seoulsi_we;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,49 +15,79 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
 
-    private ActionBarDrawerToggle drawerToggle;
+    private ActionBarDrawerToggle drawerToggle;     // 메뉴 버튼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Set a Toolbar to replace the ActionBar.
+        // 액션바 등록
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Find our drawer view
         mDrawer = findViewById(R.id.drawer_layout);
-
         drawerToggle = setupDrawerToggle();
-
-        // Tie DrawerLayout events to the ActionBarToggle
         mDrawer.addDrawerListener(drawerToggle);
+
+        // 슬라이드 뷰 등록
+        nvDrawer = findViewById(R.id.nvView);
+        setupDrawerContent(nvDrawer);
     }
 
-    //region slide menu
+    //region 슬라이드 메뉴 관련 메소드
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
+    }
 
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
+    public void selectDrawerItem(MenuItem menuItem) {
+        // Create a new fragment and specify the fragment to show based on nav item clicked
+//        Fragment fragment = null;
+//        Class fragmentClass;
+
+        // 각 슬라이드 메뉴의 버튼을 클릭하면 이벤트 발생
+        switch (menuItem.getItemId()) {
+            case R.id.about_seoulsiwi:          // 서울시위란? 버튼
+                Toast.makeText(MainActivity.this, getString(R.string.about_seoulsiwi), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.about_demo:               // 집회시위 관련정보 버튼
+                Toast.makeText(MainActivity.this, getString(R.string.about_demo), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.promotion_demo:           // 집회시위 홍보하기 버튼
+                Toast.makeText(MainActivity.this, getString(R.string.promotion_demo), Toast.LENGTH_SHORT).show();
+                break;
         }
 
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+//        try {
+//            fragment = (Fragment) fragmentClass.newInstance();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        // Insert the fragment by replacing any existing fragment
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+//
+//        // Highlight the selected item has been done by NavigationView
+//        menuItem.setChecked(true);
+//        // Set action bar title
+//        setTitle(menuItem.getTitle());
+        // Close the navigation drawer
+        mDrawer.closeDrawers();
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
         // and will not render the hamburger icon without it.
-        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
     @Override
@@ -66,13 +95,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
-        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     //endregion

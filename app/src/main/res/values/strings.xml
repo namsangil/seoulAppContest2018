@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">서울시WE</string>
+    <string name="activity_name">서울시위</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="about_seoulsiwi">서울시위란?</string>
+    <string name="about_demo">집회시위 관련정보</string>
+    <string name="promotion_demo">집회시위 홍보하기</string>
 </resources>
