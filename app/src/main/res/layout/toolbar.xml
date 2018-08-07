@@ -11,8 +11,39 @@
         android:background="@android:color/white"
         android:fitsSystemWindows="true"
         android:minHeight="?attr/actionBarSize"
+        app:contentInsetStartWithNavigation="0dp"
         app:theme="@style/Theme.Design.Light.NoActionBar"
         app:title="@string/activity_name"
-        app:titleTextAppearance="@style/Toolbar.TitleText" />
+        app:titleTextAppearance="@style/Toolbar.TitleText">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_search" />
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_margin="6dp"
+                android:background="@color/slide_menu_bottom_text_color" />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_map" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
 
 </android.support.constraint.ConstraintLayout>
