@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nvView"
+    android:layout_width="200dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@color/default_background">
+
+    <!-- status bar 만큼 뷰 로딩이 되면 paddingTop 처리 된다.
+         여기서는 못생기게 보일 수 있다.-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:src="@mipmap/icon" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/about_seoulsiwi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickSlideMenu"
+                android:padding="10dp"
+                android:text="@string/about_seoulsiwi"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/slide_menu_text_color"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/about_demo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickSlideMenu"
+                android:padding="10dp"
+                android:text="@string/about_demo"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/slide_menu_text_color"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/promotion_demo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickSlideMenu"
+                android:padding="10dp"
+                android:text="@string/promotion_demo"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/slide_menu_text_color"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/borderline"
+                    android:layout_width="25dp"
+                    android:layout_height="2dp"
+                    android:background="@color/slide_menu_bottom_text_color" />
+
+
+                <TextView
+                    android:id="@+id/setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/setting"
+                    android:onClick="onClickSlideMenu"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/slide_menu_bottom_text_color"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="@id/borderline"
+                    app:layout_constraintTop_toBottomOf="@id/borderline" />
+
+            </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.design.widget.NavigationView>
