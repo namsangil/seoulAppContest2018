@@ -121,8 +121,20 @@ class MainActivity : AppCompatActivity() {
             R.id.tv_order_by_comment -> {
                 Toast.makeText(this@MainActivity, "댓글순", Toast.LENGTH_SHORT).show()
             }
-            R.id.iv_collect ->{
+            R.id.iv_collect -> {
                 Toast.makeText(this@MainActivity, "모아보기", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // 액션바 메뉴 버튼 이벤트
+    fun onClickActionBarMenu(v: View) {
+        when (v.id) {
+            R.id.btn_search -> {
+                Toast.makeText(this@MainActivity, "돋보기", Toast.LENGTH_SHORT).show()
+            }
+            R.id.btn_map -> {
+                Toast.makeText(this@MainActivity, "지도", Toast.LENGTH_SHORT).show()
             }
         }
     }

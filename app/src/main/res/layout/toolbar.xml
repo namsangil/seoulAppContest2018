@@ -25,8 +25,10 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/btn_search"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
+                android:onClick="onClickActionBarMenu"
                 android:padding="4dp"
                 android:src="@drawable/ic_search" />
 
@@ -37,8 +39,10 @@
                 android:background="@color/slide_menu_bottom_text_color" />
 
             <ImageView
+                android:id="@+id/btn_map"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
+                android:onClick="onClickActionBarMenu"
                 android:padding="4dp"
                 android:src="@drawable/ic_map" />
 
