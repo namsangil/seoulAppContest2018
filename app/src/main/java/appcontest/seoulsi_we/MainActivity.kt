@@ -10,6 +10,10 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Toast
+import com.daimajia.slider.library.SliderLayout
+import com.daimajia.slider.library.SliderTypes.BaseSliderView
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView
+
 
 /**
  * Created by nam on 2018. 8. 7..
@@ -19,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private var mDrawer: DrawerLayout? = null
     private var toolbar: Toolbar? = null
     private var nvDrawer: NavigationView? = null
+    private var sliderShow: SliderLayout? = null
 
     private var drawerToggle: ActionBarDrawerToggle? = null     // 메뉴 버튼
 
@@ -51,9 +56,29 @@ class MainActivity : AppCompatActivity() {
                 }
         )
 
+        // 메인 슬라이드 뷰
+        sliderShow = findViewById(R.id.slider)
+
+        // 예제 임시 코드
+        addSlideView(sliderShow, "https://search2.kakaocdn.net/argon/0x200_85_hr/ETtjfwGegTb", "강아지1")
+        addSlideView(sliderShow, "https://search2.kakaocdn.net/argon/0x200_85_hr/HJf5a3OiJXf", "강아지2")
+        addSlideView(sliderShow, "https://search4.kakaocdn.net/argon/0x200_85_hr/DCtJ1xT47kH", "강아지3")
+        addSlideView(sliderShow, "https://search1.kakaocdn.net/argon/0x200_85_hr/LfVZqwj6fZI", "강아지4")
+
+        sliderShow?.setCustomIndicator(findViewById(R.id.custom_indicator))
+
     }
 
-//region 슬라이드 메뉴 관련 메소드
+    fun addSlideView(view: SliderLayout?, url: String, name: String) {
+        val slierView = DefaultSliderView(this@MainActivity)
+        slierView.image(url)
+        slierView.scaleType = BaseSliderView.ScaleType.CenterCrop
+        slierView.setOnSliderClickListener({ _ ->
+            Toast.makeText(this@MainActivity, String.format("%s", name), Toast.LENGTH_SHORT).show()
+        })
+        view?.addSlider(slierView)
+
+    }
 
     fun onClickSlideMenu(v: View) {
         when (v.id) {
@@ -65,11 +90,12 @@ class MainActivity : AppCompatActivity() {
             -> Toast.makeText(this@MainActivity, getString(R.string.promotion_demo), Toast.LENGTH_SHORT).show()
             R.id.setting                  // 설정 버튼
             -> Toast.makeText(this@MainActivity, getString(R.string.setting), Toast.LENGTH_SHORT).show()
-
-
         }
         mDrawer!!.closeDrawers()
     }
+
+//region 슬라이드 메뉴 관련 메소드
+
 
     private fun setupDrawerToggle(): ActionBarDrawerToggle {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
@@ -83,4 +109,26 @@ class MainActivity : AppCompatActivity() {
         drawerToggle!!.syncState()
     }
 
+    // 최신순, 참여순, 댓글순 버튼 이벤트
+    fun onClickFeedOrder(v: View) {
+        when (v.id) {
+            R.id.tv_order_by_recent -> {
+                Toast.makeText(this@MainActivity, "최신순", Toast.LENGTH_SHORT).show()
+            }
+            R.id.tv_order_by_join -> {
+                Toast.makeText(this@MainActivity, "참여순", Toast.LENGTH_SHORT).show()
+            }
+            R.id.tv_order_by_comment -> {
+                Toast.makeText(this@MainActivity, "댓글순", Toast.LENGTH_SHORT).show()
+            }
+            R.id.iv_collect ->{
+                Toast.makeText(this@MainActivity, "모아보기", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onStop() {
+        sliderShow?.stopAutoCycle()
+        super.onStop()
+    }
 }
