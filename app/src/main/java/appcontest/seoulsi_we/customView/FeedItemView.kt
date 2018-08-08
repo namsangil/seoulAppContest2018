@@ -60,5 +60,8 @@ class FeedItemView : LinearLayout {
         tvLikeCount?.text = mData?.likeCount.toString()
         // TODO 좋아요 여부도 표시해야 함. mData?.isLike 를 가지고...
         tvCommentCount?.text = mData?.commentCount.toString()
+
+        // TODO height 파라미터를 지정해주면 높이가 변경된다. 정사각형모양으로 맞추도록 수정하자
+        layoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1000)
     }
 }

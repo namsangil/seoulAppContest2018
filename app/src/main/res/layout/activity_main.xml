@@ -116,22 +116,31 @@
 
                 </LinearLayout>
 
-                <ScrollView
+                <!--<ScrollView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1">-->
+
+                    <!--<LinearLayout-->
+                        <!--android:id="@+id/feed_list_container"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="vertical">-->
+
+
+                    <!--</LinearLayout>-->
+
+                <!--</ScrollView>-->
+
+                <GridView
+                    android:id="@+id/feed_list_container"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1">
+                    android:numColumns="2"
+                    android:layout_weight="1"
+                    android:scrollbars="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/feed_list_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-
-                    </LinearLayout>
-
-                </ScrollView>
-
+                </GridView>
 
             </LinearLayout>
         </LinearLayout>
