@@ -1,4 +1,4 @@
-package appcontest.seoulsi_we
+package appcontest.seoulsi_we.activity
 
 import android.graphics.Rect
 import android.os.Bundle
@@ -9,7 +9,11 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.LinearLayout
 import android.widget.Toast
+import appcontest.seoulsi_we.R
+import appcontest.seoulsi_we.customView.FeedItemView
+import appcontest.seoulsi_we.model.FeedData
 import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView
@@ -24,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private var toolbar: Toolbar? = null
     private var nvDrawer: NavigationView? = null
     private var sliderShow: SliderLayout? = null
+    private var feedListContainer : LinearLayout? = null
 
     private var drawerToggle: ActionBarDrawerToggle? = null     // 메뉴 버튼
 
@@ -66,6 +71,31 @@ class MainActivity : AppCompatActivity() {
         addSlideView(sliderShow, "https://search1.kakaocdn.net/argon/0x200_85_hr/LfVZqwj6fZI", "강아지4")
 
         sliderShow?.setCustomIndicator(findViewById(R.id.custom_indicator))
+
+
+        // 피드 컨테이너
+        val param : LinearLayout.LayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1000)
+
+        // 임시 데이터
+        feedListContainer = findViewById(R.id.feed_list_container)
+        feedListContainer?.addView(FeedItemView(this@MainActivity,
+                FeedData(0, "제목입니다.", 1100100, "경기도 광명",
+                        "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
+                        "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
+                        30, true, 11)), param)
+
+        feedListContainer?.addView(FeedItemView(this@MainActivity,
+                FeedData(0, "제목입니다.", 1100100, "경기도 광명",
+                        "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
+                        "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
+                        30, true, 11)), param)
+
+        feedListContainer?.addView(FeedItemView(this@MainActivity,
+                FeedData(0, "제목입니다.", 1100100, "경기도 광명",
+                        "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
+                        "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
+                        30, true, 11)), param)
+
 
     }
 

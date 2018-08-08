@@ -1,9 +1,10 @@
-package appcontest.seoulsi_we
+package appcontest.seoulsi_we.activity
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import appcontest.seoulsi_we.R
 
 class IntroActivity : Activity() {
 

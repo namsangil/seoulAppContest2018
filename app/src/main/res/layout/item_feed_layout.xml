@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/feed_iv_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher_round" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/feed_tv_demo_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="집회 시위 타이틀"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/feed_tv_demo_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일시"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <TextView
+                    android:id="@+id/feed_tv_demo_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="장소"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toRightOf="@id/feed_tv_demo_date" />
+
+            </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/feed_btn_like"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:src="@drawable/ic_heart" />
+
+            <TextView
+                android:id="@+id/feed_tv_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:text="103"
+                app:layout_constraintLeft_toRightOf="@id/feed_btn_like" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/feed_btn_comment"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:src="@drawable/ic_comment" />
+
+            <TextView
+                android:id="@+id/feed_tv_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:text="20"
+                app:layout_constraintLeft_toRightOf="@id/feed_btn_comment" />
+
+        </android.support.constraint.ConstraintLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
