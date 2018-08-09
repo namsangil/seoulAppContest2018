@@ -83,36 +83,40 @@ class MainActivity : AppCompatActivity() {
 
         feedListContainer?.adapter = feedAdapter
 
+        feedListContainer?.setOnItemClickListener({ parent, view, position, id ->
+            Toast.makeText(this@MainActivity, "feed id : " + feedAdapter?.getItem(position)?.feedId, Toast.LENGTH_SHORT).show()
+
+        })
 
         val feedList: ArrayList<FeedData> = ArrayList()
-        feedList.add(FeedData(0, "제목입니다.", 1100100, "경기도 광명",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                30, true, 12))
-        feedList.add(FeedData(0, "제목입니다.", 1100100, "경기도 광명",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                30, true, 11))
-        feedList.add(FeedData(0, "제목입니다.", 1100100, "경기도 광명",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                30, true, 11))
-        feedList.add(FeedData(0, "제목입니다.", 1100100, "경기도 광명",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                30, true, 11))
-        feedList.add(FeedData(0, "제목입니다.", 1100100, "경기도 광명",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                30, true, 11))
-        feedList.add(FeedData(0, "제목입니다.", 1100100, "경기도 광명",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                30, true, 11))
-        feedList.add(FeedData(0, "제목입니다.", 1100100, "경기도 광명",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                "http://img.insight.co.kr/static/2016/11/15/700/9JA5GCKUW90P11T1C689.jpg",
-                30, true, 11))
+        feedList.add(FeedData(1, "제목입니다.", 1100100, "경기도 광명",
+                "https://search3.kakaocdn.net/argon/0x200_85_hr/Fg49rrhUWre",
+                "https://search3.kakaocdn.net/argon/0x200_85_hr/Fg49rrhUWre",
+                22, true, 12))
+        feedList.add(FeedData(2, "제목입니다.", 1100100, "경기도 광명",
+                "https://search4.kakaocdn.net/argon/0x200_85_hr/1EQKLXaMZhj",
+                "https://search4.kakaocdn.net/argon/0x200_85_hr/1EQKLXaMZhj",
+                11, true, 11))
+        feedList.add(FeedData(3, "제목입니다.", 1100100, "경기도 광명",
+                "https://search1.kakaocdn.net/argon/0x200_85_hr/KZvo5lXazFQ",
+                "https://search1.kakaocdn.net/argon/0x200_85_hr/KZvo5lXazFQ",
+                3, true, 20))
+        feedList.add(FeedData(4, "제목입니다.", 1100100, "경기도 광명",
+                "https://search2.kakaocdn.net/argon/0x200_85_hr/7w1pIRNgnED",
+                "https://search2.kakaocdn.net/argon/0x200_85_hr/7w1pIRNgnED",
+                5, true, 1))
+        feedList.add(FeedData(5, "제목입니다.", 1100100, "경기도 광명",
+                "https://search2.kakaocdn.net/argon/0x200_85_hr/4aXYwB5z99N",
+                "https://search2.kakaocdn.net/argon/0x200_85_hr/4aXYwB5z99N",
+                7, true, 0))
+        feedList.add(FeedData(6, "제목입니다.", 1100100, "경기도 광명",
+                "https://search2.kakaocdn.net/argon/0x200_85_hr/2KgqzD4ecQf",
+                "https://search2.kakaocdn.net/argon/0x200_85_hr/2KgqzD4ecQf",
+                2, true, 9))
+        feedList.add(FeedData(7, "제목입니다.", 1100100, "경기도 광명",
+                "https://search3.kakaocdn.net/argon/0x200_85_hr/7BHqWs1H6fW",
+                "https://search3.kakaocdn.net/argon/0x200_85_hr/7BHqWs1H6fW",
+                10, true, 7))
 
         feedAdapter!!.setData(feedList)
         feedAdapter!!.notifyDataSetChanged()
