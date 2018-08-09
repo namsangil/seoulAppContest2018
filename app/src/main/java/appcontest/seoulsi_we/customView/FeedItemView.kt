@@ -1,10 +1,11 @@
 package appcontest.seoulsi_we.customView
 
 import android.content.Context
+import android.support.constraint.ConstraintLayout
+import android.view.Gravity
 import android.view.LayoutInflater
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.ViewTreeObserver
+import android.widget.*
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.model.FeedData
 import com.squareup.picasso.Picasso
@@ -15,7 +16,6 @@ import com.squareup.picasso.Picasso
 class FeedItemView : LinearLayout {
 
     private val TAG = "FeedItemList"
-    private var mData: FeedData? = null
 
     private var mContext: Context? = null
     private var image: ImageView? = null
@@ -28,10 +28,16 @@ class FeedItemView : LinearLayout {
     private var btnComment: ImageView? = null
     private var tvCommentCount: TextView? = null
 
-    constructor(context: Context, data: FeedData) : super(context) {
+    private var feedInfoView: LinearLayout? = null
+    private var feedBottomView: LinearLayout? = null
+
+    constructor(context: Context?) : super(context) {
         mContext = context
-        mData = data
         init()
+    }
+
+    public fun setData(data: FeedData) {
+        applyData(data)
     }
 
     private fun init() {
@@ -48,10 +54,35 @@ class FeedItemView : LinearLayout {
         btnComment = view.findViewById(R.id.feed_btn_comment)
         tvCommentCount = view.findViewById(R.id.feed_tv_comment_count)
 
-        applyData()
+        feedInfoView = view.findViewById(R.id.feed_info_view)
+        feedBottomView = view.findViewById(R.id.feed_bottom_view)
+
+
+        viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                layoutParams = AbsListView.LayoutParams(width, width)
+
+                val bottomSize = (width * 0.15).toInt()
+                val paddingSize = (bottomSize * 0.2).toInt()
+
+                val params = FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+                params.setMargins(paddingSize, paddingSize, paddingSize, paddingSize)
+                params.gravity = Gravity.BOTTOM
+
+                feedInfoView?.layoutParams = params
+                feedBottomView?.layoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, bottomSize)
+                btnLike?.layoutParams = ConstraintLayout.LayoutParams(bottomSize, bottomSize)
+                btnComment?.layoutParams = ConstraintLayout.LayoutParams(bottomSize, bottomSize)
+                btnLike?.setPadding(paddingSize, paddingSize, paddingSize, paddingSize)
+                btnComment?.setPadding(paddingSize, paddingSize, paddingSize, paddingSize)
+
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+
     }
 
-    private fun applyData() {
+    private fun applyData(mData: FeedData?) {
         Picasso.with(mContext).load(mData?.thumbnailImageUrl).into(image)
         tvTitle?.text = mData?.title
         tvDate?.text = mData?.date.toString()       // 변환 해야 한다.
@@ -60,8 +91,5 @@ class FeedItemView : LinearLayout {
         tvLikeCount?.text = mData?.likeCount.toString()
         // TODO 좋아요 여부도 표시해야 함. mData?.isLike 를 가지고...
         tvCommentCount?.text = mData?.commentCount.toString()
-
-        // TODO height 파라미터를 지정해주면 높이가 변경된다. 정사각형모양으로 맞추도록 수정하자
-        layoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1000)
     }
 }

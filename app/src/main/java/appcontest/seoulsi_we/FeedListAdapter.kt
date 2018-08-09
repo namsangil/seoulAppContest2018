@@ -20,7 +20,24 @@ class FeedListAdapter : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
-        return FeedItemView(parent?.context!!, feedList[position])
+        var holder: ViewHolder? = null
+        var retView: View? = null
+
+        if (null == convertView) {
+            retView = FeedItemView(parent?.context)
+            holder = ViewHolder()
+
+            holder.view = retView
+            retView.tag = holder
+
+        } else {
+            holder = convertView.tag as ViewHolder
+            retView = convertView
+        }
+
+        holder.view?.setData(feedList[position])
+
+        return retView
     }
 
     override fun getItem(position: Int): FeedData {
@@ -34,4 +51,10 @@ class FeedListAdapter : BaseAdapter() {
     override fun getCount(): Int {
         return feedList.size
     }
+
+    inner class ViewHolder {
+        var view: FeedItemView? = null
+
+    }
+
 }
