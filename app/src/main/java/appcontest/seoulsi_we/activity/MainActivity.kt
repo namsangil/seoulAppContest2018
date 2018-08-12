@@ -13,10 +13,11 @@ import android.widget.GridView
 import android.widget.Toast
 import appcontest.seoulsi_we.FeedListAdapter
 import appcontest.seoulsi_we.R
+import appcontest.seoulsi_we.customView.CustomSliderView
+import appcontest.seoulsi_we.model.BannerData
 import appcontest.seoulsi_we.model.FeedData
 import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
-import com.daimajia.slider.library.SliderTypes.DefaultSliderView
 
 
 /**
@@ -48,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         mDrawer!!.addDrawerListener(drawerToggle!!)
 
 
-
         // 슬라이드 뷰 등록
         nvDrawer = findViewById(R.id.nvView)
 
@@ -69,11 +69,11 @@ class MainActivity : AppCompatActivity() {
         // 메인 슬라이드 뷰
         sliderShow = findViewById(R.id.slider)
 
-        // 예제 임시 코드
-        addSlideView(sliderShow, "https://search2.kakaocdn.net/argon/0x200_85_hr/ETtjfwGegTb", "강아지1")
-        addSlideView(sliderShow, "https://search2.kakaocdn.net/argon/0x200_85_hr/HJf5a3OiJXf", "강아지2")
-        addSlideView(sliderShow, "https://search4.kakaocdn.net/argon/0x200_85_hr/DCtJ1xT47kH", "강아지3")
-        addSlideView(sliderShow, "https://search1.kakaocdn.net/argon/0x200_85_hr/LfVZqwj6fZI", "강아지4")
+        // 임시데이터) BannerData 클래스를 넘겨서 채운다.
+        addSlideView(sliderShow, BannerData(10, "https://search2.kakaocdn.net/argon/0x200_85_hr/ETtjfwGegTb", 10203, "대규모 집회 리스트"))
+        addSlideView(sliderShow, BannerData(15, "https://search2.kakaocdn.net/argon/0x200_85_hr/HJf5a3OiJXf", 5553, "시위정보"))
+        addSlideView(sliderShow, BannerData(1, "https://search4.kakaocdn.net/argon/0x200_85_hr/DCtJ1xT47kH", 2314, "테스트 데이터"))
+        addSlideView(sliderShow, BannerData(7, "https://search1.kakaocdn.net/argon/0x200_85_hr/LfVZqwj6fZI", 23331, "안녕하세요"))
 
         sliderShow?.setCustomIndicator(findViewById(R.id.custom_indicator))
 
@@ -81,11 +81,8 @@ class MainActivity : AppCompatActivity() {
         // 피드 컨테이너
 
         feedListContainer = findViewById(R.id.feed_list_container)
-
         feedAdapter = FeedListAdapter()
-
         feedListContainer?.adapter = feedAdapter
-
         feedListContainer?.setOnItemClickListener({ parent, view, position, id ->
             Toast.makeText(this@MainActivity, "feed id : " + feedAdapter?.getItem(position)?.feedId, Toast.LENGTH_SHORT).show()
 
@@ -125,14 +122,14 @@ class MainActivity : AppCompatActivity() {
         feedAdapter!!.notifyDataSetChanged()
     }
 
-    fun addSlideView(view: SliderLayout?, url: String, name: String) {
-        val slierView = DefaultSliderView(this@MainActivity)
-        slierView.image(url)
-        slierView.scaleType = BaseSliderView.ScaleType.CenterCrop
-        slierView.setOnSliderClickListener({ _ ->
-            Toast.makeText(this@MainActivity, String.format("%s", name), Toast.LENGTH_SHORT).show()
+    fun addSlideView(view: SliderLayout?, data: BannerData) {
+        val sliderView = CustomSliderView(this@MainActivity, data, object : CustomSliderView.CustomSliderViewListener {
+            override fun onSliderClicked(data: BannerData) {
+                Toast.makeText(this@MainActivity, String.format("banner id : %s", data.bannerId), Toast.LENGTH_SHORT).show()
+            }
         })
-        view?.addSlider(slierView)
+        sliderView.scaleType = BaseSliderView.ScaleType.CenterCrop
+        view?.addSlider(sliderView)
 
     }
 
@@ -199,4 +196,6 @@ class MainActivity : AppCompatActivity() {
         sliderShow?.stopAutoCycle()
         super.onStop()
     }
+
+
 }
