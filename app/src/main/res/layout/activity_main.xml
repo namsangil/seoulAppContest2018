@@ -50,21 +50,22 @@
                         android:layout_gravity="bottom"
                         android:gravity="center"
                         app:selected_drawable="@drawable/selected"
-                        app:selected_width="10dp"
                         app:selected_height="5dp"
-                        app:unselected_height="5dp"
-                        app:unselected_width="5dp"
+                        app:selected_width="10dp"
                         app:shape="oval"
-                        app:unselected_color="@color/white" />
+                        app:unselected_color="@color/white"
+                        app:unselected_height="5dp"
+                        app:unselected_width="5dp" />
 
                 </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
+                    <!-- 하이라이트 색을 변경하고 싶으면 MainActivity 코드로 가자 ! -->
                     <TextView
                         android:id="@+id/tv_order_by_recent"
                         android:layout_width="wrap_content"
@@ -74,13 +75,16 @@
                         android:paddingEnd="10dp"
                         android:paddingStart="10dp"
                         android:text="@string/order_by_recent"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:textStyle="bold"
+                        android:textColor="#85b237"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <View
                         android:layout_width="1dp"
-                        android:layout_height="20dp"
+                        android:layout_height="15dp"
                         android:background="@color/slide_menu_bottom_text_color" />
 
+                    <!-- 하이라이트 색을 변경하고 싶으면 MainActivity 코드로 가자 ! -->
                     <TextView
                         android:id="@+id/tv_order_by_join"
                         android:layout_width="wrap_content"
@@ -89,14 +93,16 @@
                         android:onClick="onClickFeedOrder"
                         android:paddingEnd="10dp"
                         android:paddingStart="10dp"
-                        android:text="@string/order_by_join"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:text="@string/order_by_bit"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 
                     <View
                         android:layout_width="1dp"
-                        android:layout_height="20dp"
+                        android:layout_height="15dp"
                         android:background="@color/slide_menu_bottom_text_color" />
 
+                    <!-- 하이라이트 색을 변경하고 싶으면 MainActivity 코드로 가자 ! -->
                     <TextView
                         android:id="@+id/tv_order_by_comment"
                         android:layout_width="wrap_content"
@@ -106,7 +112,7 @@
                         android:paddingEnd="10dp"
                         android:paddingStart="10dp"
                         android:text="@string/order_by_comment"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <View
                         android:layout_width="0dp"

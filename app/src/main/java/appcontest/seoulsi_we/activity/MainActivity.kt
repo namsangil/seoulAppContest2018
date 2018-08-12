@@ -1,6 +1,8 @@
 package appcontest.seoulsi_we.activity
 
+import android.graphics.Color
 import android.graphics.Rect
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.GridView
+import android.widget.TextView
 import android.widget.Toast
 import appcontest.seoulsi_we.FeedListAdapter
 import appcontest.seoulsi_we.R
@@ -35,6 +38,8 @@ class MainActivity : AppCompatActivity() {
 
     private var drawerToggle: ActionBarDrawerToggle? = null     // 메뉴 버튼
 
+    private var toggleFeedOrderTextViews: Array<TextView>? = null   // 최신순, 인기순, 댓글순 ui변경을 위함
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -47,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         mDrawer = findViewById(R.id.drawer_layout)
         drawerToggle = setupDrawerToggle()
         mDrawer!!.addDrawerListener(drawerToggle!!)
-
 
         // 슬라이드 뷰 등록
         nvDrawer = findViewById(R.id.nvView)
@@ -69,6 +73,9 @@ class MainActivity : AppCompatActivity() {
         // 메인 슬라이드 뷰
         sliderShow = findViewById(R.id.slider)
 
+        // 최신순, 인기순, 댓글순 버튼
+        toggleFeedOrderTextViews = arrayOf(findViewById(R.id.tv_order_by_recent), findViewById(R.id.tv_order_by_join), findViewById(R.id.tv_order_by_comment))
+
         // 임시데이터) BannerData 클래스를 넘겨서 채운다.
         addSlideView(sliderShow, BannerData(10, "https://search2.kakaocdn.net/argon/0x200_85_hr/ETtjfwGegTb", 10203, "대규모 집회 리스트"))
         addSlideView(sliderShow, BannerData(15, "https://search2.kakaocdn.net/argon/0x200_85_hr/HJf5a3OiJXf", 5553, "시위정보"))
@@ -79,7 +86,6 @@ class MainActivity : AppCompatActivity() {
 
 
         // 피드 컨테이너
-
         feedListContainer = findViewById(R.id.feed_list_container)
         feedAdapter = FeedListAdapter()
         feedListContainer?.adapter = feedAdapter
@@ -176,6 +182,21 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.iv_collect -> {
                 Toast.makeText(this@MainActivity, "모아보기", Toast.LENGTH_SHORT).show()
+            }
+        }
+        updateFeedOrderButtonUI(toggleFeedOrderTextViews!!, v.id)
+    }
+
+    fun updateFeedOrderButtonUI(textButtons: Array<TextView>, selectedTextViewId: Int) {
+        for (textButton in textButtons) {
+            if (textButton.id == selectedTextViewId) {
+                // 눌린 텍스트 버튼이면, 색을 #85b237, 스타일을 bold로 변경
+                textButton.setTextColor(Color.parseColor("#85b237"))
+                textButton.setTypeface(textButton.typeface, Typeface.BOLD)
+            }
+            else{
+                textButton.setTextColor(resources.getColor(android.R.color.tab_indicator_text))
+                textButton.setTypeface(textButton.typeface, Typeface.NORMAL)
             }
         }
     }

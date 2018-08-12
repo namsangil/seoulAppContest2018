@@ -8,7 +8,7 @@
     <string name="promotion_demo">집회시위 홍보하기</string>
     <string name="setting">설정</string>
     <string name="order_by_recent">최신순</string>
-    <string name="order_by_join">참여순</string>
+    <string name="order_by_bit">인기순</string>
     <string name="order_by_comment">댓글순</string>
     <string name="line_two">2018.7.20\n오후 7시</string>
 </resources>
