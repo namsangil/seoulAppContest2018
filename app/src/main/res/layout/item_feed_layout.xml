@@ -21,6 +21,11 @@
             android:background="@drawable/feed_item_round_rectangle_image"
             />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#55000000"/>
+
         <LinearLayout
             android:id="@+id/feed_info_view"
             android:layout_width="match_parent"
