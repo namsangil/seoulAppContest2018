@@ -1,14 +1,18 @@
 package appcontest.seoulsi_we.customView
 
 import android.content.Context
+import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.support.constraint.ConstraintLayout
-import android.view.Gravity
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewTreeObserver
 import android.widget.*
 import appcontest.seoulsi_we.R
+import appcontest.seoulsi_we.Utils
 import appcontest.seoulsi_we.model.FeedData
 import com.squareup.picasso.Picasso
+
 
 /**
  * Created by nam on 2018. 8. 8..
@@ -18,14 +22,20 @@ class FeedItemView : LinearLayout {
     private val TAG = "FeedItemList"
 
     private var mContext: Context? = null
+
+    // 이미지 부분
+    private var imageContainer: FrameLayout? = null
     private var image: ImageView? = null
     private var tvTitle: TextView? = null
-    private var tvDate: TextView? = null
     private var tvAddress: TextView? = null
 
-    private var btnLike: ImageView? = null
+
+    // 바텀 뷰
+    private var ivTimer: ImageView? = null
+    private var tvTime: TextView? = null
+    private var btnLike: LinearLayout? = null
     private var tvLikeCount: TextView? = null
-    private var btnComment: ImageView? = null
+    private var btnComment: LinearLayout? = null
     private var tvCommentCount: TextView? = null
 
     private var feedInfoView: LinearLayout? = null
@@ -44,10 +54,13 @@ class FeedItemView : LinearLayout {
         // 레이아웃 불러와서
         val view = LayoutInflater.from(mContext).inflate(R.layout.item_feed_layout, this@FeedItemView, true)
 
+        imageContainer = view.findViewById(R.id.feed_image_container)
         image = view.findViewById(R.id.feed_iv_image)
         tvTitle = view.findViewById(R.id.feed_tv_demo_title)
-        tvDate = view.findViewById(R.id.feed_tv_demo_date)
         tvAddress = view.findViewById(R.id.feed_tv_demo_address)
+
+        ivTimer = view.findViewById(R.id.feed_item_timer)
+        tvTime = view.findViewById(R.id.feed_start_demo_time)
 
         btnLike = view.findViewById(R.id.feed_btn_like)
         tvLikeCount = view.findViewById(R.id.feed_tv_like_count)
@@ -57,24 +70,41 @@ class FeedItemView : LinearLayout {
         feedInfoView = view.findViewById(R.id.feed_info_view)
         feedBottomView = view.findViewById(R.id.feed_bottom_view)
 
+        if (Build.VERSION_CODES.LOLLIPOP <= Build.VERSION.SDK_INT) {
+            val drawable = resources.getDrawable(R.drawable.feed_item_round_rectangle_image) as GradientDrawable
+            image?.background = drawable
+            image?.clipToOutline = true
+        }
 
         viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                layoutParams = AbsListView.LayoutParams(width, width)
 
+
+                // 기기별 해상도가 달라서 wrap_content로 크기를 지정하면, 화면이 작은 기기에서는 뷰를 벗어나는 경우가 발생한다.
+                // 픽셀로 계산하여 직접 크기들을 지정한다.
+
+                layoutParams = AbsListView.LayoutParams(width, LayoutParams.WRAP_CONTENT)
+                imageContainer?.layoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, width)
+
+                // bottom 뷰 사이즈를 0.15배로 설정하고
                 val bottomSize = (width * 0.15).toInt()
-                val paddingSize = (bottomSize * 0.2).toInt()
+                val bottomLayoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, bottomSize)
 
-                val params = FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-                params.setMargins(paddingSize, paddingSize, paddingSize, paddingSize)
-                params.gravity = Gravity.BOTTOM
+                // bottom 뷰의 top margin을 bottom Size의 0.3배로 설정
+                bottomLayoutParams.topMargin = (bottomSize * 0.3).toInt()
+                feedBottomView?.layoutParams = bottomLayoutParams
 
-                feedInfoView?.layoutParams = params
-                feedBottomView?.layoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, bottomSize)
-                btnLike?.layoutParams = ConstraintLayout.LayoutParams(bottomSize, bottomSize)
-                btnComment?.layoutParams = ConstraintLayout.LayoutParams(bottomSize, bottomSize)
-                btnLike?.setPadding(paddingSize, paddingSize, paddingSize, paddingSize)
-                btnComment?.setPadding(paddingSize, paddingSize, paddingSize, paddingSize)
+                // 나머지 텍스트 뷰들의 텍스트 크기를 지정
+                ivTimer?.layoutParams = ConstraintLayout.LayoutParams(bottomSize, bottomSize)
+                val textDp = Utils.convertPixelsToDp((bottomSize * 0.4).toFloat(), mContext)
+                tvTime?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
+                tvLikeCount?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
+                tvCommentCount?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
+
+
+                val tvCommentLayoutParams = tvCommentCount?.layoutParams as LinearLayout.LayoutParams
+                tvCommentLayoutParams.leftMargin = (bottomSize * 0.1).toInt()
+
 
                 viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
@@ -85,7 +115,6 @@ class FeedItemView : LinearLayout {
     private fun applyData(mData: FeedData?) {
         Picasso.with(mContext).load(mData?.thumbnailImageUrl).into(image)
         tvTitle?.text = mData?.title
-        tvDate?.text = mData?.date.toString()       // 변환 해야 한다.
         tvAddress?.text = mData?.address
 
         tvLikeCount?.text = mData?.likeCount.toString()

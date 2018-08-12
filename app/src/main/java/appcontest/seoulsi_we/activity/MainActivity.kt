@@ -89,11 +89,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         val feedList: ArrayList<FeedData> = ArrayList()
-        feedList.add(FeedData(1, "제목입니다.", 1100100, "경기도 광명",
+        feedList.add(FeedData(1, "아시아나 항공\n4차 집회.", 1100100, "경기도 광명",
                 "https://search3.kakaocdn.net/argon/0x200_85_hr/Fg49rrhUWre",
                 "https://search3.kakaocdn.net/argon/0x200_85_hr/Fg49rrhUWre",
                 22, true, 12))
-        feedList.add(FeedData(2, "제목입니다.", 1100100, "경기도 광명",
+        feedList.add(FeedData(2, "아시아나 항공\n4차 집회.", 1100100, "경기도 광명",
                 "https://search4.kakaocdn.net/argon/0x200_85_hr/1EQKLXaMZhj",
                 "https://search4.kakaocdn.net/argon/0x200_85_hr/1EQKLXaMZhj",
                 11, true, 11))
