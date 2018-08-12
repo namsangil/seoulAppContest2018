@@ -48,7 +48,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:gravity="center" />
+                        android:gravity="center"
+                        app:selected_drawable="@drawable/selected"
+                        app:selected_width="10dp"
+                        app:selected_height="5dp"
+                        app:unselected_height="5dp"
+                        app:unselected_width="5dp"
+                        app:shape="oval"
+                        app:unselected_color="@color/white" />
 
                 </FrameLayout>
 
@@ -117,18 +124,18 @@
                 </LinearLayout>
 
                 <!--<ScrollView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1">-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1">-->
 
-                    <!--<LinearLayout-->
-                        <!--android:id="@+id/feed_list_container"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="vertical">-->
+                <!--<LinearLayout-->
+                <!--android:id="@+id/feed_list_container"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical">-->
 
 
-                    <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
 
                 <!--</ScrollView>-->
 
@@ -136,8 +143,8 @@
                     android:id="@+id/feed_list_container"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:numColumns="2"
                     android:layout_weight="1"
+                    android:numColumns="2"
                     android:scrollbars="vertical">
 
                 </GridView>
