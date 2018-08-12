@@ -14,8 +14,4 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TransparentStatusBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
 </resources>

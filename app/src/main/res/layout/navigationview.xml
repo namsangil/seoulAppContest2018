@@ -2,104 +2,168 @@
 <android.support.design.widget.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nvView"
-    android:layout_width="200dp"
+    android:layout_width="300dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:background="@color/default_background">
 
-    <!-- status bar 만큼 뷰 로딩이 되면 paddingTop 처리 된다.
-         여기서는 못생기게 보일 수 있다.-->
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:src="@mipmap/icon" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/about_seoulsiwi"
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="onClickSlideMenu"
-                android:padding="10dp"
-                android:text="@string/about_seoulsiwi"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/slide_menu_text_color"
-                android:textStyle="bold" />
+                android:background="@android:color/white"
+                android:src="@mipmap/icon" />
 
-            <TextView
-                android:id="@+id/about_demo"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="onClickSlideMenu"
-                android:padding="10dp"
-                android:text="@string/about_demo"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/slide_menu_text_color"
-                android:textStyle="bold" />
+                android:divider="?android:listDivider"
+                android:dividerPadding="2.5dp"
+                android:orientation="vertical"
+                android:showDividers="middle|end">
 
-            <TextView
-                android:id="@+id/promotion_demo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onClickSlideMenu"
-                android:padding="10dp"
-                android:text="@string/promotion_demo"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/slide_menu_text_color"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="100dp"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <View
-                    android:id="@+id/borderline"
-                    android:layout_width="25dp"
-                    android:layout_height="2dp"
-                    android:background="@color/slide_menu_bottom_text_color" />
-
-
-                <TextView
-                    android:id="@+id/setting"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
-                    android:text="@string/setting"
-                    android:onClick="onClickSlideMenu"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/slide_menu_bottom_text_color"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="@id/borderline"
-                    app:layout_constraintTop_toBottomOf="@id/borderline" />
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
-            </android.support.constraint.ConstraintLayout>
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:padding="2dp"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <TextView
+                        android:id="@+id/about_seoulsiwi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="onClickSlideMenu"
+                        android:text="@string/about_seoulsiwi"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/slide_menu_text_color"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:padding="2dp"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <TextView
+                        android:id="@+id/about_demo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="onClickSlideMenu"
+                        android:text="@string/about_demo"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/slide_menu_text_color"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:padding="2dp"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <TextView
+                        android:id="@+id/promotion_demo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="onClickSlideMenu"
+                        android:text="@string/promotion_demo"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/slide_menu_text_color"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:padding="2dp"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <TextView
+                        android:id="@+id/setting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="onClickSlideMenu"
+                        android:text="@string/setting"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/slide_menu_text_color"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
         </LinearLayout>
-    </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/btn_navigation_close"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end|top"
+            android:layout_margin="10dp"
+            android:onClick="onClickSlideMenu"
+            android:src="@mipmap/ic_launcher" />
+
+    </FrameLayout>
 </android.support.design.widget.NavigationView>

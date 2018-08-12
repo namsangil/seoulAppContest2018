@@ -1,7 +1,6 @@
 package appcontest.seoulsi_we.activity
 
 import android.graphics.Color
-import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -10,7 +9,6 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.GridView
 import android.widget.TextView
 import android.widget.Toast
@@ -57,18 +55,18 @@ class MainActivity : AppCompatActivity() {
         nvDrawer = findViewById(R.id.nvView)
 
         // 뷰 로딩이 완료되면, status bar 높이만큼 떨어뜨린다.
-        nvDrawer?.viewTreeObserver?.addOnGlobalLayoutListener(
-                object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        val rect = Rect()
-                        val window = window
-                        window.decorView.getWindowVisibleDisplayFrame(rect)
-                        val statusBarHeight = rect.top
-                        nvDrawer?.setPadding(0, statusBarHeight, 0, 0)
-                        nvDrawer?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
-                    }
-                }
-        )
+//        nvDrawer?.viewTreeObserver?.addOnGlobalLayoutListener(
+//                object : ViewTreeObserver.OnGlobalLayoutListener {
+//                    override fun onGlobalLayout() {
+//                        val rect = Rect()
+//                        val window = window
+//                        window.decorView.getWindowVisibleDisplayFrame(rect)
+//                        val statusBarHeight = rect.top
+//                        nvDrawer?.setPadding(0, statusBarHeight, 0, 0)
+//                        nvDrawer?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+//                    }
+//                }
+//        )
 
         // 메인 슬라이드 뷰
         sliderShow = findViewById(R.id.slider)
@@ -149,6 +147,11 @@ class MainActivity : AppCompatActivity() {
             -> Toast.makeText(this@MainActivity, getString(R.string.promotion_demo), Toast.LENGTH_SHORT).show()
             R.id.setting                  // 설정 버튼
             -> Toast.makeText(this@MainActivity, getString(R.string.setting), Toast.LENGTH_SHORT).show()
+            R.id.btn_navigation_close
+            -> {
+                // 결국 닫아지므로 여기서는 아무것도 하지 않는다.
+            }
+
         }
         mDrawer!!.closeDrawers()
     }
@@ -193,8 +196,7 @@ class MainActivity : AppCompatActivity() {
                 // 눌린 텍스트 버튼이면, 색을 #85b237, 스타일을 bold로 변경
                 textButton.setTextColor(Color.parseColor("#85b237"))
                 textButton.setTypeface(textButton.typeface, Typeface.BOLD)
-            }
-            else{
+            } else {
                 textButton.setTextColor(resources.getColor(android.R.color.tab_indicator_text))
                 textButton.setTypeface(textButton.typeface, Typeface.NORMAL)
             }
