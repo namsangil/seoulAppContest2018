@@ -40,11 +40,14 @@ class MainActivity : AppCompatActivity() {
 
         // 액션바 등록
         toolbar = findViewById(R.id.toolbar)
+        toolbar?.title = ""
         setSupportActionBar(toolbar)
 
         mDrawer = findViewById(R.id.drawer_layout)
         drawerToggle = setupDrawerToggle()
         mDrawer!!.addDrawerListener(drawerToggle!!)
+
+
 
         // 슬라이드 뷰 등록
         nvDrawer = findViewById(R.id.nvView)
