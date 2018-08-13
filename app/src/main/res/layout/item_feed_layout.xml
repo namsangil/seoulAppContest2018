@@ -78,7 +78,8 @@
                 android:id="@+id/feed_item_timer"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_heart" />
+                android:src="@drawable/timer"
+                android:layout_margin="5dp"/>
 
             <TextView
                 android:id="@+id/feed_start_demo_time"
@@ -109,7 +110,7 @@
                         android:layout_height="20dp"
                         android:layout_weight="1"
                         android:scaleType="centerInside"
-                        android:src="@drawable/ic_heart" />
+                        android:src="@drawable/heart" />
 
                     <TextView
                         android:id="@+id/feed_tv_like_count"
@@ -135,14 +136,14 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:scaleType="centerInside"
-                        android:src="@drawable/ic_comment" />
+                        android:src="@drawable/comment" />
 
                     <TextView
                         android:id="@+id/feed_tv_comment_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="10sp"
-                        android:text="111"
+                        android:text="11"
                         android:textStyle="bold" />
 
                 </LinearLayout>

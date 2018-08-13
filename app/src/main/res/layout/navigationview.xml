@@ -18,9 +18,9 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:src="@mipmap/icon" />
+                android:layout_height="100dp"
+                android:layout_margin="20dp"
+                android:src="@drawable/logo" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,40 +31,42 @@
                 android:showDividers="middle|end">
 
                 <LinearLayout
+                    android:id="@+id/about_seoulsiwi"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/seoulsiwi_background"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginStart="10dp"
-                        android:padding="2dp"
-                        android:src="@mipmap/ic_launcher" />
+                    android:onClick="onClickSlideMenu"
+                    android:orientation="vertical"
+                    android:paddingEnd="0dp"
+                    android:paddingStart="30dp">
 
                     <TextView
-                        android:id="@+id/about_seoulsiwi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="onClickSlideMenu"
+                        android:text="@string/app_description"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/about_seoulsiwi"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/slide_menu_text_color"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/about_demo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="0dp"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
+                    android:onClick="onClickSlideMenu"
                     android:orientation="horizontal"
                     android:padding="10dp">
 
@@ -74,13 +76,11 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
                         android:padding="2dp"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@drawable/noti" />
 
                     <TextView
-                        android:id="@+id/about_demo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="onClickSlideMenu"
                         android:text="@string/about_demo"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/slide_menu_text_color"
@@ -89,11 +89,13 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/promotion_demo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="0dp"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
+                    android:onClick="onClickSlideMenu"
                     android:orientation="horizontal"
                     android:padding="10dp">
 
@@ -103,13 +105,11 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
                         android:padding="2dp"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@drawable/write" />
 
                     <TextView
-                        android:id="@+id/promotion_demo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="onClickSlideMenu"
                         android:text="@string/promotion_demo"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/slide_menu_text_color"
@@ -119,11 +119,13 @@
 
 
                 <LinearLayout
+                    android:id="@+id/setting"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="0dp"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
+                    android:onClick="onClickSlideMenu"
                     android:orientation="horizontal"
                     android:padding="10dp">
 
@@ -133,13 +135,11 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
                         android:padding="2dp"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@drawable/setting" />
 
                     <TextView
-                        android:id="@+id/setting"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="onClickSlideMenu"
                         android:text="@string/setting"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/slide_menu_text_color"
@@ -163,7 +163,8 @@
             android:layout_gravity="end|top"
             android:layout_margin="10dp"
             android:onClick="onClickSlideMenu"
-            android:src="@mipmap/ic_launcher" />
+            android:padding="5dp"
+            android:src="@drawable/x" />
 
     </FrameLayout>
 </android.support.design.widget.NavigationView>

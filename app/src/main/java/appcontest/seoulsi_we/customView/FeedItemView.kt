@@ -95,14 +95,18 @@ class FeedItemView : LinearLayout {
                 feedBottomView?.layoutParams = bottomLayoutParams
 
                 // 나머지 텍스트 뷰들의 텍스트 크기를 지정
-                ivTimer?.layoutParams = ConstraintLayout.LayoutParams(bottomSize, bottomSize)
+                val timerParams = ConstraintLayout.LayoutParams(bottomSize, bottomSize)
+                ivTimer?.layoutParams = timerParams
+                val timerPadding = (bottomSize * 0.12).toInt()
+                ivTimer?.setPadding(timerPadding, timerPadding, timerPadding, timerPadding)
                 val textDp = Utils.convertPixelsToDp((bottomSize * 0.4).toFloat(), mContext)
                 tvTime?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
+                tvTime?.setPadding((bottomSize * 0.2).toInt(), 0, 0, 0)
                 tvLikeCount?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
                 tvCommentCount?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
 
 
-                val tvCommentLayoutParams = tvCommentCount?.layoutParams as LinearLayout.LayoutParams
+                val tvCommentLayoutParams = btnComment?.layoutParams as ConstraintLayout.LayoutParams
                 tvCommentLayoutParams.leftMargin = (bottomSize * 0.1).toInt()
 
 

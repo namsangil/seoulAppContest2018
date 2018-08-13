@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupDrawerToggle(): ActionBarDrawerToggle {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
-        // and will not render the hamburger icon without it.
+        // and will not render the hamburger search without it.
         return ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close)
     }
 
