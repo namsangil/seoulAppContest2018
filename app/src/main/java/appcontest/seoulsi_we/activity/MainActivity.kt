@@ -1,9 +1,15 @@
 package appcontest.seoulsi_we.activity
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -26,6 +32,8 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView
  */
 
 class MainActivity : AppCompatActivity() {
+    private val PERMISSIONS_CODE = 1101         // 위치 퍼미션
+
     private var mDrawer: DrawerLayout? = null
     private var toolbar: Toolbar? = null
     private var nvDrawer: NavigationView? = null
@@ -211,8 +219,24 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.btn_map -> {
                 Toast.makeText(this@MainActivity, "지도", Toast.LENGTH_SHORT).show()
+
+                if (true == checkLocationPermission()) {
+                    startActivity(Intent(this@MainActivity, MapActivity::class.java))
+                }
+
             }
         }
+    }
+
+    fun checkLocationPermission(): Boolean {
+        // M 버전 이상이면 묻지 않고 true 리턴
+        if (Build.VERSION_CODES.M <= Build.VERSION.SDK_INT) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSIONS_CODE)
+                return false
+            }
+        }
+        return true
     }
 
     override fun onStop() {

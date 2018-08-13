@@ -3,6 +3,7 @@
     package="appcontest.seoulsi_we">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +24,12 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.MapActivity"/>
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="19d303c14b03e1cd2e31f6ee72c6999d" />
+
     </application>
 
 </manifest>
