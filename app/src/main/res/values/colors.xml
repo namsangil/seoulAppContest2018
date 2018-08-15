@@ -9,4 +9,5 @@
     <color name="slide_menu_text_color">#808080</color>
     <color name="slide_menu_bottom_text_color">#CDCDCD</color>
     <color name="feed_item_bottom_background_color">#E5E5E5</color>
+    <color name="toolbar_title_color">#333333</color>
 </resources>

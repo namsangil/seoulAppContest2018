@@ -12,4 +12,6 @@
     <string name="order_by_bit">인기순</string>
     <string name="order_by_comment">댓글순</string>
     <string name="line_two">2018.7.20\n오후 7시</string>
+
+    <string name="realtime_map">실시간 지도</string>
 </resources>
