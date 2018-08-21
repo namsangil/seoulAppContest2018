@@ -14,4 +14,5 @@
     <string name="line_two">2018.7.20\n오후 7시</string>
 
     <string name="realtime_map">실시간 지도</string>
+    <string name="word_around">주변</string>
 </resources>

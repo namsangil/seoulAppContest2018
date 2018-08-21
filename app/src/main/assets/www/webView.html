@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>간단한 지도 표시하기</title>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=2XA9u5DfEpPOfvDUKWI4&submodules=geocoder"></script>
+
+</head>
+<body>
+<div id="map" style="width:100%;height:400px;"></div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<script >
+var map = new naver.maps.Map('map', {
+    center: new naver.maps.LatLng(37.3595704, 127.105399)
+});
+
+<!--var map = new naver.maps.Map('map', {-->
+    <!--center: new naver.maps.LatLng(37.3595704, 127.105399),-->
+    <!--mapTypeControl: true,-->
+    <!--mapTypeControlOptions: {-->
+        <!--style: naver.maps.MapTypeControlStyle.DROPDOWN-->
+    <!--}-->
+<!--});-->
+
+var trafficLayer = new naver.maps.TrafficLayer({
+    interval: 2000 // 2초마다 새로고침
+});
+
+var btn = $('#traffic');
+
+naver.maps.Event.addListener(map, 'trafficLayer_changed', function(trafficLayer) {
+    if (trafficLayer) {
+        btn.addClass('control-on');
+        $("#autorefresh").parent().show();
+        $("#autorefresh")[0].checked = true;
+    } else {
+        btn.removeClass('control-on');
+        $("#autorefresh").parent().hide();
+    }
+});
+
+trafficLayer.setMap(map);
+
+
+btn.on("click", function(e) {
+    e.preventDefault();
+
+    if (trafficLayer.getMap()) {
+        trafficLayer.setMap(null);
+    } else {
+        trafficLayer.setMap(map);
+    }
+});
+
+$("#autorefresh").on("click", function(e) {
+    var btn = $(this),
+        checked = btn.is(":checked");
+
+    if (checked) {
+        trafficLayer.startAutoRefresh();
+    } else {
+        trafficLayer.endAutoRefresh();
+    }
+});
+</script>
+</body>
+</html>
