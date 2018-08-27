@@ -17,7 +17,7 @@
         android:layout_weight="1">
 
         <WebView
-            android:id="@+id/map_view"
+            android:id="@+id/webview"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </WebView>
@@ -60,9 +60,10 @@
 
     </FrameLayout>
 
-    <View
+    <Button
         android:layout_width="match_parent"
-        android:layout_height="100dp">
-    </View>
+        android:layout_height="wrap_content"
+        android:onClick="addTraffic"
+        android:text="testButton"/>
 
 </LinearLayout>
