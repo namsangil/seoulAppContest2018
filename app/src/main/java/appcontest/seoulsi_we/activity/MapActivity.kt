@@ -186,6 +186,22 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
+    fun changeMapScale(v : View){
+        when(v.id){
+            R.id.map_scale_plus ->
+            {
+                // + 버튼을 누르는 경우 지도 확대를 한다.
+                webView?.loadUrl("javascript:zoomIn()")
+
+            }
+            R.id.map_scale_minus ->
+            {
+                // - 버튼을 누르는 경우 지도 축소를 한다.
+                webView?.loadUrl("javascript:zoomOut()")
+            }
+        }
+    }
+
     private val locationListener = object : LocationListener {
         var responseCount = 0
         override fun onLocationChanged(location: Location?) {

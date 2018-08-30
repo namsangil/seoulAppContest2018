@@ -19,8 +19,7 @@
         <WebView
             android:id="@+id/webview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </WebView>
+            android:layout_height="match_parent"></WebView>
 
         <View
             android:layout_width="match_parent"
@@ -39,9 +38,9 @@
             android:layout_height="30dp"
             android:layout_gravity="top|end"
             android:layout_margin="10dp"
-            android:onClick="moveAroundLocation"
             android:background="@drawable/around_border"
-            android:gravity="center">
+            android:gravity="center"
+            android:onClick="moveAroundLocation">
 
             <ImageView
                 android:layout_width="15dp"
@@ -58,6 +57,37 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="35dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="10dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/map_scale_plus"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/border_normal"
+                android:gravity="center"
+                android:onClick="changeMapScale"
+                android:padding="7dp"
+                android:src="@drawable/ic_plus" />
+
+            <ImageView
+                android:id="@+id/map_scale_minus"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/border_normal"
+                android:gravity="center"
+                android:onClick="changeMapScale"
+                android:padding="7dp"
+                android:src="@drawable/ic_minus" />
+
+
+        </LinearLayout>
+
+
     </FrameLayout>
 
     <Button
@@ -65,11 +95,10 @@
         android:layout_height="wrap_content"
         android:onClick="addTraffic"
         android:text="testButton"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <include
         android:id="@+id/map_feed_item"
-        layout="@layout/feed_item_for_map"
-        />
+        layout="@layout/feed_item_for_map" />
 
 </LinearLayout>
