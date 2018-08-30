@@ -19,14 +19,17 @@
 <script type="text/javascript" src="//dapi.kakao.co
 m/v2/maps/sdk.js?appkey=51ffec02095daa0b16bad15ce10c9fd7"></script>
 <script>
+
+var mapLevel = 3
+
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
         center: new daum.maps.LatLng(37.551568, 126.972787), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
+        level: mapLevel // 지도의 확대 레벨
     };
 
 var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-    // map.addOverlayMapTypeId(daum.maps.MapTypeId.TRAFFIC);
+    map.addOverlayMapTypeId(daum.maps.MapTypeId.TRAFFIC);
 
 
 function changeMapViewSize(width, height){
@@ -34,6 +37,28 @@ function changeMapViewSize(width, height){
     mapContainer.style.height = width+"px";
     mapContainer.style.width = height+"px";
 
+}
+
+function zoomIn() {
+    // 현재 지도의 레벨을 얻어옵니다
+    var level = map.getLevel();
+
+    // 지도를 1레벨 내립니다 (지도가 확대됩니다)
+    map.setLevel(level - 1);
+
+    // 지도 레벨을 표시합니다
+    displayLevel();
+}
+
+function zoomOut() {
+    // 현재 지도의 레벨을 얻어옵니다
+    var level = map.getLevel();
+
+    // 지도를 1레벨 올립니다 (지도가 축소됩니다)
+    map.setLevel(level + 1);
+
+    // 지도 레벨을 표시합니다
+    displayLevel();
 }
 
 function addTrafficInfo(){
@@ -79,7 +104,7 @@ var highlightImage = "./spriteMarker.png";
 for (var i = 0; i < positions.length; i ++) {
         // 마커 이미지의 이미지 크기 입니다
     var imageSize = new daum.maps.Size(60, 60);
-    var highlightSize = new daum.maps.Size(70,80);
+    var highlightSize = new daum.maps.Size(80,90);
 
         // 마커 이미지를 생성합니다
     var normalMarkerImage = new daum.maps.MarkerImage(normalImage, imageSize);
