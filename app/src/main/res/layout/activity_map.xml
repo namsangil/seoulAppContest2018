@@ -64,6 +64,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="addTraffic"
-        android:text="testButton"/>
+        android:text="testButton"
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/map_feed_item"
+        layout="@layout/feed_item_for_map"
+        />
 
 </LinearLayout>

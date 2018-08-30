@@ -15,4 +15,6 @@
 
     <string name="realtime_map">실시간 지도</string>
     <string name="word_around">주변</string>
+
+    <string name="test">아시아나 항공 \n4차 집회</string>
 </resources>

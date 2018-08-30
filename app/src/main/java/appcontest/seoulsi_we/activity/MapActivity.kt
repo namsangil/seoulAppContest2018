@@ -11,9 +11,11 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.webkit.*
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import appcontest.seoulsi_we.R
+import appcontest.seoulsi_we.model.FeedData
+import com.squareup.picasso.Picasso
 
 
 class MapActivity : AppCompatActivity() {
@@ -23,6 +25,11 @@ class MapActivity : AppCompatActivity() {
     val handler = Handler()
     var webView: WebView? = null
     var locationManager: LocationManager? = null
+    val url = "http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com"
+    val feedDatas = FeedData.instance
+
+    var itemView: ItemView? = null
+//    val url = "http://10.0.2.2"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,10 +41,48 @@ class MapActivity : AppCompatActivity() {
         textView.text = getString(R.string.realtime_map)
 
 
-//        mapView?.settings?.javaScriptEnabled = true
-//        mapView?.loadUrl("http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com")
-
         webView = findViewById<WebView>(R.id.webview)
+        initWebView(webView)
+
+        itemView = ItemView(this@MapActivity, findViewById(R.id.map_feed_item))
+        itemView?.view?.visibility = View.GONE
+
+    }
+
+    inner class ItemView constructor(context: Context, view: View) {
+        private val context = context
+        private val container: View? = view
+        private var imageView: ImageView? = null
+        private var title: TextView? = null
+        private var date: TextView? = null
+        private var likeCount: TextView? = null
+        private var commentCount: TextView? = null
+
+        var view: View? = container
+            get() = container
+
+        init {
+            imageView = container?.findViewById(R.id.map_feed_item_image)
+            title = container?.findViewById(R.id.map_feed_item_title)
+            date = container?.findViewById(R.id.map_tv_feed_item_time)
+            likeCount = container?.findViewById(R.id.map_feed_tv_like_count)
+            commentCount = container?.findViewById(R.id.map_feed_tv_comment_count)
+        }
+
+        fun setData(data: FeedData?) {
+            Picasso.with(context).load(data?.thumbnailImageUrl).into(imageView)
+            title?.text = data?.title
+
+            // TODO 컨버팅 해야함.
+            date?.text = data?.date?.toString()
+            likeCount?.text = data?.likeCount.toString()
+            // TODO 좋아요 여부도 표시해야 함. mData?.isLike 를 가지고...
+            commentCount?.text = data?.commentCount.toString()
+            container?.visibility = View.VISIBLE
+        }
+    }
+
+    private fun initWebView(webView: WebView?) {
         val settings = webView?.settings
         settings?.javaScriptEnabled = true
         settings?.loadWithOverviewMode = true
@@ -53,33 +98,21 @@ class MapActivity : AppCompatActivity() {
             webView?.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         }
 
-
-
         webView?.webChromeClient = WebChromeClient()
-        webView?.webViewClient = object:WebViewClient(){
+        webView?.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
                 webView?.invalidate()
             }
         }
-        webView?.loadUrl("http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com")
-//        webView?.loadUrl("http://10.0.2.2")
+        webView?.loadUrl(url)
 
         webView?.addJavascriptInterface(AndroidBridge(handler, this), "android")
 
-//        webView?.viewTreeObserver?.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-//            override fun onGlobalLayout() {
-//                val width = webView?.width?.toString()
-//                val height = webView?.height?.toString()
-//                webView?.loadUrl("javascript:changeMapViewSize(" + width!! + "," + height!! + ")")
-//                webView?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
-//            }
-//        })
     }
 
-    //    @android.webkit.JavascriptInterface
-    private class AndroidBridge constructor(handler: Handler, context: Context) {
+    private inner class AndroidBridge constructor(handler: Handler, context: Context) {
         val handler = handler
         val context = context
 
@@ -88,10 +121,40 @@ class MapActivity : AppCompatActivity() {
         fun onSelectItem(arg: String) { // must be final
             handler.post({
                 Log.d("android", "onSelectItem(" + arg + ")")
-                Toast.makeText(context, arg, Toast.LENGTH_SHORT).show()
+                try {
+                    val id = Integer.parseInt(arg)
+
+                    val data: FeedData? = findFeed(id)
+
+                    if (null == data) {
+                        itemView?.view?.visibility = View.GONE
+                        return@post
+                    }
+
+                    handler.post({
+                        itemView?.setData(data)
+                    })
+
+
+                } catch (e: NumberFormatException) {
+                    return@post
+                }
             })
         }
     }
+
+
+    private fun findFeed(id: Int): FeedData? {
+
+        for (feedData in feedDatas) {
+            if (feedData.feedId == id) {
+                return feedData
+            }
+        }
+
+        return null
+    }
+
 
     private var trafficEnabled = false
 
@@ -103,12 +166,10 @@ class MapActivity : AppCompatActivity() {
         } else {
             webView?.loadUrl("javascript:removeTrafficInfo()")
         }
-//
-//        setPosition(String.format("%f",37.551568), String.format("%f",126.972787))
     }
 
-    fun setPosition(lat: String, lon: String) {
-//        webView?.loadUrl("javascript:panTo("+lat+","+lon+")")
+    fun setPosition(lat: Double?, lon: Double?) {
+        webView?.loadUrl("javascript:panTo(" + lat + "," + lon + ")")
     }
 
     fun backImageClick(v: View) {
@@ -123,16 +184,17 @@ class MapActivity : AppCompatActivity() {
         } catch (e: SecurityException) {
 
         }
-//        mapView?.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.53737528, 127.00557633), true)
     }
 
     private val locationListener = object : LocationListener {
         var responseCount = 0
         override fun onLocationChanged(location: Location?) {
+            //현재 내 위치를 GeoPoint로 리턴한다.
             if (3 < responseCount++) {
                 locationManager?.removeUpdates(this)
             }
-            webView?.loadUrl("javascript:panTo(" + location?.latitude + "," + location?.longitude + ")")
+            setPosition(location?.latitude, location?.longitude)
+//            webView?.loadUrl("javascript:panTo(" + location?.latitude + "," + location?.longitude + ")")
         }
 
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
@@ -144,10 +206,6 @@ class MapActivity : AppCompatActivity() {
         override fun onProviderDisabled(provider: String?) {
         }
     }
-
-
-    //현재 내 위치를 GeoPoint로 리턴한다.
-
 
 }
 

@@ -100,36 +100,7 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        val feedList: ArrayList<FeedData> = ArrayList()
-        feedList.add(FeedData(1, "아시아나 항공\n4차 집회.", 1100100, "경기도 광명",
-                "https://search3.kakaocdn.net/argon/0x200_85_hr/Fg49rrhUWre",
-                "https://search3.kakaocdn.net/argon/0x200_85_hr/Fg49rrhUWre",
-                22, true, 12))
-        feedList.add(FeedData(2, "아시아나 항공\n4차 집회.", 1100100, "경기도 광명",
-                "https://search4.kakaocdn.net/argon/0x200_85_hr/1EQKLXaMZhj",
-                "https://search4.kakaocdn.net/argon/0x200_85_hr/1EQKLXaMZhj",
-                11, true, 11))
-        feedList.add(FeedData(3, "제목입니다.", 1100100, "경기도 광명",
-                "https://search1.kakaocdn.net/argon/0x200_85_hr/KZvo5lXazFQ",
-                "https://search1.kakaocdn.net/argon/0x200_85_hr/KZvo5lXazFQ",
-                3, true, 20))
-        feedList.add(FeedData(4, "제목입니다.", 1100100, "경기도 광명",
-                "https://search2.kakaocdn.net/argon/0x200_85_hr/7w1pIRNgnED",
-                "https://search2.kakaocdn.net/argon/0x200_85_hr/7w1pIRNgnED",
-                5, true, 1))
-        feedList.add(FeedData(5, "제목입니다.", 1100100, "경기도 광명",
-                "https://search2.kakaocdn.net/argon/0x200_85_hr/4aXYwB5z99N",
-                "https://search2.kakaocdn.net/argon/0x200_85_hr/4aXYwB5z99N",
-                7, true, 0))
-        feedList.add(FeedData(6, "제목입니다.", 1100100, "경기도 광명",
-                "https://search2.kakaocdn.net/argon/0x200_85_hr/2KgqzD4ecQf",
-                "https://search2.kakaocdn.net/argon/0x200_85_hr/2KgqzD4ecQf",
-                2, true, 9))
-        feedList.add(FeedData(7, "제목입니다.", 1100100, "경기도 광명",
-                "https://search3.kakaocdn.net/argon/0x200_85_hr/7BHqWs1H6fW",
-                "https://search3.kakaocdn.net/argon/0x200_85_hr/7BHqWs1H6fW",
-                10, true, 7))
-
+        val feedList: ArrayList<FeedData> = FeedData.instance
         feedAdapter!!.setData(feedList)
         feedAdapter!!.notifyDataSetChanged()
     }
@@ -218,8 +189,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, "돋보기", Toast.LENGTH_SHORT).show()
             }
             R.id.btn_map -> {
-                Toast.makeText(this@MainActivity, "지도", Toast.LENGTH_SHORT).show()
-
+//                Toast.makeText(this@MainActivity, "지도", Toast.LENGTH_SHORT).show()
                 if (true == checkLocationPermission()) {
                     startActivity(Intent(this@MainActivity, MapActivity::class.java))
                 }
