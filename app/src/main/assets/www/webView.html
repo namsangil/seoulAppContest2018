@@ -4,33 +4,43 @@
     <meta charset="utf-8">
     <title>여러개 마커 표시하기</title>
 
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0px; padding: 0px }
+      #map { height: 100% }
+</style>
 </head>
 <body topmargin = "0", leftmargin="0", marginwidth="0", marginheight="0">
-<div id="map" style="width:100%;height:800px;"></div>
-
-<input type="button" id="button1" onclick="addTrafficInfo();" value="버튼1" />
-<input type="button" id="button2" onclick="removeTrafficInfo();" value="버튼2" />
-
+<div id="map"></div>
+<!--
+<input type="button" id="button1" onclick="changeMapViewSize(200,200);" value="버튼1" />
+<input type="button" id="button2" onclick="changeMapViewSize(400,400);" value="버튼2" />
+ -->
 <script type="text/javascript" src="//dapi.kakao.co
 m/v2/maps/sdk.js?appkey=51ffec02095daa0b16bad15ce10c9fd7"></script>
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
         center: new daum.maps.LatLng(37.551568, 126.972787), // 지도의 중심좌표
-        level: 5 // 지도의 확대 레벨
+        level: 3 // 지도의 확대 레벨
     };
 
 var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
     // map.addOverlayMapTypeId(daum.maps.MapTypeId.TRAFFIC);
 
 
+function changeMapViewSize(width, height){
+
+    mapContainer.style.height = width+"px";
+    mapContainer.style.width = height+"px";
+
+}
+
 function addTrafficInfo(){
-    // alert("add");
     map.addOverlayMapTypeId(daum.maps.MapTypeId.TRAFFIC);
 }
 
 function removeTrafficInfo(){
-    // alert("remove");
     map.removeOverlayMapTypeId(daum.maps.MapTypeId.TRAFFIC);
 }
 
@@ -68,8 +78,8 @@ var highlightImage = "./spriteMarker.png";
 
 for (var i = 0; i < positions.length; i ++) {
         // 마커 이미지의 이미지 크기 입니다
-    var imageSize = new daum.maps.Size(20, 20);
-    var highlightSize = new daum.maps.Size(35,38);
+    var imageSize = new daum.maps.Size(60, 60);
+    var highlightSize = new daum.maps.Size(70,80);
 
         // 마커 이미지를 생성합니다
     var normalMarkerImage = new daum.maps.MarkerImage(normalImage, imageSize);
