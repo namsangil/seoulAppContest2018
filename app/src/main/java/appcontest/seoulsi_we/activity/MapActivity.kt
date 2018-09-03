@@ -16,6 +16,9 @@ import android.widget.TextView
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.model.FeedData
 import com.squareup.picasso.Picasso
+import org.json.JSONObject
+
+
 
 
 class MapActivity : AppCompatActivity() {
@@ -114,6 +117,7 @@ class MapActivity : AppCompatActivity() {
 
     override fun onResume() {
         moveAroundLocation(null)
+        setMarker()
         super.onResume()
     }
 
@@ -146,6 +150,15 @@ class MapActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    private fun setMarker(){
+        val obj = JSONObject()
+        obj.put("id","1")
+        obj.put("lat","37.551568")
+        obj.put("lon","126.972787")
+
+        webView?.loadUrl("javascript:setMarket("+obj.toString()+")")
     }
 
 
