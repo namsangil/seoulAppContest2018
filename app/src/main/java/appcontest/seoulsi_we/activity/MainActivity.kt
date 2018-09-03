@@ -126,8 +126,9 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.about_demo               // 집회시위 관련정보 버튼
             -> {
-                mDrawer!!.closeDrawers()
-                Toast.makeText(this@MainActivity, getString(R.string.about_demo), Toast.LENGTH_SHORT).show()
+                mDrawer!!.closeDrawer(nvDrawer!!, false)
+                val intent = Intent(this@MainActivity, AboutDemoActivity::class.java)
+                startActivity(intent)
             }
             R.id.promotion_demo           // 집회시위 홍보하기 버튼
             -> {
