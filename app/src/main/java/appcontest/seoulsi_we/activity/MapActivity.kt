@@ -112,6 +112,11 @@ class MapActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        moveAroundLocation(null)
+        super.onResume()
+    }
+
     private inner class AndroidBridge constructor(handler: Handler, context: Context) {
         val handler = handler
         val context = context
@@ -176,7 +181,7 @@ class MapActivity : AppCompatActivity() {
         finish()
     }
 
-    fun moveAroundLocation(v: View) {
+    fun moveAroundLocation(v: View?) {
         Log.d(TAG, "moveAroundLocation")
         try {
             locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 1f, locationListener)
