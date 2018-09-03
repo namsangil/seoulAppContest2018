@@ -119,15 +119,29 @@ class MainActivity : AppCompatActivity() {
     fun onClickSlideMenu(v: View) {
         when (v.id) {
             R.id.about_seoulsiwi          // 서울시위란? 버튼
-            -> Toast.makeText(this@MainActivity, getString(R.string.about_seoulsiwi), Toast.LENGTH_SHORT).show()
+            -> {
+                mDrawer!!.closeDrawer(nvDrawer!!, false)
+                val intent = Intent(this@MainActivity, IntroductionAppActivity::class.java)
+                startActivity(intent)
+            }
             R.id.about_demo               // 집회시위 관련정보 버튼
-            -> Toast.makeText(this@MainActivity, getString(R.string.about_demo), Toast.LENGTH_SHORT).show()
+            -> {
+                mDrawer!!.closeDrawers()
+                Toast.makeText(this@MainActivity, getString(R.string.about_demo), Toast.LENGTH_SHORT).show()
+            }
             R.id.promotion_demo           // 집회시위 홍보하기 버튼
-            -> Toast.makeText(this@MainActivity, getString(R.string.promotion_demo), Toast.LENGTH_SHORT).show()
+            -> {
+                mDrawer!!.closeDrawers()
+                Toast.makeText(this@MainActivity, getString(R.string.promotion_demo), Toast.LENGTH_SHORT).show()
+            }
             R.id.setting                  // 설정 버튼
-            -> Toast.makeText(this@MainActivity, getString(R.string.setting), Toast.LENGTH_SHORT).show()
+            -> {
+                mDrawer!!.closeDrawers()
+                Toast.makeText(this@MainActivity, getString(R.string.setting), Toast.LENGTH_SHORT).show()
+            }
             R.id.btn_navigation_close
             -> {
+                mDrawer!!.closeDrawers()
                 // 결국 닫아지므로 여기서는 아무것도 하지 않는다.
             }
 

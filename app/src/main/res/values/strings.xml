@@ -17,4 +17,7 @@
     <string name="word_around">주변</string>
 
     <string name="test">아시아나 항공 \n4차 집회</string>
+    <string name="description_seoulsiwi_title">‘서울시위(WE)’ 란?</string>
+    <string name="description_seoulsiwi">서울시내 집회/시위 관련 정보를 제공하는 앱입니다.\n 실시간으로 집회/시위로 인한 교통통제 여부를 파악할 수 있으며, 직접 집회/시위 정보를 업로드하여 시민들의 참여를 독려할 수 있습니다. \'서울시위(WE)\'라는앱 이름은 서울시내 집회/시위에서 제기되는 문제들이결국 \'우리(WE)\' 모두의 문제이며 함께 해결해나가야한다는 것을 의미합니다.</string>
+    <string name="team_name">시민의 목소리</string>
 </resources>

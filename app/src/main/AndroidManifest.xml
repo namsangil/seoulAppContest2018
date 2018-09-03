@@ -24,12 +24,13 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.MapActivity"/>
+        <activity android:name=".activity.MapActivity" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="19d303c14b03e1cd2e31f6ee72c6999d" />
 
+        <activity android:name=".activity.IntroductionAppActivity"></activity>
     </application>
 
 </manifest>
