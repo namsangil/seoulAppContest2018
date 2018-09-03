@@ -16,9 +16,8 @@ import android.widget.TextView
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.model.FeedData
 import com.squareup.picasso.Picasso
+import org.json.JSONArray
 import org.json.JSONObject
-
-
 
 
 class MapActivity : AppCompatActivity() {
@@ -28,11 +27,11 @@ class MapActivity : AppCompatActivity() {
     val handler = Handler()
     var webView: WebView? = null
     var locationManager: LocationManager? = null
-    val url = "http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com"
+        val url = "http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com"
+//    val url = "http://10.0.2.2"
     val feedDatas = FeedData.instance
 
     var itemView: ItemView? = null
-//    val url = "http://10.0.2.2"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,13 +151,72 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
-    private fun setMarker(){
-        val obj = JSONObject()
-        obj.put("id","1")
-        obj.put("lat","37.551568")
-        obj.put("lon","126.972787")
 
-        webView?.loadUrl("javascript:setMarket("+obj.toString()+")")
+//    var positions = [
+//        {
+//            id : 1,
+//            lat : 37.551568,
+//            lon : 126.972787
+//        },
+//        {
+//            id : 2,
+//            lat : 37.552568,
+//            lon : 126.973787
+//        },
+//        {
+//            id : 3,
+//            lat : 37.550568,
+//            lon : 126.971787
+//        },
+//        {
+//            id : 4,
+//            lat : 33.441357,
+//            lon : 126.631591
+//        }
+//    ];
+
+    private fun setMarker() {
+        val arr = JSONArray()
+
+        val obj1 = JSONObject()
+        obj1.put("id", "1")
+        obj1.put("lat", "37.551568")
+        obj1.put("lon", "126.972787")
+
+        arr.put(obj1)
+
+        val obj2 = JSONObject()
+        obj2.put("id", "2")
+        obj2.put("lat", "37.552568")
+        obj2.put("lon", "126.973787")
+
+        arr.put(obj2)
+
+        val obj3 = JSONObject()
+        obj3.put("id", "3")
+        obj3.put("lat", "37.550568")
+        obj3.put("lon", "126.971787")
+
+        arr.put(obj3)
+
+        val obj4 = JSONObject()
+        obj4.put("id", "4")
+        obj4.put("lat", "33.441357")
+        obj4.put("lon", "126.631591")
+
+        arr.put(obj4)
+
+        Thread({
+            try {
+                Thread.sleep(2000)
+                runOnUiThread {
+                    webView?.loadUrl("javascript:setMarker("+arr.toString()+")")
+                }
+            } catch (e: InterruptedException) {
+
+            }
+
+        }).start()
     }
 
 
@@ -204,16 +262,14 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
-    fun changeMapScale(v : View){
-        when(v.id){
-            R.id.map_scale_plus ->
-            {
+    fun changeMapScale(v: View) {
+        when (v.id) {
+            R.id.map_scale_plus -> {
                 // + 버튼을 누르는 경우 지도 확대를 한다.
                 webView?.loadUrl("javascript:zoomIn()")
 
             }
-            R.id.map_scale_minus ->
-            {
+            R.id.map_scale_minus -> {
                 // - 버튼을 누르는 경우 지도 축소를 한다.
                 webView?.loadUrl("javascript:zoomOut()")
             }
@@ -228,7 +284,6 @@ class MapActivity : AppCompatActivity() {
                 locationManager?.removeUpdates(this)
             }
             setPosition(location?.latitude, location?.longitude)
-//            webView?.loadUrl("javascript:panTo(" + location?.latitude + "," + location?.longitude + ")")
         }
 
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {

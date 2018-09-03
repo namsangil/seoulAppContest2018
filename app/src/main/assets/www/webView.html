@@ -13,9 +13,9 @@
 <body topmargin = "0", leftmargin="0", marginwidth="0", marginheight="0">
 <div id="map"></div>
 <!--
-<input type="button" id="button1" onclick="changeMapViewSize(200,200);" value="버튼1" />
-<input type="button" id="button2" onclick="changeMapViewSize(400,400);" value="버튼2" />
- -->
+<input type="button" id="button1" onclick="removeMarker();" value="버튼1" /> -->
+<!-- <input type="button" id="button2" onclick="changeMapViewSize(400,400);" value="버튼2" /> -->
+
 <script type="text/javascript" src="//dapi.kakao.co
 m/v2/maps/sdk.js?appkey=51ffec02095daa0b16bad15ce10c9fd7"></script>
 <script>
@@ -82,46 +82,55 @@ function panTo(lat, lon) {
 var positions = [
     {
         id : 1,
-        latlng: new daum.maps.LatLng(37.551568, 126.972787)
+        lat : 37.551568,
+        lon : 126.972787
     },
     {
         id : 2,
-        latlng: new daum.maps.LatLng(37.552568, 126.973787)
+        lat : 37.552568,
+        lon : 126.973787
     },
     {
         id : 3,
-        latlng: new daum.maps.LatLng(37.550568, 126.971787)
+        lat : 37.550568,
+        lon : 126.971787
     },
     {
         id : 4,
-        latlng: new daum.maps.LatLng(33.441357, 126.631591)
+        lat : 33.441357,
+        lon : 126.631591
     }
 ];
 // 마커 이미지의 이미지 주소입니다
 var normalImage = "./normalMarker.png";
 var highlightImage = "./spriteMarker.png";
+var selectedMarker = null;
 
-for (var i = 0; i < positions.length; i ++) {
-        // 마커 이미지의 이미지 크기 입니다
-    var imageSize = new daum.maps.Size(60, 60);
-    var highlightSize = new daum.maps.Size(80,90);
+function setMarker(positions){
+        for (var i = 0; i < positions.length; i ++) {
+            // 마커 이미지의 이미지 크기 입니다
+        var imageSize = new daum.maps.Size(60, 60);
+        var highlightSize = new daum.maps.Size(80,90);
 
-        // 마커 이미지를 생성합니다
-    var normalMarkerImage = new daum.maps.MarkerImage(normalImage, imageSize);
-    var highlightMarkerImage = new daum.maps.MarkerImage(highlightImage, highlightSize);
-
-    var selectedMarker = null;
+            // 마커 이미지를 생성합니다
+        var normalMarkerImage = new daum.maps.MarkerImage(normalImage, imageSize);
+        var highlightMarkerImage = new daum.maps.MarkerImage(highlightImage, highlightSize);
 
 
-    addMarker(positions[i], normalMarkerImage, highlightMarkerImage);
+        addMarker(positions[i], normalMarkerImage, highlightMarkerImage);
 
+    }
+}
+
+function removeMarker(){
+    marker.setMap(null);
 }
 
 function addMarker(position, normalMarkerImage, highlightMarkerImage){
     // 마커를 생성합니다
     var marker = new daum.maps.Marker({
         map: map, // 마커를 표시할 지도
-        position: position.latlng, // 마커를 표시할 위치
+        position: new daum.maps.LatLng(position.lat, position.lon), // 마커를 표시할 위치
         image : normalMarkerImage // 마커 이미지
     });
 
