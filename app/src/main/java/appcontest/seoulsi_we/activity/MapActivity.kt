@@ -7,7 +7,6 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.webkit.*
@@ -20,7 +19,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 
-class MapActivity : AppCompatActivity() {
+class MapActivity : BaseActivity() {
 
     val TAG = "MapActivity"
 
@@ -248,9 +247,6 @@ class MapActivity : AppCompatActivity() {
         webView?.loadUrl("javascript:panTo(" + lat + "," + lon + ")")
     }
 
-    fun backImageClick(v: View) {
-        finish()
-    }
 
     fun moveAroundLocation(v: View?) {
         Log.d(TAG, "moveAroundLocation")

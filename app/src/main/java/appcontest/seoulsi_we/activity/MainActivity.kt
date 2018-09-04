@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.GridView
@@ -31,7 +30,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView
  * Created by nam on 2018. 8. 7..
  */
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private val PERMISSIONS_CODE = 1101         // 위치 퍼미션
 
     private var mDrawer: DrawerLayout? = null

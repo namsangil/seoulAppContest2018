@@ -1,12 +1,10 @@
 package appcontest.seoulsi_we.activity
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.widget.TextView
 import appcontest.seoulsi_we.R
 
-class IntroductionAppActivity : AppCompatActivity() {
+class IntroductionAppActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,9 +14,4 @@ class IntroductionAppActivity : AppCompatActivity() {
         textView.text = getString(R.string.activity_name)
 
     }
-
-    fun backImageClick(v: View) {
-        finish()
-    }
-
 }
