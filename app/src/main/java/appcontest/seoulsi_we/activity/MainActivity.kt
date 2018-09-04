@@ -131,8 +131,9 @@ class MainActivity : BaseActivity() {
             }
             R.id.promotion_demo           // 집회시위 홍보하기 버튼
             -> {
-                mDrawer!!.closeDrawers()
-                Toast.makeText(this@MainActivity, getString(R.string.promotion_demo), Toast.LENGTH_SHORT).show()
+                mDrawer!!.closeDrawer(nvDrawer!!, false)
+                val intent = Intent(this@MainActivity, EnrolMyDemoActivity::class.java)
+                startActivity(intent)
             }
             R.id.setting                  // 설정 버튼
             -> {

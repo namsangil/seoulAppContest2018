@@ -30,8 +30,15 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="19d303c14b03e1cd2e31f6ee72c6999d" />
 
-        <activity android:name=".activity.IntroductionAppActivity" />
-        <activity android:name=".activity.AboutDemoActivity"></activity>
+        <activity
+            android:name=".activity.IntroductionAppActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AboutDemoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EnrolMyDemoActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
