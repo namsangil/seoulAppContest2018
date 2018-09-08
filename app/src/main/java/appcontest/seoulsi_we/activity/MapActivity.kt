@@ -26,8 +26,8 @@ class MapActivity : BaseActivity() {
     val handler = Handler()
     var webView: WebView? = null
     var locationManager: LocationManager? = null
-        val url = "http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com"
-//    val url = "http://10.0.2.2"
+    val url = "http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com"
+    //    val url = "http://10.0.2.2"
     val feedDatas = FeedData.instance
 
     var itemView: ItemView? = null
@@ -209,7 +209,7 @@ class MapActivity : BaseActivity() {
             try {
                 Thread.sleep(2000)
                 runOnUiThread {
-                    webView?.loadUrl("javascript:setMarker("+arr.toString()+")")
+                    webView?.loadUrl("javascript:setMarker(" + arr.toString() + ")")
                 }
             } catch (e: InterruptedException) {
 
@@ -276,9 +276,7 @@ class MapActivity : BaseActivity() {
         var responseCount = 0
         override fun onLocationChanged(location: Location?) {
             //현재 내 위치를 GeoPoint로 리턴한다.
-            if (3 < responseCount++) {
-                locationManager?.removeUpdates(this)
-            }
+            locationManager?.removeUpdates(this)
             setPosition(location?.latitude, location?.longitude)
         }
 

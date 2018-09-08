@@ -29,5 +29,6 @@
     <string name="word_enrol_picture">사진등록</string>
     <string name="word_cert">접수증</string>
     <string name="word_send">보내기</string>
+    <string name="word_select">선택</string>
     <string name="team_name">시민의 목소리</string>
 </resources>

@@ -63,24 +63,30 @@
                         android:showDividers="middle">
 
                         <TextView
+                            android:id="@+id/enrol_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:onClick="onClicked"
                             android:padding="15dp"
                             android:text="@string/word_date"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#757778" />
 
                         <TextView
+                            android:id="@+id/enrol_location"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:onClick="onClicked"
                             android:padding="15dp"
                             android:text="@string/word_location"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#757778" />
 
                         <TextView
+                            android:id="@+id/enrol_promoter"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:onClick="onClicked"
                             android:padding="15dp"
                             android:text="@string/word_promoter"
                             android:textAppearance="?android:attr/textAppearanceMedium"
