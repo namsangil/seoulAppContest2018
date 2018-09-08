@@ -26,7 +26,7 @@ class SelectLocationDialog : DialogFragment(), View.OnClickListener {
     private val url = "http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com/enrol.html"
 
     interface SelectLocationDialogListener {
-        fun onSelectedLocation(lat: String, lon: String, strAddress: String)
+        fun onSelectedLocation(lat: String, lon: String, address: String)
     }
 
     private val handler = Handler()

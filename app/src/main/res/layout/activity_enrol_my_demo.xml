@@ -82,13 +82,16 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#757778" />
 
-                        <TextView
+                        <EditText
                             android:id="@+id/enrol_promoter"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="@string/word_promoter"
+                            android:maxLength="10"
+                            android:maxLines="1"
                             android:onClick="onClicked"
                             android:padding="15dp"
-                            android:text="@string/word_promoter"
+                            android:background="@null"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#757778" />
 
@@ -105,12 +108,13 @@
                     android:background="@drawable/enrol_demo_border_normal">
 
                     <EditText
+                        android:id="@+id/enrol_aim"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="1dp"
                         android:background="#f8f8f8"
                         android:gravity="top"
-                        android:hint="@string/word_goal"
+                        android:hint="@string/word_aim"
                         android:minHeight="130dp"
                         android:padding="15dp"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -163,11 +167,13 @@
     </FrameLayout>
 
     <Button
+        android:id="@+id/send_demo"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="#8ac81e"
         android:gravity="center"
         android:text="@string/word_send"
+        android:onClick="onClicked"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white"
         android:textStyle="bold">
