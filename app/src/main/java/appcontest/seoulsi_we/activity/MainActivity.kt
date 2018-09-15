@@ -19,6 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import appcontest.seoulsi_we.FeedListAdapter
 import appcontest.seoulsi_we.R
+import appcontest.seoulsi_we.activity.DetailDemoActivity.Companion.FEED_ID_KEY
 import appcontest.seoulsi_we.customView.CustomSliderView
 import appcontest.seoulsi_we.model.BannerData
 import appcontest.seoulsi_we.model.FeedData
@@ -96,7 +97,9 @@ class MainActivity : BaseActivity() {
         feedListContainer?.adapter = feedAdapter
         feedListContainer?.setOnItemClickListener({ parent, view, position, id ->
             Toast.makeText(this@MainActivity, "feed id : " + feedAdapter?.getItem(position)?.feedId, Toast.LENGTH_SHORT).show()
-
+            val intent = Intent(this@MainActivity, DetailDemoActivity::class.java)
+            intent.putExtra(FEED_ID_KEY, feedAdapter?.getItem(position)?.feedId)
+            startActivity(intent)
         })
 
         val feedList: ArrayList<FeedData> = FeedData.instance

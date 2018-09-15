@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="10dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/comment_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="fbrkdfal"
+            android:textColor="#8ac81e" />
+
+        <TextView
+            android:id="@+id/comment_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="3시간 전" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="이미 기금고갈된 군인, 공무원 연금 수급자들은 돈잔치하며 사는데 푼돈 연금 조차 못받는다니 말이 돼냐. 당장 군인 공원연금수령액을 대폭 낮추어 국민연금 수령자와의 불평등을 축소하고 그다음 국민연금 재원 확보 방법을 강구하라.  " />
+
+</LinearLayout>

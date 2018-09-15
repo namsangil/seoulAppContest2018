@@ -39,6 +39,7 @@
         <activity
             android:name=".activity.EnrolMyDemoActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.DetailDemoActivity"></activity>
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="default_background">#FAFAFA</color>
     <color name="default_textcolor">#B6B6B6</color>
+    <color name="default_viewcolor">#B7B7B7</color>
     <color name="white">#FFFFFF</color>
     <color name="slide_menu_text_color">#808080</color>
     <color name="slide_menu_bottom_text_color">#CDCDCD</color>

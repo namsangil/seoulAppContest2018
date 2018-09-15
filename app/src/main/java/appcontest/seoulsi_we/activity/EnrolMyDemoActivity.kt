@@ -84,7 +84,7 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
     }
 
     fun onSelectedTime(cal : Calendar){
-        val value = String.format("%d년 %d월 %d일 %d시 %d분",
+        val value = String.format(getString(R.string.time_format),
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH)+1,
                 cal.get(Calendar.DATE),
