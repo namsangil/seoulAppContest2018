@@ -136,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="2018.7.20 오후 7시 "
-                    android:textSize="15sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -150,7 +150,8 @@
                     android:id="@+id/detail_activity_start_location_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
                     android:gravity="center">
 
                     <ImageView
@@ -164,8 +165,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="광화문 세종문화회관 앞 "
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -178,13 +178,16 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="40dp"
-                        android:layout_margin="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginStart="5dp"
+                        android:padding="7dp"
                         android:src="@drawable/vertical_ellipsis" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginStart="5dp"
                         android:gravity="center">
 
                         <ImageView
@@ -198,8 +201,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:text="금호 아시아나 본사 "
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                            android:textSize="20sp" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -207,14 +209,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:background="@drawable/border_normal">
 
                 <appcontest.seoulsi_we.customView.CustomWebView
                     android:id="@+id/detail_activity_webview"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/border_normal">
+                    android:layout_margin="1dp">
 
                 </appcontest.seoulsi_we.customView.CustomWebView>
 
@@ -255,7 +258,7 @@
                     android:id="@+id/detail_activity_sad_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_margin="15dp"
                     android:gravity="center"
                     android:onClick="onClickButton"
                     android:orientation="vertical">
@@ -281,7 +284,7 @@
                     android:id="@+id/detail_activity_anger_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_margin="15dp"
                     android:gravity="center"
                     android:onClick="onClickButton"
                     android:orientation="vertical">
@@ -307,7 +310,7 @@
                     android:id="@+id/detail_activity_unlike_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_margin="15dp"
                     android:gravity="center"
                     android:onClick="onClickButton"
                     android:orientation="vertical">

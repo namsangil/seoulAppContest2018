@@ -68,7 +68,7 @@ class FeedData {
     companion object {
         val instance = object : ArrayList<FeedData>() {
             init {
-                add(FeedData(1, "아시아나 항공\n4차 집회.", "‘OZKA면(오죽하면) 이러겠니’", Calendar.getInstance().timeInMillis, 100, 100, "content입니다.", "",
+                add(FeedData(1, "아시아나 항공 4차 집회.", "‘OZKA면(오죽하면) 이러겠니’", Calendar.getInstance().timeInMillis, 100, 100, "content입니다.", "",
                         110100, 110100, "",
                         arrayOf(DemoAddress("서울특별시 용산구 용산동2가 1-727", "37.545696", "126.979326"), DemoAddress("용산중학교", "37.545912", "126.980972")),
                         "https://search3.kakaocdn.net/argon/0x200_85_hr/Fg49rrhUWre",
