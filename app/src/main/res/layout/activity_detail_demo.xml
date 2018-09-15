@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context="appcontest.seoulsi_we.activity.DetailDemoActivity">
 
@@ -25,6 +27,7 @@
                     android:id="@+id/detail_activity_demo_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
                     android:src="@color/colorPrimaryDark" />
 
 
@@ -38,6 +41,7 @@
                     android:paddingRight="10dp">
 
                     <TextView
+                        android:id="@+id/detail_activity_demo_subtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="‘OZKA면(오죽하면) 이러겠니’"
@@ -46,6 +50,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/detail_activity_demo_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="아시아나 항공 4차 집회"
@@ -59,6 +64,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="start|top"
                     android:layout_margin="10dp"
+                    android:onClick="onClickButton"
                     android:padding="5dp"
                     android:src="@drawable/x" />
 
@@ -69,7 +75,7 @@
 
 
                     <ImageView
-                        android:id="@+id/btn_detail_demo_like"
+                        android:id="@+id/btn_detail_activity_demo_like"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="start|top"
@@ -78,7 +84,7 @@
                         android:src="@drawable/ic_launcher_background" />
 
                     <ImageView
-                        android:id="@+id/btn_detail_demo_share"
+                        android:id="@+id/btn_detail_activity_demo_share"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="start|top"
@@ -96,6 +102,7 @@
                 android:padding="15dp">
 
                 <TextView
+                    android:id="@+id/detail_activity_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -121,10 +128,10 @@
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/timer_black"
-                    />
+                    android:src="@drawable/timer_black" />
 
                 <TextView
+                    android:id="@+id/detail_activity_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -140,6 +147,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/detail_activity_start_location_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -151,6 +159,7 @@
                         android:src="@drawable/demo_start_point" />
 
                     <TextView
+                        android:id="@+id/detail_activity_start_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -160,45 +169,54 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/vertical_ellipsis" />
-
                 <LinearLayout
+                    android:id="@+id/detail_activity_end_location_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="center">
+                    android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/demo_end_point" />
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/vertical_ellipsis" />
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="금호 아시아나 본사 "
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:layout_margin="5dp"
+                        android:gravity="center">
 
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/demo_end_point" />
+
+                        <TextView
+                            android:id="@+id/detail_activity_end_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="금호 아시아나 본사 "
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
                 </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <WebView
+                <appcontest.seoulsi_we.customView.CustomWebView
+                    android:id="@+id/detail_activity_webview"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:layout_margin="10dp">
+                    android:layout_margin="10dp"
+                    android:background="@drawable/border_normal">
 
-                </WebView>
+                </appcontest.seoulsi_we.customView.CustomWebView>
 
             </LinearLayout>
 
@@ -208,10 +226,12 @@
                 android:gravity="center">
 
                 <LinearLayout
+                    android:id="@+id/detail_activity_cheer_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
+                    android:onClick="onClickButton"
                     android:orientation="vertical">
 
                     <ImageView
@@ -232,10 +252,12 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/detail_activity_sad_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
+                    android:onClick="onClickButton"
                     android:orientation="vertical">
 
                     <ImageView
@@ -246,7 +268,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="응원해요" />
+                        android:text="슬퍼요" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -256,10 +278,12 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/detail_activity_anger_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
+                    android:onClick="onClickButton"
                     android:orientation="vertical">
 
                     <ImageView
@@ -270,7 +294,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="응원해요" />
+                        android:text="화나요" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -280,10 +304,12 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/detail_activity_unlike_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
+                    android:onClick="onClickButton"
                     android:orientation="vertical">
 
                     <ImageView
@@ -294,7 +320,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="응원해요" />
+                        android:text="별로에요" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -318,6 +344,7 @@
                 android:background="@drawable/border_normal">
 
                 <EditText
+                    android:id="@+id/detail_activity_input_comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -326,6 +353,7 @@
                     android:padding="5dp" />
 
                 <Button
+                    android:id="@+id/detail_activity_enrol_comment"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
@@ -338,11 +366,12 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/detail_activity_comment_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
                 android:divider="@drawable/enrol_demo_list_divider"
                 android:orientation="vertical"
                 android:showDividers="middle">

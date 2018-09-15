@@ -179,15 +179,15 @@ class MapActivity : BaseActivity() {
 
         val obj1 = JSONObject()
         obj1.put("id", "1")
-        obj1.put("lat", "37.551568")
-        obj1.put("lon", "126.972787")
+        obj1.put("lat", "37.545004")
+        obj1.put("lon", "126.982197")
 
         arr.put(obj1)
 
         val obj2 = JSONObject()
         obj2.put("id", "2")
-        obj2.put("lat", "37.552568")
-        obj2.put("lon", "126.973787")
+        obj2.put("lat", "37.545696")
+        obj2.put("lon", "126.979326")
 
         arr.put(obj2)
 

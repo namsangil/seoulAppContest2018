@@ -119,7 +119,7 @@ class FeedItemView : LinearLayout {
     private fun applyData(mData: FeedData?) {
         Picasso.with(mContext).load(mData?.thumbnailImageUrl).into(image)
         tvTitle?.text = mData?.title
-        tvAddress?.text = mData?.address
+        tvAddress?.text = mData?.address?.get(0)?.address
 
         tvLikeCount?.text = mData?.likeCount.toString()
         // TODO 좋아요 여부도 표시해야 함. mData?.isLike 를 가지고...
