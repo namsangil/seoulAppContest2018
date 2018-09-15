@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>여러개 마커 표시하기</title>
+
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0px; padding: 0px }
+      #map { height: 100% }
+</style>
+</head>
+<body topmargin = "0", leftmargin="0", marginwidth="0", marginheight="0">
+<div id="map"></div>
+<!--
+<input type="butto또" id="button1" onclick="removeMarker();" value="버튼1" /> -->
+<!-- <input type="button" id="button2" onclick="changeMapViewSize(400,400);" value="버튼2" /> -->
+
+<script type="text/javascript" src="//dapi.kakao.co
+m/v2/maps/sdk.js?appkey=51ffec02095daa0b16bad15ce10c9fd7&libraries=services"></script>
+<script>
+
+var mapLevel = 3
+
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+    mapOption = {
+        center: new daum.maps.LatLng(37.551568, 126.972787), // 지도의 중심좌표
+        level: mapLevel // 지도의 확대 레벨
+    };
+
+var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+// 주소-좌표 변환 객체를 생성합니다
+var geocoder = new daum.maps.services.Geocoder();
+
+var highlightImage = "./spriteMarker.png";
+var selectedPosition;
+
+var highlightSize = new daum.maps.Size(80,90);
+var highlightMarkerImage = new daum.maps.MarkerImage(highlightImage, highlightSize);
+
+var marker = new daum.maps.Marker({
+      position: map.getCenter(),
+      image : highlightMarkerImage
+});
+
+marker.setMap(map);
+
+selectedPosition = map.getCenter();
+
+daum.maps.event.addListener(map, 'click', function(mouseEvent) {
+
+     var latlng = mouseEvent.latLng;
+     marker.setPosition(latlng);
+
+     console.log(selectedPosition);
+     selectedPosition = latlng;
+
+     searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
+        if (status === daum.maps.services.Status.OK) {
+
+
+            var loadAddress = "";
+            var address = "";
+            var data = [];
+            if(result[0].road_address != null){
+              loadAddress = result[0].road_address.address_name;
+            }
+
+            address = result[0].address.address_name;
+
+            try{
+              window.android.onSelectItem(selectedPosition["ib"],selectedPosition["jb"],loadAddress,result[0].address.address_name);
+            }
+            catch(e){
+
+            }
+
+        }
+    });
+
+});
+
+function searchDetailAddrFromCoords(coords, callback) {
+    // 좌표로 법정동 상세 주소 정보를 요청합니다
+    geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+}
+
+
+function searchAddrFromCoords(coords, callback) {
+    // 좌표로 행정동 주소 정보를 요청합니다
+    geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+}
+
+function panTo(lat, lon) {
+    // 이동할 위도 경도 위치를 생성합니다
+    var moveLatLon = new daum.maps.LatLng(lat, lon);
+
+    // 지도 중심을 부드럽게 이동시킵니다
+    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+    map.panTo(moveLatLon);
+}
+
+
+</script>
+</body>
+</html>

@@ -29,7 +29,6 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     };
 
 var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-    map.addOverlayMapTypeId(daum.maps.MapTypeId.TRAFFIC);
 
 
 function changeMapViewSize(width, height){
@@ -94,32 +93,65 @@ var positions = [
         id : 3,
         lat : 37.550568,
         lon : 126.971787
-    },
-    {
-        id : 4,
-        lat : 33.441357,
-        lon : 126.631591
     }
 ];
 // 마커 이미지의 이미지 주소입니다
 var normalImage = "./normalMarker.png";
 var highlightImage = "./spriteMarker.png";
+var startLocationImage = "./startImageMarker.png";
+var endLocationImage = "./endImageMarker.png";
 var selectedMarker = null;
 
+// setMarker(positions);
+
 function setMarker(positions){
+    addTrafficInfo();
+
         for (var i = 0; i < positions.length; i ++) {
             // 마커 이미지의 이미지 크기 입니다
-        var imageSize = new daum.maps.Size(60, 60);
-        var highlightSize = new daum.maps.Size(80,90);
+            var imageSize = new daum.maps.Size(60, 60);
+            var highlightSize = new daum.maps.Size(80,90);
 
-            // 마커 이미지를 생성합니다
-        var normalMarkerImage = new daum.maps.MarkerImage(normalImage, imageSize);
-        var highlightMarkerImage = new daum.maps.MarkerImage(highlightImage, highlightSize);
+                // 마커 이미지를 생성합니다
+            var normalMarkerImage = new daum.maps.MarkerImage(normalImage, imageSize);
+            var highlightMarkerImage = new daum.maps.MarkerImage(highlightImage, highlightSize);
 
 
-        addMarker(positions[i], normalMarkerImage, highlightMarkerImage);
+            addMarker(positions[i], normalMarkerImage, highlightMarkerImage);
 
     }
+}
+
+// setStartEndMarker(positions);
+
+function setStartEndMarker(positions){
+    if(0 < positions.length){
+        var startImageSize = new daum.maps.Size(80,90);
+
+        var startImage = new daum.maps.MarkerImage(startLocationImage, startImageSize);
+
+        addStartEndMarker(positions[0], startImage);
+
+        panTo(positions[0].lat, positions[1].lon);
+
+        if(2 <= positions.length){
+            var endImageSize = new daum.maps.Size(80,90);
+            var endImage = new daum.maps.MarkerImage(endLocationImage, endImageSize);
+
+            addStartEndMarker(positions[positions.length-1], endImage);
+        }
+    }
+}
+
+function addStartEndMarker(position, image){
+    // 마커를 생성합니다
+    var marker = new daum.maps.Marker({
+        map: map, // 마커를 표시할 지도
+        position: new daum.maps.LatLng(position.lat, position.lon), // 마커를 표시할 위치
+        image : image // 마커 이미지
+    });
+
+    marker.normalImage = image;
 }
 
 function removeMarker(){
@@ -150,7 +182,13 @@ function addMarker(position, normalMarkerImage, highlightMarkerImage){
 
             // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
             marker.setImage(highlightMarkerImage);
-            window.android.onSelectItem(position.id);
+
+            try{
+                window.android.onSelectItem(position.id);
+            }
+            catch(e){
+                console.log(e);
+            }
 
         }
         // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
