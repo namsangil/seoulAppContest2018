@@ -164,7 +164,7 @@
             android:layout_margin="10dp"
             android:onClick="onClickSlideMenu"
             android:padding="5dp"
-            android:src="@drawable/x" />
+            android:src="@drawable/x_black" />
 
     </FrameLayout>
 </android.support.design.widget.NavigationView>

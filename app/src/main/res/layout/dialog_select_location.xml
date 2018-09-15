@@ -24,7 +24,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center_vertical|end"
             android:padding="5dp"
-            android:src="@drawable/x" />
+            android:src="@drawable/x_black" />
 
     </FrameLayout>
 
