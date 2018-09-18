@@ -80,6 +80,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="start|top"
                         android:layout_margin="10dp"
+                        android:onClick="onClickButton"
                         android:padding="5dp"
                         android:src="@drawable/ic_launcher_background" />
 
@@ -89,6 +90,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="start|top"
                         android:layout_margin="10dp"
+                        android:onClick="onClickButton"
                         android:padding="5dp"
                         android:src="@drawable/ic_launcher_background" />
 
@@ -238,9 +240,9 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_launcher_background" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/cheer" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -264,9 +266,9 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_launcher_background" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/sad" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -290,9 +292,9 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_launcher_background" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/anger" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -316,9 +318,9 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_launcher_background" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/noLike" />
 
                     <TextView
                         android:layout_width="wrap_content"
