@@ -6,26 +6,42 @@ import java.util.*
  * Created by nam on 2018. 8. 9..
  */
 
-/*등록번호: pid
+/*
+등록번호: pid
 일시: date
-장소명: place
-주소: location
+장소: [ 장소명 : place
+       위도 : lat
+       경도 : lon
+       ] -> 이동 경로 포함
 시작시간:startTime
 종료시간:endTime
 주최자: host
 목적: title
+부제: subTitle
 내용: content
 상세내용: content_detail //불필요할 수도
 접수증: certificate
+이미지 경로: imageUrl
 등록일: regdate
 수정일: editdate
 호감수: like
-댓글갯수: rpl_count*/
+댓글갯수: rpl_count
+응원개수: cheer_count
+슬픔개수: sad_count
+화남개수: anger_count
+별로개수: noLike_count
+
+호감여부: isLike
+응원여부: isCheer
+슬픔여부: isSad
+화남여부: isAnger
+별로여부: isNoLike
+*/
 
 class FeedData {
 
     // 추후 구조 변경해야 함. 임시 구조
-    val feedId: Int?
+    val feedId: Int?            // 등록번호
     val title: String?
     val subTitle: String?
     val date: Long?

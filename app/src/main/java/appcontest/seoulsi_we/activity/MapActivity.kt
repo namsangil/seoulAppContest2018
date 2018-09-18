@@ -58,6 +58,7 @@ class MapActivity : BaseActivity() {
         private var date: TextView? = null
         private var likeCount: TextView? = null
         private var commentCount: TextView? = null
+        private var feedID: Int? = null
 
         var view: View? = container
             get() = container
@@ -177,33 +178,16 @@ class MapActivity : BaseActivity() {
     private fun setMarker() {
         val arr = JSONArray()
 
-        val obj1 = JSONObject()
-        obj1.put("id", "1")
-        obj1.put("lat", "37.545004")
-        obj1.put("lon", "126.982197")
+        val datas = FeedData.instance
 
-        arr.put(obj1)
+        for (data in datas) {
+            val obj = JSONObject()
+            obj.put("id", data.feedId)
+            obj.put("lat", data.address!![0].lat)
+            obj.put("lon", data.address[0].lon)
 
-        val obj2 = JSONObject()
-        obj2.put("id", "2")
-        obj2.put("lat", "37.545696")
-        obj2.put("lon", "126.979326")
-
-        arr.put(obj2)
-
-        val obj3 = JSONObject()
-        obj3.put("id", "3")
-        obj3.put("lat", "37.550568")
-        obj3.put("lon", "126.971787")
-
-        arr.put(obj3)
-
-        val obj4 = JSONObject()
-        obj4.put("id", "4")
-        obj4.put("lat", "33.441357")
-        obj4.put("lon", "126.631591")
-
-        arr.put(obj4)
+            arr.put(obj)
+        }
 
         Thread({
             try {

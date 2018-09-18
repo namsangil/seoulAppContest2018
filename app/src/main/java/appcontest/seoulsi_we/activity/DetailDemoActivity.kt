@@ -1,6 +1,7 @@
 package appcontest.seoulsi_we.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -179,7 +180,7 @@ class DetailDemoActivity : AppCompatActivity() {
             calendar.timeInMillis = data.date
             timeTextView?.text = String.format(getString(R.string.time_format_end_hour),
                     calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH)+1,
+                    calendar.get(Calendar.MONTH) + 1,
                     calendar.get(Calendar.DATE),
                     calendar.get(Calendar.HOUR))
         }
@@ -251,6 +252,17 @@ class DetailDemoActivity : AppCompatActivity() {
             }
             R.id.detail_activity_unlike_view -> {
                 //TODO 별로에요
+            }
+            R.id.btn_detail_activity_demo_like -> {
+                //TODO 즐겨찾기 추가
+            }
+            R.id.btn_detail_activity_demo_share -> {
+                //TODO 공유하기
+                val sendIntent = Intent()
+                sendIntent.type = "text/plain"
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "TEST")
+                val chooser: Intent = Intent.createChooser(sendIntent, "")
+                startActivity(chooser)
             }
         }
     }
