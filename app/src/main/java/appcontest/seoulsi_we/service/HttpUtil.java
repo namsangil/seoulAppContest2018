@@ -12,10 +12,12 @@ public class HttpUtil {
 
     private Retrofit retrofit;
 
+    public static final String URL = "http://ec2-52-78-138-9.ap-northeast-2.compute.amazonaws.com:3000/";
+
 
     private HttpUtil() {
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://ec2-52-78-138-9.ap-northeast-2.compute.amazonaws.com:3000/")
+                .baseUrl(URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

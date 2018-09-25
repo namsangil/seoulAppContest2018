@@ -15,6 +15,7 @@ import appcontest.seoulsi_we.Utils
 import appcontest.seoulsi_we.customView.CustomWebView
 import appcontest.seoulsi_we.model.FeedData
 import appcontest.seoulsi_we.service.HttpUtil
+import com.squareup.picasso.Picasso
 import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Call
@@ -51,10 +52,10 @@ class DetailDemoActivity : AppCompatActivity() {
     private var angerView: View? = null
     private var unLikeView: View? = null
 
-    private var cheerCountTextView : TextView? = null
-    private var sadCountTextView : TextView? = null
-    private var angerCountTextView : TextView? = null
-    private var unLikeCountTextView : TextView? = null
+    private var cheerCountTextView: TextView? = null
+    private var sadCountTextView: TextView? = null
+    private var angerCountTextView: TextView? = null
+    private var unLikeCountTextView: TextView? = null
 
 
     private var commentEditText: EditText? = null
@@ -151,9 +152,9 @@ class DetailDemoActivity : AppCompatActivity() {
     }
 
     fun updateUI(data: FeedData) {
-//        if (null != data.imageUrl) {
-//            Picasso.with(this@DetailDemoActivity).load(data.imageUrl).into(feedImageView)
-//        }
+        if (null != data.imageUrl) {
+            Picasso.with(this@DetailDemoActivity).load(data.imageUrl).into(feedImageView)
+        }
 
         if (null != data.subTitle) {
             subTitleTextview?.text = data.subTitle

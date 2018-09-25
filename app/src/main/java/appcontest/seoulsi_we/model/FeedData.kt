@@ -1,5 +1,6 @@
 package appcontest.seoulsi_we.model
 
+import appcontest.seoulsi_we.service.HttpUtil
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -59,6 +60,7 @@ class FeedData {
     @SerializedName("sad_count") var sadCount : Int? = null
     @SerializedName("anger_count") var angerCount : Int? = null
     @SerializedName("noLike_count") var noLikeCount : Int? = null
+    @SerializedName("imageUrl") var imageUrl : String? = String.format("%s%s", HttpUtil.URL, "peace1.jpg");
 
 
     inner class AddressData{

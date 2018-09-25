@@ -1,6 +1,7 @@
 package appcontest.seoulsi_we.activity
 
 import android.content.Context
+import android.content.Intent
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -13,9 +14,16 @@ import android.webkit.*
 import android.widget.ImageView
 import android.widget.TextView
 import appcontest.seoulsi_we.R
+import appcontest.seoulsi_we.Utils
 import appcontest.seoulsi_we.model.FeedData
+import appcontest.seoulsi_we.service.HttpUtil
+import com.squareup.picasso.Picasso
 import org.json.JSONArray
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.*
 
 
 class MapActivity : BaseActivity() {
@@ -25,12 +33,12 @@ class MapActivity : BaseActivity() {
     val handler = Handler()
     var webView: WebView? = null
     var locationManager: LocationManager? = null
-    val url = "http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com"
-    //    val url = "http://10.0.2.2"
+    val mapServerUrl = "http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com"
+    //    val mapServerUrl = "http://10.0.2.2"
 
     var itemView: ItemView? = null
 
-    private var feedDatas : Array<FeedData> = arrayOf()
+    private var feedList: ArrayList<FeedData> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,18 +77,44 @@ class MapActivity : BaseActivity() {
             date = container?.findViewById(R.id.map_tv_feed_item_time)
             likeCount = container?.findViewById(R.id.map_feed_tv_like_count)
             commentCount = container?.findViewById(R.id.map_feed_tv_comment_count)
+
+            view.setOnClickListener(View.OnClickListener {
+                val intent = Intent(this@MapActivity, DetailDemoActivity::class.java)
+                intent.putExtra(DetailDemoActivity.FEED_ID_KEY, feedID)
+                this@MapActivity.startActivity(intent)
+            })
+
         }
 
         fun setData(data: FeedData?) {
-//            Picasso.with(context).load(data?.certImageUrl).into(imageView)
+            Picasso.with(context).load(data?.imageUrl).into(imageView)
             title?.text = data?.title
 
-            // TODO 컨버팅 해야함.
-            date?.text = data?.date?.toString()
+            val calendar = Calendar.getInstance()
+            calendar.time = Utils.getSomeDate(data?.date)
+            calendar.add(Calendar.HOUR, 9)
+            val AmPmStr: String
+//        calendar.get(Calendar.AM_PM)
+            if (Calendar.AM == calendar.get(Calendar.AM_PM)) {
+                AmPmStr = "오전"
+            } else {
+                AmPmStr = "오후"
+            }
+
+            date?.text = String.format(this@MapActivity.getString(R.string.feed_list_time_format),
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH) + 1,
+                    calendar.get(Calendar.DATE),
+                    AmPmStr,
+                    calendar.get(Calendar.HOUR)
+            )
+
             likeCount?.text = data?.likeCount.toString()
             // TODO 좋아요 여부도 표시해야 함. mData?.isLike 를 가지고...
             commentCount?.text = data?.commentCount.toString()
             container?.visibility = View.VISIBLE
+
+            feedID = data?.feedId
         }
     }
 
@@ -108,15 +142,33 @@ class MapActivity : BaseActivity() {
                 webView?.invalidate()
             }
         }
-        webView?.loadUrl(url)
+        webView?.loadUrl(mapServerUrl)
 
         webView?.addJavascriptInterface(AndroidBridge(handler, this), "android")
+
+        moveAroundLocation(null)
+        getData()
+    }
+
+    private fun getData() {
+        HttpUtil.getHttpService().getEvents().enqueue(object : Callback<Array<FeedData>> {
+            override fun onFailure(call: Call<Array<FeedData>>?, t: Throwable?) {
+                Log.d("namsang", "fail")
+            }
+
+            override fun onResponse(call: Call<Array<FeedData>>, response: Response<Array<FeedData>>?) {
+                Log.d("namsang", "response")
+                feedList.clear()
+                for (data in response?.body()!!) {
+                    feedList.add(data)
+                }
+                setMarker()
+            }
+        })
 
     }
 
     override fun onResume() {
-        moveAroundLocation(null)
-        setMarker()
         super.onResume()
     }
 
@@ -180,7 +232,7 @@ class MapActivity : BaseActivity() {
 
 
 
-        for (data in feedDatas) {
+        for (data in feedList) {
             val obj = JSONObject()
             obj.put("id", data.feedId)
             obj.put("lat", data.address!![0].lat)
@@ -205,7 +257,7 @@ class MapActivity : BaseActivity() {
 
     private fun findFeed(id: Int): FeedData? {
 
-        for (feedData in feedDatas) {
+        for (feedData in feedList) {
             if (feedData.feedId == id) {
                 return feedData
             }
