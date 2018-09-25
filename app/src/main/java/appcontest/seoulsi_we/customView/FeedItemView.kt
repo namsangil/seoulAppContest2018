@@ -11,6 +11,7 @@ import android.widget.*
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.Utils
 import appcontest.seoulsi_we.model.FeedData
+import appcontest.seoulsi_we.service.HttpUtil
 import com.squareup.picasso.Picasso
 import java.util.*
 
@@ -118,13 +119,12 @@ class FeedItemView : LinearLayout {
     }
 
     private fun applyData(mData: FeedData?) {
-        Picasso.with(mContext).load(mData?.imageUrl).into(image)
+        Picasso.with(mContext).load(String.format("%s%s", HttpUtil.URL,mData?.imageUrl)).into(image)
         tvTitle?.text = mData?.title
         tvAddress?.text = mData?.address?.get(0)?.placeName
 
         val calendar = Calendar.getInstance()
-        calendar.time = Utils.getSomeDate(mData?.date)
-        calendar.add(Calendar.HOUR, 9)
+        calendar.timeInMillis = mData?.date!!
         val AmPmStr: String
 //        calendar.get(Calendar.AM_PM)
         if (Calendar.AM == calendar.get(Calendar.AM_PM)) {

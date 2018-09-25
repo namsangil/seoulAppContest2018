@@ -1,6 +1,5 @@
 package appcontest.seoulsi_we.model
 
-import appcontest.seoulsi_we.service.HttpUtil
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -45,7 +44,7 @@ class FeedData {
     @SerializedName("pid") var feedId: Int? = null           // 등록번호
     @SerializedName("title") var title: String? = null
     @SerializedName("subtitle") var subTitle: String? = null
-    @SerializedName("date") var date: String? = null
+    @SerializedName("date") var date: Long? = null
     @SerializedName("regdate") var regDate: String?= null
     @SerializedName("editdate") var editDate: String? = null
     @SerializedName("startTime") var startTime: Long? = null
@@ -60,7 +59,7 @@ class FeedData {
     @SerializedName("sad_count") var sadCount : Int? = null
     @SerializedName("anger_count") var angerCount : Int? = null
     @SerializedName("noLike_count") var noLikeCount : Int? = null
-    @SerializedName("imageUrl") var imageUrl : String? = String.format("%s%s", HttpUtil.URL, "peace1.jpg");
+    @SerializedName("rimage") var imageUrl : String? = null
 
 
     inner class AddressData{

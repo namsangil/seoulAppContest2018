@@ -12,8 +12,9 @@ import retrofit2.http.Query;
 public interface HttpInterface {
 
     @GET("api/eventsAll")
-    Call<FeedData[]> getEvents();
+    Call<FeedData[]> getEvents(@Query("condition") int condition);
 
     @GET("api/eventsOne")
     Call<FeedData> getEvent(@Query("pid") int feedID);
+
 }

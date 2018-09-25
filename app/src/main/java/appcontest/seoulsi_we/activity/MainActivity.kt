@@ -112,15 +112,24 @@ class MainActivity : BaseActivity() {
         feedAdapter!!.setData(feedList)
         feedAdapter!!.notifyDataSetChanged()
 
+        getData(0)
 
-        HttpUtil.getHttpService().getEvents().enqueue(object : Callback<Array<FeedData>> {
+
+
+    }
+
+    private fun getData(condition : Int){
+        feedList.clear()
+        feedAdapter!!.setData(feedList)
+        feedAdapter!!.notifyDataSetChanged()
+
+        HttpUtil.getHttpService().getEvents(condition).enqueue(object : Callback<Array<FeedData>> {
             override fun onFailure(call: Call<Array<FeedData>>?, t: Throwable?) {
                 Log.d("namsang","fail")
             }
 
             override fun onResponse(call: Call<Array<FeedData>>, response: Response<Array<FeedData>>?) {
                 Log.d("namsang","response")
-                feedList.clear()
                 for(data in response?.body()!!){
                     feedList.add(data)
                 }
@@ -196,13 +205,16 @@ class MainActivity : BaseActivity() {
     fun onClickFeedOrder(v: View) {
         when (v.id) {
             R.id.tv_order_by_recent -> {
-                Toast.makeText(this@MainActivity, "최신순", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@MainActivity, "최신순", Toast.LENGTH_SHORT).show()
+                getData(0)
             }
             R.id.tv_order_by_join -> {
-                Toast.makeText(this@MainActivity, "참여순", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@MainActivity, "참여순", Toast.LENGTH_SHORT).show()
+                getData(1)
             }
             R.id.tv_order_by_comment -> {
-                Toast.makeText(this@MainActivity, "댓글순", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@MainActivity, "댓글순", Toast.LENGTH_SHORT).show()
+                getData(2)
             }
             R.id.iv_collect -> {
                 Toast.makeText(this@MainActivity, "모아보기", Toast.LENGTH_SHORT).show()

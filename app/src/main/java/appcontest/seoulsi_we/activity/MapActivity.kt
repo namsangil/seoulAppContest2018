@@ -14,7 +14,6 @@ import android.webkit.*
 import android.widget.ImageView
 import android.widget.TextView
 import appcontest.seoulsi_we.R
-import appcontest.seoulsi_we.Utils
 import appcontest.seoulsi_we.model.FeedData
 import appcontest.seoulsi_we.service.HttpUtil
 import com.squareup.picasso.Picasso
@@ -87,12 +86,12 @@ class MapActivity : BaseActivity() {
         }
 
         fun setData(data: FeedData?) {
-            Picasso.with(context).load(data?.imageUrl).into(imageView)
+            Picasso.with(context).load(String.format("%s%s",HttpUtil.URL,data?.imageUrl)).into(imageView)
             title?.text = data?.title
 
             val calendar = Calendar.getInstance()
-            calendar.time = Utils.getSomeDate(data?.date)
-            calendar.add(Calendar.HOUR, 9)
+
+            calendar.timeInMillis = data?.date!!
             val AmPmStr: String
 //        calendar.get(Calendar.AM_PM)
             if (Calendar.AM == calendar.get(Calendar.AM_PM)) {
@@ -151,7 +150,7 @@ class MapActivity : BaseActivity() {
     }
 
     private fun getData() {
-        HttpUtil.getHttpService().getEvents().enqueue(object : Callback<Array<FeedData>> {
+        HttpUtil.getHttpService().getEvents(0).enqueue(object : Callback<Array<FeedData>> {
             override fun onFailure(call: Call<Array<FeedData>>?, t: Throwable?) {
                 Log.d("namsang", "fail")
             }

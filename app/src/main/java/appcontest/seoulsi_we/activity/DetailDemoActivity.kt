@@ -11,7 +11,6 @@ import android.view.View
 import android.webkit.*
 import android.widget.*
 import appcontest.seoulsi_we.R
-import appcontest.seoulsi_we.Utils
 import appcontest.seoulsi_we.customView.CustomWebView
 import appcontest.seoulsi_we.model.FeedData
 import appcontest.seoulsi_we.service.HttpUtil
@@ -153,7 +152,7 @@ class DetailDemoActivity : AppCompatActivity() {
 
     fun updateUI(data: FeedData) {
         if (null != data.imageUrl) {
-            Picasso.with(this@DetailDemoActivity).load(data.imageUrl).into(feedImageView)
+            Picasso.with(this@DetailDemoActivity).load(String.format("%s%s",HttpUtil.URL,data.imageUrl)).into(feedImageView)
         }
 
         if (null != data.subTitle) {
@@ -171,7 +170,7 @@ class DetailDemoActivity : AppCompatActivity() {
         if (null != data.date) {
             val calendar = Calendar.getInstance()
 
-            calendar.time = Utils.getSomeDate(data.date)
+            calendar.timeInMillis = data.date!!
             timeTextView?.text = String.format(getString(R.string.time_format_end_hour),
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH) + 1,
@@ -282,7 +281,8 @@ class DetailDemoActivity : AppCompatActivity() {
                 //TODO 별로에요
             }
             R.id.btn_detail_activity_demo_like -> {
-                //TODO 즐겨찾기 추가
+                //TODO 좋아요
+
             }
             R.id.btn_detail_activity_demo_share -> {
                 //TODO 공유하기
