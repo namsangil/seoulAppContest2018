@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 import android.widget.GridView
 import android.widget.TextView
@@ -23,8 +24,13 @@ import appcontest.seoulsi_we.activity.DetailDemoActivity.Companion.FEED_ID_KEY
 import appcontest.seoulsi_we.customView.CustomSliderView
 import appcontest.seoulsi_we.model.BannerData
 import appcontest.seoulsi_we.model.FeedData
+import appcontest.seoulsi_we.service.HttpUtil
 import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.*
 
 
 /**
@@ -45,6 +51,8 @@ class MainActivity : BaseActivity() {
     private var drawerToggle: ActionBarDrawerToggle? = null     // 메뉴 버튼
 
     private var toggleFeedOrderTextViews: Array<TextView>? = null   // 최신순, 인기순, 댓글순 ui변경을 위함
+
+    private var feedList: ArrayList<FeedData> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,7 +98,6 @@ class MainActivity : BaseActivity() {
 
         sliderShow?.setCustomIndicator(findViewById(R.id.custom_indicator))
 
-
         // 피드 컨테이너
         feedListContainer = findViewById(R.id.feed_list_container)
         feedAdapter = FeedListAdapter()
@@ -102,9 +109,26 @@ class MainActivity : BaseActivity() {
             startActivity(intent)
         })
 
-        val feedList: ArrayList<FeedData> = FeedData.instance
         feedAdapter!!.setData(feedList)
         feedAdapter!!.notifyDataSetChanged()
+
+
+        HttpUtil.getHttpService().getEvents().enqueue(object : Callback<Array<FeedData>> {
+            override fun onFailure(call: Call<Array<FeedData>>?, t: Throwable?) {
+                Log.d("namsang","fail")
+            }
+
+            override fun onResponse(call: Call<Array<FeedData>>, response: Response<Array<FeedData>>?) {
+                Log.d("namsang","response")
+                feedList.clear()
+                for(data in response?.body()!!){
+                    feedList.add(data)
+                }
+                feedAdapter!!.setData(feedList)
+                feedAdapter!!.notifyDataSetChanged()
+            }
+        })
+
     }
 
     fun addSlideView(view: SliderLayout?, data: BannerData) {
@@ -204,7 +228,7 @@ class MainActivity : BaseActivity() {
     fun onClickActionBarMenu(v: View) {
         when (v.id) {
             R.id.btn_search -> {
-                Toast.makeText(this@MainActivity, "돋보기", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@MainActivity, SearchActivity::class.java))
             }
             R.id.btn_map -> {
 //                Toast.makeText(this@MainActivity, "지도", Toast.LENGTH_SHORT).show()

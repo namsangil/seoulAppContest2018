@@ -11,7 +11,7 @@ import android.widget.*
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.Utils
 import appcontest.seoulsi_we.model.FeedData
-import com.squareup.picasso.Picasso
+import java.util.*
 
 
 /**
@@ -117,9 +117,28 @@ class FeedItemView : LinearLayout {
     }
 
     private fun applyData(mData: FeedData?) {
-        Picasso.with(mContext).load(mData?.thumbnailImageUrl).into(image)
+//        Picasso.with(mContext).load(mData?.thumbnailImageUrl).into(image)
         tvTitle?.text = mData?.title
-        tvAddress?.text = mData?.address?.get(0)?.address
+        tvAddress?.text = mData?.address?.get(0)?.placeName
+
+        val calendar = Calendar.getInstance()
+        calendar.time = Utils.getSomeDate(mData?.date)
+        calendar.add(Calendar.HOUR, 9)
+        val AmPmStr: String
+//        calendar.get(Calendar.AM_PM)
+        if (Calendar.AM == calendar.get(Calendar.AM_PM)) {
+            AmPmStr = "오전"
+        } else {
+            AmPmStr = "오후"
+        }
+
+        tvTime?.text = String.format(mContext!!.getString(R.string.feed_list_time_format),
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DATE),
+                AmPmStr,
+                calendar.get(Calendar.HOUR)
+                )
 
         tvLikeCount?.text = mData?.likeCount.toString()
         // TODO 좋아요 여부도 표시해야 함. mData?.isLike 를 가지고...

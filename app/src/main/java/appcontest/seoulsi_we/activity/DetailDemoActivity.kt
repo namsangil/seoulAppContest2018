@@ -11,11 +11,15 @@ import android.view.View
 import android.webkit.*
 import android.widget.*
 import appcontest.seoulsi_we.R
+import appcontest.seoulsi_we.Utils
 import appcontest.seoulsi_we.customView.CustomWebView
 import appcontest.seoulsi_we.model.FeedData
-import com.squareup.picasso.Picasso
+import appcontest.seoulsi_we.service.HttpUtil
 import org.json.JSONArray
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 class DetailDemoActivity : AppCompatActivity() {
@@ -47,12 +51,18 @@ class DetailDemoActivity : AppCompatActivity() {
     private var angerView: View? = null
     private var unLikeView: View? = null
 
+    private var cheerCountTextView : TextView? = null
+    private var sadCountTextView : TextView? = null
+    private var angerCountTextView : TextView? = null
+    private var unLikeCountTextView : TextView? = null
+
+
     private var commentEditText: EditText? = null
     private var commentEnrolButton: Button? = null
 
     private var commentContainer: LinearLayout? = null
 
-    private var data: FeedData? = null
+    private var feedData: FeedData? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,13 +77,23 @@ class DetailDemoActivity : AppCompatActivity() {
 
         initView()
 
-        data = FeedData.instance[0]
-
-        updateUI(data!!)
-
         initWebView(webView)
 
+        getData(feedID)
 
+    }
+
+    private fun getData(feedID: Int) {
+        HttpUtil.getHttpService().getEvent(feedID).enqueue(object : Callback<FeedData> {
+            override fun onFailure(call: Call<FeedData>?, t: Throwable?) {
+
+            }
+
+            override fun onResponse(call: Call<FeedData>?, response: Response<FeedData>?) {
+                feedData = response?.body()
+                updateUI(feedData!!)
+            }
+        })
     }
 
     private fun initWebView(webView: WebView?) {
@@ -104,34 +124,6 @@ class DetailDemoActivity : AppCompatActivity() {
 
         webView?.addJavascriptInterface(AndroidBridge(handler, this), "android")
 
-        val arr = JSONArray()
-
-        val obj1 = JSONObject()
-        obj1.put("id", "1")
-        obj1.put("lat", "37.551568")
-        obj1.put("lon", "126.972787")
-
-        arr.put(obj1)
-
-        val obj2 = JSONObject()
-        obj2.put("id", "2")
-        obj2.put("lat", "37.552568")
-        obj2.put("lon", "126.973787")
-
-        arr.put(obj2)
-
-
-        Thread({
-            try {
-                Thread.sleep(2000)
-                runOnUiThread {
-                    webView?.loadUrl("javascript:setStartEndMarker(" + arr.toString() + ")")
-                }
-            } catch (e: InterruptedException) {
-
-            }
-
-        }).start()
     }
 
     override fun onResume() {
@@ -159,9 +151,9 @@ class DetailDemoActivity : AppCompatActivity() {
     }
 
     fun updateUI(data: FeedData) {
-        if (null != data.imageUrl) {
-            Picasso.with(this@DetailDemoActivity).load(data.imageUrl).into(feedImageView)
-        }
+//        if (null != data.imageUrl) {
+//            Picasso.with(this@DetailDemoActivity).load(data.imageUrl).into(feedImageView)
+//        }
 
         if (null != data.subTitle) {
             subTitleTextview?.text = data.subTitle
@@ -177,7 +169,8 @@ class DetailDemoActivity : AppCompatActivity() {
 
         if (null != data.date) {
             val calendar = Calendar.getInstance()
-            calendar.timeInMillis = data.date
+
+            calendar.time = Utils.getSomeDate(data.date)
             timeTextView?.text = String.format(getString(R.string.time_format_end_hour),
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH) + 1,
@@ -185,20 +178,49 @@ class DetailDemoActivity : AppCompatActivity() {
                     calendar.get(Calendar.HOUR))
         }
 
+        cheerView
+
         val addArr = data.address
 
         if (null != addArr) {
             if (addArr.isNotEmpty()) {
-                startLocationtextView?.text = addArr[0].address
+                startLocationtextView?.text = addArr[0].placeName
             }
 
             if (2 <= addArr.size) {
-                endLocationTextView?.text = addArr[addArr.size - 1].address
+                endLocationTextView?.text = addArr[addArr.size - 1].placeName
             } else {
-                endLocationTextView?.visibility = View.GONE
+                endLocationContainer?.visibility = View.GONE
             }
         }
 
+        cheerCountTextView?.text = data.cheerCount?.toString()
+        sadCountTextView?.text = data.sadCount?.toString()
+        angerCountTextView?.text = data.angerCount?.toString()
+        unLikeCountTextView?.text = data.noLikeCount?.toString()
+
+
+        val arr = JSONArray()
+
+        for (address in data.address!!) {
+            val obj = JSONObject()
+            obj.put("id", "0")
+            obj.put("lat", address.lat?.toString())
+            obj.put("lon", address.lon?.toString())
+            arr.put(obj)
+        }
+
+        Thread({
+            try {
+                Thread.sleep(1000)
+                runOnUiThread {
+                    webView?.loadUrl("javascript:setStartEndMarker(" + arr.toString() + ")")
+                }
+            } catch (e: InterruptedException) {
+
+            }
+
+        }).start()
 
     }
 
@@ -228,6 +250,11 @@ class DetailDemoActivity : AppCompatActivity() {
         sadView = findViewById(R.id.detail_activity_sad_view)
         angerView = findViewById(R.id.detail_activity_anger_view)
         unLikeView = findViewById(R.id.detail_activity_unlike_view)
+
+        cheerCountTextView = findViewById(R.id.detail_activity_cheer_textview)
+        sadCountTextView = findViewById(R.id.detail_activity_sad_textview)
+        angerCountTextView = findViewById(R.id.detail_activity_anger_textview)
+        unLikeCountTextView = findViewById(R.id.detail_activity_unlike_textview)
 
         commentEditText = findViewById(R.id.detail_activity_input_comment)
         commentEnrolButton = findViewById(R.id.detail_activity_enrol_comment)

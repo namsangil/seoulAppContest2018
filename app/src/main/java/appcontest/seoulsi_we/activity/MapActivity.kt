@@ -14,7 +14,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.model.FeedData
-import com.squareup.picasso.Picasso
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -28,9 +27,10 @@ class MapActivity : BaseActivity() {
     var locationManager: LocationManager? = null
     val url = "http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com"
     //    val url = "http://10.0.2.2"
-    val feedDatas = FeedData.instance
 
     var itemView: ItemView? = null
+
+    private var feedDatas : Array<FeedData> = arrayOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +72,7 @@ class MapActivity : BaseActivity() {
         }
 
         fun setData(data: FeedData?) {
-            Picasso.with(context).load(data?.thumbnailImageUrl).into(imageView)
+//            Picasso.with(context).load(data?.certImageUrl).into(imageView)
             title?.text = data?.title
 
             // TODO 컨버팅 해야함.
@@ -178,13 +178,13 @@ class MapActivity : BaseActivity() {
     private fun setMarker() {
         val arr = JSONArray()
 
-        val datas = FeedData.instance
 
-        for (data in datas) {
+
+        for (data in feedDatas) {
             val obj = JSONObject()
             obj.put("id", data.feedId)
             obj.put("lat", data.address!![0].lat)
-            obj.put("lon", data.address[0].lon)
+            obj.put("lon", data.address!![0].lon)
 
             arr.put(obj)
         }

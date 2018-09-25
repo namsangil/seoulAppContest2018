@@ -250,6 +250,7 @@
                         android:text="응원해요" />
 
                     <TextView
+                        android:id="@+id/detail_activity_cheer_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="132" />
@@ -276,6 +277,7 @@
                         android:text="슬퍼요" />
 
                     <TextView
+                        android:id="@+id/detail_activity_sad_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="132" />
@@ -302,6 +304,7 @@
                         android:text="화나요" />
 
                     <TextView
+                        android:id="@+id/detail_activity_anger_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="132" />
@@ -328,6 +331,7 @@
                         android:text="별로에요" />
 
                     <TextView
+                        android:id="@+id/detail_activity_unlike_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="132" />

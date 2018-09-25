@@ -34,4 +34,5 @@
 
     <string name="time_format_end_hour">%d년 %d월 %d일 %d시</string>
     <string name="time_format">%d년 %d월 %d일 %d시 %d분</string>
+    <string name="feed_list_time_format">%d.%d.%d\n%s %d시</string>
 </resources>

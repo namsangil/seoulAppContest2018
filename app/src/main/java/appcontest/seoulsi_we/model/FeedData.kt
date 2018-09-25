@@ -1,6 +1,6 @@
 package appcontest.seoulsi_we.model
 
-import java.util.*
+import com.google.gson.annotations.SerializedName
 
 /**
  * Created by nam on 2018. 8. 9..
@@ -41,61 +41,31 @@ import java.util.*
 class FeedData {
 
     // 추후 구조 변경해야 함. 임시 구조
-    val feedId: Int?            // 등록번호
-    val title: String?
-    val subTitle: String?
-    val date: Long?
-    val startTime: Long?
-    val endTime: Long?
-    val content: String?
-    val detailContent: String?
-    val regDate: Long?
-    val editDate: Long?
-    val certImageUrl: String?
-    val address: Array<DemoAddress>?
-    val thumbnailImageUrl: String?
-    val imageUrl: String?
-    val likeCount: Int?
-    val isLike: Boolean?
-    val commentCount: Int?
+    @SerializedName("pid") var feedId: Int? = null           // 등록번호
+    @SerializedName("title") var title: String? = null
+    @SerializedName("subtitle") var subTitle: String? = null
+    @SerializedName("date") var date: String? = null
+    @SerializedName("regdate") var regDate: String?= null
+    @SerializedName("editdate") var editDate: String? = null
+    @SerializedName("startTime") var startTime: Long? = null
+    @SerializedName("endTime") var endTime: Long? = null
+    @SerializedName("content") var content: String? = null
+    @SerializedName("certificate") var certImageUrl: String? = null
+    @SerializedName("place") var address: Array<AddressData>? = null
+    // 0 : 장소명칭, 1 : 주소, 2 : 위도, 3 : 경도
+    @SerializedName("like") var likeCount: Int? = null
+    @SerializedName("rpl_count") var commentCount: Int? = null
+    @SerializedName("cheer_count") var cheerCount : Int? = null
+    @SerializedName("sad_count") var sadCount : Int? = null
+    @SerializedName("anger_count") var angerCount : Int? = null
+    @SerializedName("noLike_count") var noLikeCount : Int? = null
 
 
-    constructor(feedId: Int, title: String, subTitle: String, date: Long, startTime: Long, endTime: Long, content: String, detailContent: String,
-                regDate: Long, editDate: Long, certImageUrl: String, address: Array<DemoAddress>, thumbnailImageUrl: String, imageUrl: String, likeCount: Int, isLike: Boolean, commentCount: Int) {
-        this.feedId = feedId
-        this.title = title
-        this.subTitle = subTitle
-        this.date = date
-        this.startTime = startTime
-        this.endTime = endTime
-        this.content = content
-        this.detailContent = detailContent
-        this.regDate = regDate
-        this.editDate = editDate
-        this.certImageUrl = certImageUrl
-        this.address = address
-        this.thumbnailImageUrl = thumbnailImageUrl
-        this.imageUrl = imageUrl
-        this.likeCount = likeCount
-        this.isLike = isLike
-        this.commentCount = commentCount
-    }
+    inner class AddressData{
+        @SerializedName("lat") var lat : Double? = null
+        @SerializedName("lng") var lon : Double? = null
+        @SerializedName("location") var location : String? = null
+        @SerializedName("placeName") var placeName : String? = null
 
-    companion object {
-        val instance = object : ArrayList<FeedData>() {
-            init {
-                add(FeedData(1, "아시아나 항공 4차 집회.", "‘OZKA면(오죽하면) 이러겠니’", Calendar.getInstance().timeInMillis, 100, 100, "content입니다.", "",
-                        110100, 110100, "",
-                        arrayOf(DemoAddress("서울특별시 용산구 용산동2가 1-727", "37.545696", "126.979326"), DemoAddress("용산중학교", "37.545912", "126.980972")),
-                        "https://search3.kakaocdn.net/argon/0x200_85_hr/Fg49rrhUWre",
-                        "https://search3.kakaocdn.net/argon/0x200_85_hr/Fg49rrhUWre",
-                        22, true, 12))
-            }
-        }
-    }
-    class DemoAddress constructor(_address: String, _lat: String, _lon: String) {
-        val address: String? = _address
-        val lat: String? = _lat
-        val lon: String? = _lon
     }
 }

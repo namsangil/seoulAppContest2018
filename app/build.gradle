@@ -33,6 +33,12 @@ dependencies {
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.daimajia.slider:library:1.1.5@aar'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.android.support:design:27.1.0'
+    // Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    // JSON Parsing
+    compile 'com.google.code.gson:gson:2.6.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 
 }
 repositories {
