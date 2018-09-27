@@ -7,14 +7,17 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.webkit.*
 import android.widget.*
+import appcontest.seoulsi_we.Consts
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.customView.CustomWebView
-import appcontest.seoulsi_we.model.FeedData
+import appcontest.seoulsi_we.model.FeedDetailData
 import appcontest.seoulsi_we.service.HttpUtil
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.demo_comment_view.view.*
 import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Call
@@ -62,7 +65,7 @@ class DetailDemoActivity : AppCompatActivity() {
 
     private var commentContainer: LinearLayout? = null
 
-    private var feedData: FeedData? = null
+    private var feedData: FeedDetailData? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,17 +82,17 @@ class DetailDemoActivity : AppCompatActivity() {
 
         initWebView(webView)
 
-        getData(feedID)
+        getData(feedID, Consts.DEVICE_ID)
 
     }
 
-    private fun getData(feedID: Int) {
-        HttpUtil.getHttpService().getEvent(feedID).enqueue(object : Callback<FeedData> {
-            override fun onFailure(call: Call<FeedData>?, t: Throwable?) {
+    private fun getData(feedID: Int, deviceID : String) {
+        HttpUtil.getHttpService().getEvent(feedID, deviceID).enqueue(object : Callback<FeedDetailData> {
+            override fun onFailure(call: Call<FeedDetailData>?, t: Throwable?) {
 
             }
 
-            override fun onResponse(call: Call<FeedData>?, response: Response<FeedData>?) {
+            override fun onResponse(call: Call<FeedDetailData>?, response: Response<FeedDetailData>?) {
                 feedData = response?.body()
                 updateUI(feedData!!)
             }
@@ -150,27 +153,27 @@ class DetailDemoActivity : AppCompatActivity() {
         }
     }
 
-    fun updateUI(data: FeedData) {
-        if (null != data.imageUrl) {
-            Picasso.with(this@DetailDemoActivity).load(String.format("%s%s",HttpUtil.URL,data.imageUrl)).into(feedImageView)
+    fun updateUI(data: FeedDetailData) {
+        if (null != data.feedData?.imageUrl) {
+            Picasso.with(this@DetailDemoActivity).load(String.format("%s%s",HttpUtil.URL,data.feedData?.imageUrl)).into(feedImageView)
         }
 
-        if (null != data.subTitle) {
-            subTitleTextview?.text = data.subTitle
+        if (null != data.feedData?.subTitle) {
+            subTitleTextview?.text = data.feedData?.subTitle
         }
 
-        if (null != data.title) {
-            titleTextView?.text = data.title
+        if (null != data.feedData?.title) {
+            titleTextView?.text = data.feedData?.title
         }
 
-        if (null != data.content) {
-            contentTextView?.text = data.content
+        if (null != data.feedData?.content) {
+            contentTextView?.text = data.feedData?.content
         }
 
-        if (null != data.date) {
+        if (null != data.feedData?.date) {
             val calendar = Calendar.getInstance()
 
-            calendar.timeInMillis = data.date!!
+            calendar.timeInMillis = data.feedData?.date!!
             timeTextView?.text = String.format(getString(R.string.time_format_end_hour),
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH) + 1,
@@ -178,9 +181,8 @@ class DetailDemoActivity : AppCompatActivity() {
                     calendar.get(Calendar.HOUR))
         }
 
-        cheerView
 
-        val addArr = data.address
+        val addArr = data.feedData?.address
 
         if (null != addArr) {
             if (addArr.isNotEmpty()) {
@@ -194,15 +196,15 @@ class DetailDemoActivity : AppCompatActivity() {
             }
         }
 
-        cheerCountTextView?.text = data.cheerCount?.toString()
-        sadCountTextView?.text = data.sadCount?.toString()
-        angerCountTextView?.text = data.angerCount?.toString()
-        unLikeCountTextView?.text = data.noLikeCount?.toString()
+        cheerCountTextView?.text = data.feedData?.cheerCount?.toString()
+        sadCountTextView?.text = data.feedData?.sadCount?.toString()
+        angerCountTextView?.text = data.feedData?.angerCount?.toString()
+        unLikeCountTextView?.text = data.feedData?.noLikeCount?.toString()
 
 
         val arr = JSONArray()
 
-        for (address in data.address!!) {
+        for (address in data.feedData?.address!!) {
             val obj = JSONObject()
             obj.put("id", "0")
             obj.put("lat", address.lat?.toString())
@@ -221,6 +223,17 @@ class DetailDemoActivity : AppCompatActivity() {
             }
 
         }).start()
+
+
+        commentContainer?.removeAllViews()
+
+        for(comment in data.replyData!!){
+            val v = LayoutInflater.from(this@DetailDemoActivity).inflate(R.layout.demo_comment_view, null, false)
+            v.comment_id.text = comment.deviceId
+            v.comment_textbox.text = comment.text
+
+            commentContainer?.addView(v, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+        }
 
     }
 

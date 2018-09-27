@@ -40,7 +40,6 @@ import com.google.gson.annotations.SerializedName
 
 class FeedData {
 
-    // 추후 구조 변경해야 함. 임시 구조
     @SerializedName("pid") var feedId: Int? = null           // 등록번호
     @SerializedName("title") var title: String? = null
     @SerializedName("subtitle") var subTitle: String? = null
@@ -53,7 +52,7 @@ class FeedData {
     @SerializedName("certificate") var certImageUrl: String? = null
     @SerializedName("place") var address: Array<AddressData>? = null
     // 0 : 장소명칭, 1 : 주소, 2 : 위도, 3 : 경도
-    @SerializedName("like") var likeCount: Int? = null
+    @SerializedName("like_count") var likeCount: Int? = null
     @SerializedName("rpl_count") var commentCount: Int? = null
     @SerializedName("cheer_count") var cheerCount : Int? = null
     @SerializedName("sad_count") var sadCount : Int? = null

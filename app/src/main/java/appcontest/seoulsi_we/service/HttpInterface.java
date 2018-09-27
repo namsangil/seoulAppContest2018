@@ -2,6 +2,7 @@ package appcontest.seoulsi_we.service;
 
 
 import appcontest.seoulsi_we.model.FeedData;
+import appcontest.seoulsi_we.model.FeedDetailData;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -15,6 +16,6 @@ public interface HttpInterface {
     Call<FeedData[]> getEvents(@Query("condition") int condition);
 
     @GET("api/eventsOne")
-    Call<FeedData> getEvent(@Query("pid") int feedID);
+    Call<FeedDetailData> getEvent(@Query("pid") int feedID, @Query("device_id") String deviceID);
 
 }
