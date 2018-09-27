@@ -18,4 +18,6 @@ public interface HttpInterface {
     @GET("api/eventsOne")
     Call<FeedDetailData> getEvent(@Query("pid") int feedID, @Query("device_id") String deviceID);
 
+    @GET("api/searchEvent")
+    Call<FeedData[]> searchEvents(@Query("keyword") String keyword);
 }
