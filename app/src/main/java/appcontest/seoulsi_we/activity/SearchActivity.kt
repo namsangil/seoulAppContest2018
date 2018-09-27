@@ -1,9 +1,12 @@
 package appcontest.seoulsi_we.activity
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -13,10 +16,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import appcontest.seoulsi_we.Consts
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.model.FeedData
 import appcontest.seoulsi_we.service.HttpUtil
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.searched_item_layout.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,6 +36,14 @@ class SearchActivity : BaseActivity() {
     private var searchedFeedViewAdapter: SearchedFeedViewAdapter? = null
     private var fragmentContainer: FrameLayout? = null
     private var tabHost: TabHost? = null
+
+    private var recentContainer: LinearLayout? = null
+    private var recommandContainer: LinearLayout? = null
+
+    private val SPLIT_CHAR_DATA = "&&"
+    private val SPLIT_CHAR_OBJECT = "!!"
+
+    private val recentSearchedDataList: ArrayList<RecentSearchData> = ArrayList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,13 +75,13 @@ class SearchActivity : BaseActivity() {
 
         //Tab 1
         var spec: TabHost.TabSpec = host.newTabSpec("0")
-        spec.setContent(R.id.tab1)
+        spec.setContent(R.id.recommand_container_scrollview)
         spec.setIndicator("추천 검색어")
         host.addTab(spec)
 
         //Tab 2
         spec = host.newTabSpec("1")
-        spec.setContent(R.id.tab2)
+        spec.setContent(R.id.recent_searched_container_scrollview)
         spec.setIndicator("최근 검색어")
 
         host.addTab(spec)
@@ -87,8 +100,32 @@ class SearchActivity : BaseActivity() {
         searchEditText = findViewById(R.id.navigation_toolbar_search)
         searchEditText?.setOnEditorActionListener({ v, actionId, event ->
             if (EditorInfo.IME_ACTION_SEARCH == actionId) {
-                search(searchEditText?.text?.toString())
+                val text = searchEditText?.text?.toString()
 
+                var isExistKeyword = false
+                var idx = 0
+                for (searchData in recentSearchedDataList) {
+                    if (searchData.keyWord == text) {
+                        isExistKeyword = true
+                        break
+                    }
+                    idx++
+                }
+
+                val calendar = Calendar.getInstance()
+                val date = String.format("%02d.%02d", calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH))
+
+                // 리스트에 존재하면 날짜만 변경하고 다시 저장
+                if (true == isExistKeyword) {
+                    recentSearchedDataList[idx] = RecentSearchData(text!!, date)
+                } else {
+                    // 존재하지 않으면 추가로 저장
+                    recentSearchedDataList.add(RecentSearchData(text!!, date))
+                }
+
+                saveRecentSearchedKeywords(this@SearchActivity, recentSearchedDataList)
+
+                search(text)
                 return@setOnEditorActionListener true
             }
 
@@ -109,12 +146,53 @@ class SearchActivity : BaseActivity() {
         })
 
         fragmentContainer = findViewById(android.R.id.tabcontent)
+        recommandContainer = findViewById(R.id.recommand_container)
+        recentContainer = findViewById(R.id.recent_searched_container)
+
+        recentSearchedDataList.addAll(loadRecentSearchedKeywords(this@SearchActivity))
 
         searchedListView = findViewById(R.id.searched_list_view)
         searchedFeedViewAdapter = SearchedFeedViewAdapter()
         searchedListView?.adapter = searchedFeedViewAdapter
         searchedListView?.layoutManager = LinearLayoutManager(this@SearchActivity)
+        val divider = DividerItemDecoration(this@SearchActivity, LinearLayoutManager(this@SearchActivity).orientation)
+        searchedListView?.addItemDecoration(divider)
         searchedFeedViewAdapter?.notifyDataSetChanged()
+
+        updateUI()
+    }
+
+    private fun updateUI() {
+
+        recentContainer?.removeAllViews()
+        var index = 0
+        for (data in recentSearchedDataList) {
+            val v = LayoutInflater.from(this@SearchActivity).inflate(R.layout.searched_item_layout, null, false)
+            v.tag = index
+            v.searched_view_keyword.text = data.keyWord
+            v.searched_view_date.text = data.date
+            v.searched_view_delete.tag = index
+            v.searched_view_delete.setOnClickListener({ view ->
+                val idx: Int = view.tag as Int
+                recentSearchedDataList.removeAt(idx)
+                saveRecentSearchedKeywords(this@SearchActivity, recentSearchedDataList)
+            })
+
+            v.setOnClickListener({ view ->
+                val idx = view.tag as Int
+                searchEditText?.setText(recentSearchedDataList[idx].keyWord)
+                search(recentSearchedDataList[idx].keyWord)
+
+                val recentSearchedData = recentSearchedDataList[idx]
+                recentSearchedDataList.removeAt(idx)
+                recentSearchedDataList.add(0, recentSearchedData)
+                saveRecentSearchedKeywords(this@SearchActivity, recentSearchedDataList)
+
+            })
+            recentContainer?.addView(v, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+            index++
+        }
+
     }
 
     private fun search(searchText: String?) {
@@ -134,7 +212,6 @@ class SearchActivity : BaseActivity() {
                 searchedListView?.visibility = View.VISIBLE
             }
         })
-
     }
 
 
@@ -218,5 +295,50 @@ class SearchActivity : BaseActivity() {
         val intent = Intent(this@SearchActivity, DetailDemoActivity::class.java)
         intent.putExtra(DetailDemoActivity.FEED_ID_KEY, feedID)
         startActivity(intent)
+    }
+
+    fun loadRecentSearchedKeywords(activity: Activity): ArrayList<RecentSearchData> {
+        val list = ArrayList<RecentSearchData>()
+        val sharedPreference = activity.getSharedPreferences(Consts.SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE)
+        val data = sharedPreference.getString(Consts.RECENT_SEARCH_SHARED_PREFERENCE_KEY, "")
+
+        if (data.isEmpty()) {
+            return list
+        }
+
+        val array = data.split(SPLIT_CHAR_OBJECT)
+        for (searchedData in array) {
+            if (searchedData.isEmpty()) {
+                break
+            }
+            val items = searchedData.split(SPLIT_CHAR_DATA)
+            val recentSearchedData = RecentSearchData(items[0], items[1])
+            list.add(recentSearchedData)
+        }
+
+        return list
+    }
+
+    fun saveRecentSearchedKeywords(activity: Activity, recentSearchDatas: ArrayList<RecentSearchData>) {
+        val saveStr = StringBuilder()
+        for (recentSearchData in recentSearchDatas) {
+            saveStr.append(recentSearchData.keyWord)
+                    .append(SPLIT_CHAR_DATA)
+                    .append(recentSearchData.date)
+                    .append(SPLIT_CHAR_OBJECT)
+        }
+
+        val sharedPreference = activity.getSharedPreferences(Consts.SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE)
+        val editor = sharedPreference.edit()
+        editor.putString(Consts.RECENT_SEARCH_SHARED_PREFERENCE_KEY, saveStr.toString())
+
+        editor.apply()
+
+        updateUI()
+    }
+
+    inner class RecentSearchData constructor(keyword: String, date: String) {
+        val keyWord = keyword
+        val date = date
     }
 }

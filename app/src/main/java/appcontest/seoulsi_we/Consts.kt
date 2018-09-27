@@ -7,5 +7,8 @@ package appcontest.seoulsi_we
 class Consts {
     companion object {
         var DEVICE_ID = "unKnown"
+
+        val SHARED_PREFERENCE_KEY = "sharedPreference"
+        val RECENT_SEARCH_SHARED_PREFERENCE_KEY = "recentSearchedKeyword"
     }
 }

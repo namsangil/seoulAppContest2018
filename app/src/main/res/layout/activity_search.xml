@@ -22,12 +22,11 @@
         <TabHost
             android:id="@+id/tabHost"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <TabWidget
@@ -39,38 +38,41 @@
                 <FrameLayout
                     android:id="@android:id/tabcontent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
-                    <LinearLayout
-                        android:id="@+id/tab1"
+                    <ScrollView
+                        android:id="@+id/recommand_container_scrollview"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:divider="@drawable/enrol_demo_list_divider"
-                        android:orientation="vertical"
-                        android:showDividers="middle">
+                        android:layout_height="match_parent">
 
-                        <include layout="@layout/searched_item_layout" />
+                        <LinearLayout
+                            android:id="@+id/recommand_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:divider="@drawable/enrol_demo_list_divider"
+                            android:orientation="vertical"
+                            android:showDividers="middle">
 
-                        <include layout="@layout/searched_item_layout" />
+                        </LinearLayout>
+                    </ScrollView>
 
-                        <include layout="@layout/searched_item_layout" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/tab2"
+                    <ScrollView
+                        android:id="@+id/recent_searched_container_scrollview"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent">
 
-                        <include layout="@layout/searched_item_layout" />
+                        <LinearLayout
+                            android:id="@+id/recent_searched_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:divider="@drawable/enrol_demo_list_divider"
+                            android:orientation="vertical"
+                            android:showDividers="middle">
 
-                        <include layout="@layout/searched_item_layout" />
+                        </LinearLayout>
 
-                        <include layout="@layout/searched_item_layout" />
-
-                    </LinearLayout>
-
+                    </ScrollView>
                 </FrameLayout>
 
 
@@ -81,7 +83,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/searched_list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
         </android.support.v7.widget.RecyclerView>
 
