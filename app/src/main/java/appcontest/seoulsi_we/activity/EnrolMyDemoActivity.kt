@@ -3,11 +3,13 @@ package appcontest.seoulsi_we.activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.dialog.SelectLocationDialog
@@ -177,7 +179,7 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
         editText.setBackgroundResource(0)
         dialog.setView(editText)
 
-        dialog.setPositiveButton("확인", ({ _, _ ->
+        dialog.setPositiveButton("확인", ({ dialog, _ ->
             val alias = editText.text.toString()
             placeList[idx].placeName = alias
 
@@ -186,6 +188,8 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
             } else {
                 v.demo_place_name.text = address.location + "(" + alias + ")"
             }
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(editText.windowToken, 0)
 
         }))
 
