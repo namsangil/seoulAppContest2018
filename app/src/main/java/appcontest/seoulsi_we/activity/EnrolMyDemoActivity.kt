@@ -1,10 +1,15 @@
 package appcontest.seoulsi_we.activity
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,24 +19,32 @@ import android.widget.*
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.dialog.SelectLocationDialog
 import appcontest.seoulsi_we.model.FeedData
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.enrol_place_view.view.*
 import java.util.*
 
 
 class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationDialogListener {
+    private val GALLERY_CODE = 1112
 
-    var firstLocationView: LinearLayout? = null
+    private var firstLocationView: LinearLayout? = null
 
-    var enrolFeedData = FeedData()
+    private var enrolFeedData = FeedData()
 
-    var dateTextView: TextView? = null
-    var promoterEditText: EditText? = null
-    var aimEditText: EditText? = null
-    var addPlaceButton: ImageView? = null
+    private var dateTextView: TextView? = null
+    private var promoterEditText: EditText? = null
+    private var aimEditText: EditText? = null
+    private var addPlaceButton: ImageView? = null
 
-    var placeContainer: LinearLayout? = null
-    val placeList: ArrayList<FeedData.AddressData> = ArrayList()
+    private var placeContainer: LinearLayout? = null
+    private val placeList: ArrayList<FeedData.AddressData> = ArrayList()
 
+    private var photoButton: View? = null
+    private var photoUri: Uri? = null
+    private var currentPhotoPath: String? = null //실제 사진 파일 경로
+    private var mImageCaptureName: String? = null //이미지 이름
+
+    private var certificationImage : ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +74,9 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
         }
         addPlaceButton = findViewById(R.id.enrol_demo_add_place_button)
         addPlaceButton?.visibility = View.GONE
+
+        photoButton = findViewById(R.id.activity_enrol_photo_button)
+        certificationImage = findViewById(R.id.certificate_photo_image)
 
     }
 
@@ -111,7 +127,7 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
                     // TODO 데이터를 전송한다.
                     Toast.makeText(this@EnrolMyDemoActivity, "데이터를 전송합니다..", Toast.LENGTH_SHORT).show()
                 } else {
-                      Toast.makeText(this@EnrolMyDemoActivity, "입력되지 않은 데이터가 있습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@EnrolMyDemoActivity, "입력되지 않은 데이터가 있습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
             R.id.enrol_demo_add_place_button -> {
@@ -119,8 +135,45 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
                 dialog.setListener(this@EnrolMyDemoActivity)
                 dialog.show(fragmentManager, "DialogFragment")
             }
+            R.id.activity_enrol_photo_button -> {
+                Toast.makeText(this@EnrolMyDemoActivity, "사진을 등록하려고 합니다.", Toast.LENGTH_SHORT).show()
+                selectPhotoByGallery()
+            }
 
         }
+    }
+
+    fun selectPhotoByGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.data = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        intent.type = "image/*"
+        startActivityForResult(intent, GALLERY_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GALLERY_CODE) {
+                sendPicture(data?.data!!)
+            }
+        }
+    }
+
+    private fun sendPicture(imgUri : Uri){
+        Picasso.with(this@EnrolMyDemoActivity).load(imgUri).fit().centerCrop().into(certificationImage)
+    }
+
+
+    private fun getRealPathFromURI(contentUri : Uri) : String{
+        var columnIndex = 0
+        var proj : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor : Cursor = contentResolver.query(contentUri, proj, null, null, null)
+        if(cursor.moveToFirst()){
+            columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        }
+
+        return cursor.getString(columnIndex)
     }
 
     override fun onSelectedLocation(lat: String, lon: String, location: String, isFirstLocation: Boolean) {
@@ -217,36 +270,5 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
         enrolFeedData.date = startCalendar.timeInMillis
         enrolFeedData.startTime = startCalendar.get(Calendar.HOUR_OF_DAY)
         enrolFeedData.endTime = endCalendar.get(Calendar.HOUR_OF_DAY)
-    }
-
-    class EnrolDemo {
-        var time: Long? = null
-        var lat: String? = null
-        var lon: String? = null
-        var address: String? = null
-        var promoter: String? = null
-        var aim: String? = null
-
-        fun isNotEmpty(): Boolean {
-            time ?: return false
-            lat ?: return false
-            lon ?: return false
-            address ?: return false
-            if (address!!.isEmpty()) {
-                return false
-            }
-
-            promoter ?: return false
-            if (promoter!!.isEmpty()) {
-                return false
-            }
-
-            aim ?: return false
-            if (aim!!.isEmpty()) {
-                return false
-            }
-
-            return true
-        }
     }
 }

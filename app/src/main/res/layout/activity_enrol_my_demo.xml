@@ -149,9 +149,12 @@
                     android:textStyle="bold" />
 
                 <LinearLayout
+                    android:id="@+id/activity_enrol_photo_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:onClick="onClicked"
                     android:background="@drawable/enrol_demo_border_normal"
                     android:orientation="horizontal">
 
@@ -170,6 +173,12 @@
                         android:text="@string/word_enrol_picture" />
 
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/certificate_photo_image"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    />
 
             </LinearLayout>
 
