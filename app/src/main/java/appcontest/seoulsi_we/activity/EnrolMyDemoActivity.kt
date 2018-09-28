@@ -18,7 +18,7 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
 
     var enrolDemo = EnrolDemo()
 
-    var dateTextView : TextView?= null
+    var dateTextView: TextView? = null
     var promoterEditText: EditText? = null
     var aimEditText: EditText? = null
 
@@ -46,14 +46,28 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
 
                     val dialog = TimePickerDialog(this@EnrolMyDemoActivity, TimePickerDialog.OnTimeSetListener { _, hour, min ->
                         cal.set(year, month, date, hour, min)
-                        onSelectedTime(cal)
+                        val dialog = TimePickerDialog(this@EnrolMyDemoActivity, TimePickerDialog.OnTimeSetListener { _, hour, min ->
+                            val endTime = Calendar.getInstance()
+
+                            endTime.set(year, month, date, hour, min)
+
+                            onSelectedTime(cal, endTime)
+
+                        }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true)
+
+                        dialog.show()
+                        Toast.makeText(this@EnrolMyDemoActivity, "집회 종료 시간을 선택해주세요.", Toast.LENGTH_SHORT).show()
+
                     }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true)  //마지막 boolean 값은 시간을 24시간으로 보일지 아닐지
 
                     dialog.show()
+                    Toast.makeText(this@EnrolMyDemoActivity, "집회 시작 시간을 선택해주세요.", Toast.LENGTH_SHORT).show()
+
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE))
 
                 dialog.datePicker.minDate = Date().time    //입력한 날짜 이전으로 클릭 안되게 옵션
                 dialog.show()
+                Toast.makeText(this@EnrolMyDemoActivity, "집회 일자를 선택해주세요.", Toast.LENGTH_SHORT).show()
 
             }
         // 장소 등록
@@ -83,16 +97,17 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
         locationTextView?.text = address
     }
 
-    fun onSelectedTime(cal : Calendar){
-        val value = String.format(getString(R.string.time_format),
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH)+1,
-                cal.get(Calendar.DATE),
-                cal.get(Calendar.HOUR_OF_DAY),
-                cal.get(Calendar.MINUTE))
+    fun onSelectedTime(startCalendar: Calendar, endCalendar: Calendar) {
+        val value = String.format(getString(R.string.enrol_demo_time_format),
+                startCalendar.get(Calendar.YEAR),
+                startCalendar.get(Calendar.MONTH) + 1,
+                startCalendar.get(Calendar.DATE),
+                startCalendar.get(Calendar.HOUR_OF_DAY),
+                endCalendar.get(Calendar.HOUR_OF_DAY)
+        )
 
         dateTextView?.text = value
-        enrolDemo.time = cal.timeInMillis
+        enrolDemo.time = startCalendar.timeInMillis
     }
 
     class EnrolDemo {
