@@ -26,7 +26,7 @@ class SelectLocationDialog : DialogFragment(), View.OnClickListener {
     private val url = "http://ec2-52-78-3-222.ap-northeast-2.compute.amazonaws.com/enrol.html"
 
     interface SelectLocationDialogListener {
-        fun onSelectedLocation(lat: String, lon: String, address: String)
+        fun onSelectedLocation(lat: String, lon: String, location: String, isFirstLocation : Boolean)
     }
 
     private val handler = Handler()
@@ -38,9 +38,10 @@ class SelectLocationDialog : DialogFragment(), View.OnClickListener {
     private var locationManager: LocationManager? = null
     private var listener: SelectLocationDialogListener? = null
 
-
     private var lat = ""            // 위도
     private var lon = ""            // 경도
+
+    var isFirstLocation = false
 
     companion object {
         fun newInstance(): SelectLocationDialog {
@@ -167,7 +168,7 @@ class SelectLocationDialog : DialogFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         val textView = v as TextView
         val address = textView.text.toString()
-        listener?.onSelectedLocation(lat, lon, address)
+        listener?.onSelectedLocation(lat, lon, address, isFirstLocation)
 
         dismiss()
     }

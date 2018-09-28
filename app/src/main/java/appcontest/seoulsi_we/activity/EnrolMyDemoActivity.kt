@@ -1,26 +1,35 @@
 package appcontest.seoulsi_we.activity
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.view.WindowManager
+import android.widget.*
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.dialog.SelectLocationDialog
+import appcontest.seoulsi_we.model.FeedData
+import kotlinx.android.synthetic.main.enrol_place_view.view.*
 import java.util.*
 
 
 class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationDialogListener {
 
-    var locationTextView: TextView? = null
+    var firstLocationView: LinearLayout? = null
 
-    var enrolDemo = EnrolDemo()
+    var enrolFeedData = FeedData()
 
     var dateTextView: TextView? = null
     var promoterEditText: EditText? = null
     var aimEditText: EditText? = null
+    var addPlaceButton: ImageView? = null
+
+    var placeContainer: LinearLayout? = null
+    val placeList: ArrayList<FeedData.AddressData> = ArrayList()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +42,23 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
         promoterEditText = findViewById(R.id.enrol_promoter)
         aimEditText = findViewById(R.id.enrol_aim)
 
-        locationTextView = findViewById(R.id.enrol_location)
+        placeContainer = findViewById(R.id.enrol_location_container)
+        firstLocationView = findViewById(R.id.first_location_view)
+        firstLocationView?.demo_place_name?.setOnClickListener {
+            onClicked(firstLocationView?.demo_place_name!!)
+        }
+        // 첫번째 장소는 삭제 기능이 없다.
+        firstLocationView?.findViewById<ImageView>(R.id.delete_demo_place)?.visibility = View.GONE
+        firstLocationView?.findViewById<ImageView>(R.id.add_demo_place_alias)?.visibility = View.GONE
+        firstLocationView?.findViewById<ImageView>(R.id.add_demo_place_alias)?.tag = 0
+        firstLocationView?.findViewById<ImageView>(R.id.add_demo_place_alias)?.setOnClickListener { view ->
+            val idx = view.tag as Int
+            if (0 < placeList.size) {
+                showAliasDialog(firstLocationView!!, idx, placeList[0])
+            }
+        }
+        addPlaceButton = findViewById(R.id.enrol_demo_add_place_button)
+        addPlaceButton?.visibility = View.GONE
 
     }
 
@@ -71,30 +96,108 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
 
             }
         // 장소 등록
-            R.id.enrol_location -> {
+            R.id.demo_place_name -> {
                 val dialog = SelectLocationDialog.newInstance()
+                dialog.isFirstLocation = true
                 dialog.setListener(this@EnrolMyDemoActivity)
                 dialog.show(fragmentManager, "DialogFragment")
             }
             R.id.send_demo -> {
-                enrolDemo.promoter = promoterEditText?.text.toString()
-                enrolDemo.aim = aimEditText?.text.toString()
-                if (enrolDemo.isNotEmpty()) {
+                enrolFeedData.host = promoterEditText?.text.toString()
+                enrolFeedData.content = aimEditText?.text.toString()
+                if (enrolFeedData.isEmptyForEnrol()) {
                     // TODO 데이터를 전송한다.
                     Toast.makeText(this@EnrolMyDemoActivity, "데이터를 전송합니다..", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this@EnrolMyDemoActivity, "입력되지 않은 데이터가 있습니다.", Toast.LENGTH_SHORT).show()
+                      Toast.makeText(this@EnrolMyDemoActivity, "입력되지 않은 데이터가 있습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
+            R.id.enrol_demo_add_place_button -> {
+                val dialog = SelectLocationDialog.newInstance()
+                dialog.setListener(this@EnrolMyDemoActivity)
+                dialog.show(fragmentManager, "DialogFragment")
+            }
+
         }
     }
 
-    override fun onSelectedLocation(lat: String, lon: String, address: String) {
-        enrolDemo.lat = lat
-        enrolDemo.lon = lon
-        enrolDemo.address = address
+    override fun onSelectedLocation(lat: String, lon: String, location: String, isFirstLocation: Boolean) {
 
-        locationTextView?.text = address
+        val address = FeedData.AddressData(lat.toDouble(), lon.toDouble(), location, "")
+
+        if (true == isFirstLocation) {
+            if (0 < placeList.size) {
+                placeList.removeAt(0)
+            }
+            placeList.add(0, address)
+            firstLocationView?.add_demo_place_alias?.visibility = View.VISIBLE
+        } else {
+            placeList.add(address)
+        }
+
+        enrolFeedData.address = placeList.toTypedArray()
+
+        if (true == isFirstLocation) {
+            firstLocationView?.demo_place_name?.text = address.location
+            firstLocationView?.demo_place_name?.tag = placeList.size - 1 // index
+        } else {
+            val v = LayoutInflater.from(this@EnrolMyDemoActivity).inflate(R.layout.enrol_place_view, null, false)
+            v.demo_place_name.text = address.location
+            v.delete_demo_place.tag = placeList.size - 1
+            v.delete_demo_place.setOnClickListener { view ->
+                val idx = view.tag as Int
+                placeList.removeAt(idx)
+                placeContainer?.removeViewAt(idx)
+                // 객체에 반영
+                enrolFeedData.address = placeList.toTypedArray()
+            }
+            v.add_demo_place_alias.tag = placeList.size - 1
+            v.add_demo_place_alias.setOnClickListener { view ->
+                val idx = view.tag as Int
+                // 별명을 입력할 다이얼로그 호출
+                showAliasDialog(v, idx, address)
+
+            }
+            placeContainer?.addView(v, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+        }
+
+        // 하나라도 추가하게 되면, 장소 추가 버튼이 보여진다.
+        addPlaceButton?.visibility = View.VISIBLE
+
+    }
+
+    fun showAliasDialog(v: View, idx: Int, address: FeedData.AddressData) {
+        val dialog = AlertDialog.Builder(this@EnrolMyDemoActivity)
+        dialog.setMessage("장소 이름을 입력해주세요. ex) XX빌딩 정문")
+
+        val editText = EditText(this@EnrolMyDemoActivity)
+        editText.setText(placeList[idx].placeName)
+        editText.gravity = Gravity.CENTER_HORIZONTAL
+        editText.selectAll()
+        editText.setBackgroundResource(0)
+        dialog.setView(editText)
+
+        dialog.setPositiveButton("확인", ({ _, _ ->
+            val alias = editText.text.toString()
+            placeList[idx].placeName = alias
+
+            if (alias.isEmpty()) {
+                v.demo_place_name.text = address.location
+            } else {
+                v.demo_place_name.text = address.location + "(" + alias + ")"
+            }
+
+        }))
+
+        dialog.setNegativeButton("취소", null)
+
+        val alertDialog = dialog.create()
+
+        if (null != alertDialog.window) {
+            alertDialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        }
+
+        alertDialog.show()
     }
 
     fun onSelectedTime(startCalendar: Calendar, endCalendar: Calendar) {
@@ -107,7 +210,9 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
         )
 
         dateTextView?.text = value
-        enrolDemo.time = startCalendar.timeInMillis
+        enrolFeedData.date = startCalendar.timeInMillis
+        enrolFeedData.startTime = startCalendar.get(Calendar.HOUR_OF_DAY)
+        enrolFeedData.endTime = endCalendar.get(Calendar.HOUR_OF_DAY)
     }
 
     class EnrolDemo {

@@ -46,8 +46,8 @@ class FeedData {
     @SerializedName("date") var date: Long? = null
     @SerializedName("regdate") var regDate: String?= null
     @SerializedName("editdate") var editDate: String? = null
-    @SerializedName("startTime") var startTime: Long? = null
-    @SerializedName("endTime") var endTime: Long? = null
+    @SerializedName("startTime") var startTime: Int? = null
+    @SerializedName("endTime") var endTime: Int? = null
     @SerializedName("content") var content: String? = null
     @SerializedName("certificate") var certImageUrl: String? = null
     @SerializedName("place") var address: Array<AddressData>? = null
@@ -59,13 +59,33 @@ class FeedData {
     @SerializedName("anger_count") var angerCount : Int? = null
     @SerializedName("noLike_count") var noLikeCount : Int? = null
     @SerializedName("rimage") var imageUrl : String? = null
+    @SerializedName("host") var host : String? = null
 
 
-    inner class AddressData{
-        @SerializedName("lat") var lat : Double? = null
-        @SerializedName("lng") var lon : Double? = null
-        @SerializedName("location") var location : String? = null
-        @SerializedName("placeName") var placeName : String? = null
+    class AddressData constructor(lat : Double, lon : Double, location : String, placeName : String){
+        @SerializedName("lat") var lat : Double? = lat
+        @SerializedName("lng") var lon : Double? = lon
+        @SerializedName("location") var location : String? = location
+        @SerializedName("placeName") var placeName : String? = placeName
 
+    }
+
+    fun isEmptyForEnrol() : Boolean{
+        // feedID, date, startTime, endTime, address, host, title, certificate
+        feedId ?: return false
+        date ?: return false
+        startTime ?: return false
+        endTime ?: return false
+        address ?: return false
+        host ?: return false
+
+        if(title != null && title!!.isEmpty())
+        {
+            return false
+        }
+
+        certImageUrl ?: return false
+
+        return true
     }
 }

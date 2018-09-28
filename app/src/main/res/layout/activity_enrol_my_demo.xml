@@ -72,26 +72,44 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#757778" />
 
-                        <TextView
-                            android:id="@+id/enrol_location"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="onClicked"
-                            android:padding="15dp"
-                            android:text="@string/word_location"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#757778" />
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/enrol_location_container"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <include
+                                    android:id="@+id/first_location_view"
+                                    layout="@layout/enrol_place_view"
+                                    android:onClick="onClicked" />
+
+                            </LinearLayout>
+
+                            <ImageView
+                                android:id="@+id/enrol_demo_add_place_button"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:onClick="onClicked"
+                                android:padding="5dp"
+                                android:src="@drawable/ic_add" />
+
+                        </LinearLayout>
 
                         <EditText
                             android:id="@+id/enrol_promoter"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:hint="@string/word_promoter"
                             android:maxLength="10"
                             android:maxLines="1"
                             android:onClick="onClicked"
                             android:padding="15dp"
-                            android:background="@null"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#757778" />
 
@@ -172,8 +190,8 @@
         android:layout_height="60dp"
         android:background="#8ac81e"
         android:gravity="center"
-        android:text="@string/word_send"
         android:onClick="onClicked"
+        android:text="@string/word_send"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white"
         android:textStyle="bold">
