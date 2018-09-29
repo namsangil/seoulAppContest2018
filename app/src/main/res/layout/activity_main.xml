@@ -124,7 +124,8 @@
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:onClick="onClickFeedOrder"
-                        android:src="@drawable/filter" />
+                        android:src="@drawable/filter"
+                        android:visibility="gone"/>
 
 
                 </LinearLayout>
