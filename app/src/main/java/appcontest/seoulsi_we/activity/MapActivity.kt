@@ -233,7 +233,7 @@ class MapActivity : BaseActivity() {
 
         for (data in feedList) {
             val obj = JSONObject()
-            obj.put("id", data.feedId)
+            obj.put("id", data.feedId.toString())
             obj.put("lat", data.address!![0].lat)
             obj.put("lon", data.address!![0].lon)
 
