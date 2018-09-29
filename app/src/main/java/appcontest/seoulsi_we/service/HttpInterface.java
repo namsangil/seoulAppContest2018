@@ -19,11 +19,14 @@ public interface HttpInterface {
     Call<FeedData[]> getEvents(@Query("condition") int condition);
 
     @GET("api/eventsOne")
-    Call<FeedDetailData> getEvent(@Query("pid") long feedID, @Query("device_id") String deviceID);
+    Call<FeedDetailData> getEvent(@Query("pid") long pid, @Query("device_id") String deviceID);
 
     @GET("api/searchEvent")
     Call<FeedData[]> searchEvents(@Query("keyword") String keyword);
 
     @GET("api/eventsWrite")
-    Call<ResultData> writeEvent(@Query("pid") long feedID, @Query("date") long date, @Query("startTime") int startTime, @Query("endTime") int endTime, @Query("title") String title, @Query("content") String content, @Query("host") String host, @Query("place") JSONArray place, @Query("certificate") String certFileName);
+    Call<ResultData> writeEvent(@Query("pid") long pid, @Query("date") long date, @Query("startTime") int startTime, @Query("endTime") int endTime, @Query("title") String title, @Query("content") String content, @Query("host") String host, @Query("place") JSONArray place, @Query("certificate") String certFileName);
+
+    @GET("/api/events/reply/write")
+    Call<ResultData> writeReply(@Query("pid") long pid, @Query("device_id") String deviceID, @Query("text") String text);
 }

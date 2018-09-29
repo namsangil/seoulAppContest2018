@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 class ReplyData{
 
     @SerializedName("_id") var replyID : String? = null
-    @SerializedName("pid") var pid : Int? = null
+    @SerializedName("pid") var pid : Long? = null
     @SerializedName("device_id") var deviceId: String? = null           // 기기아이디
     @SerializedName("editdate") var editDate : String? = null
     @SerializedName("regdate") var regDate : String? = null

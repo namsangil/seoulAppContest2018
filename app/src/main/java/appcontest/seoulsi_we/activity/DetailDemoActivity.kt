@@ -9,12 +9,14 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.webkit.*
 import android.widget.*
 import appcontest.seoulsi_we.Consts
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.customView.CustomWebView
 import appcontest.seoulsi_we.model.FeedDetailData
+import appcontest.seoulsi_we.model.ResultData
 import appcontest.seoulsi_we.service.HttpUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.demo_comment_view.view.*
@@ -64,17 +66,17 @@ class DetailDemoActivity : AppCompatActivity() {
     private var commentEnrolButton: Button? = null
 
     private var commentContainer: LinearLayout? = null
-
     private var detailEventData: FeedDetailData? = null
 
+    private var feedID: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_demo)
 
-        val feedID = intent.getLongExtra(FEED_ID_KEY, -1)
+        feedID = intent.getLongExtra(FEED_ID_KEY, -1)
 
-        if (feedID < 0) {
+        if (feedID!! < 0) {
             throw IllegalArgumentException("0 이상이 피드 아이디를 넘겨받아야 합니다.")
         }
 
@@ -82,7 +84,7 @@ class DetailDemoActivity : AppCompatActivity() {
 
         initWebView(webView)
 
-        getData(feedID, Consts.DEVICE_ID)
+        getData(feedID!!, Consts.DEVICE_ID)
 
     }
 
@@ -126,11 +128,6 @@ class DetailDemoActivity : AppCompatActivity() {
         webView?.loadUrl(url)
 
         webView?.addJavascriptInterface(AndroidBridge(handler, this), "android")
-
-    }
-
-    override fun onResume() {
-        super.onResume()
 
     }
 
@@ -313,7 +310,42 @@ class DetailDemoActivity : AppCompatActivity() {
                 val chooser: Intent = Intent.createChooser(sendIntent, "")
                 startActivity(chooser)
             }
+            R.id.detail_activity_enrol_comment -> {
+                //TODO 댓글 등록
+                writeReply()
+            }
+
         }
+    }
+
+    fun writeReply() {
+        val text = commentEditText?.text?.toString()
+        if (text!!.isEmpty()) {
+            return
+        }
+
+        HttpUtil.getHttpService().writeReply(feedID!!, Consts.DEVICE_ID, text).enqueue(object : Callback<ResultData> {
+            override fun onFailure(call: Call<ResultData>?, t: Throwable?) {
+
+            }
+
+            override fun onResponse(call: Call<ResultData>?, response: Response<ResultData>?) {
+                val resultCommand = ResultData.ResultCommand.findCommand(response?.body()?.resultCode!!)
+                when (resultCommand) {
+                    ResultData.ResultCommand.SUCCESS -> {
+                        getData(feedID!!, Consts.DEVICE_ID)
+                        commentEditText?.setText("")
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(commentEditText?.windowToken, 0)
+
+                    }
+                    ResultData.ResultCommand.FAIL -> {
+
+                    }
+
+                }
+            }
+        })
     }
 
     fun pan(v: View) {
@@ -329,7 +361,7 @@ class DetailDemoActivity : AppCompatActivity() {
                 detailEventData?.feedData?.address ?: return
                 if (0 < detailEventData?.feedData?.address?.size!!) {
                     val size = detailEventData?.feedData?.address?.size!!
-                    val addressData = detailEventData?.feedData?.address!![size-1]
+                    val addressData = detailEventData?.feedData?.address!![size - 1]
                     setPosition(addressData.lat, addressData.lon)
                 }
             }

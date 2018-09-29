@@ -374,6 +374,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
                     android:background="#8ac81e"
+                    android:onClick="onClickButton"
                     android:text="등록"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/white"
