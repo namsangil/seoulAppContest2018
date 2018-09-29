@@ -15,6 +15,7 @@ import android.widget.*
 import appcontest.seoulsi_we.Consts
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.customView.CustomWebView
+import appcontest.seoulsi_we.model.EventsFeelData
 import appcontest.seoulsi_we.model.FeedDetailData
 import appcontest.seoulsi_we.model.ResultData
 import appcontest.seoulsi_we.service.HttpUtil
@@ -96,6 +97,9 @@ class DetailDemoActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<FeedDetailData>?, response: Response<FeedDetailData>?) {
                 detailEventData = response?.body()
+                if (null == detailEventData?.eventsFeelData) {
+                    detailEventData?.eventsFeelData = EventsFeelData(detailEventData?.feedData?.feedId!!)
+                }
                 updateUI(detailEventData!!)
             }
         })
@@ -286,24 +290,22 @@ class DetailDemoActivity : AppCompatActivity() {
             R.id.btn_detail_demo_close -> {
                 this@DetailDemoActivity.finish()
             }
-            R.id.detail_activity_cheer_view -> {
-                //TODO 응원해요
-            }
-            R.id.detail_activity_sad_view -> {
-                //TODO 슬퍼요
-            }
-            R.id.detail_activity_anger_view -> {
-                //TODO 화나요
+            R.id.btn_detail_activity_demo_like -> {
+                setFeel(Feel.LIKE, detailEventData?.eventsFeelData?.like!!)
             }
             R.id.detail_activity_unlike_view -> {
-                //TODO 별로에요
+                setFeel(Feel.NOLIKE, detailEventData?.eventsFeelData?.noLike!!)
             }
-            R.id.btn_detail_activity_demo_like -> {
-                //TODO 좋아요
-
+            R.id.detail_activity_cheer_view -> {
+                setFeel(Feel.CHEER, detailEventData?.eventsFeelData?.cheer!!)
+            }
+            R.id.detail_activity_sad_view -> {
+                setFeel(Feel.SAD, detailEventData?.eventsFeelData?.sad!!)
+            }
+            R.id.detail_activity_anger_view -> {
+                setFeel(Feel.ANGER, detailEventData?.eventsFeelData?.anger!!)
             }
             R.id.btn_detail_activity_demo_share -> {
-                //TODO 공유하기
                 val sendIntent = Intent()
                 sendIntent.type = "text/plain"
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "TEST")
@@ -311,11 +313,39 @@ class DetailDemoActivity : AppCompatActivity() {
                 startActivity(chooser)
             }
             R.id.detail_activity_enrol_comment -> {
-                //TODO 댓글 등록
                 writeReply()
             }
 
         }
+    }
+
+    enum class Feel constructor(value: Int) {
+        LIKE(0),
+        NOLIKE(1),
+        CHEER(2),
+        SAD(3),
+        ANGER(4);
+
+        val Value = value
+    }
+
+    fun setFeel(feel: Feel, flag: Boolean) {
+        HttpUtil.getHttpService().setFeel(feedID!!, Consts.DEVICE_ID, feel.Value, flag).enqueue(object : Callback<ResultData> {
+            override fun onFailure(call: Call<ResultData>?, t: Throwable?) {
+            }
+
+            override fun onResponse(call: Call<ResultData>?, response: Response<ResultData>?) {
+                val resultCommand = ResultData.ResultCommand.findCommand(response?.body()?.resultCode!!)
+                when (resultCommand) {
+                    ResultData.ResultCommand.SUCCESS -> {
+                        getData(feedID!!, Consts.DEVICE_ID)
+                    }
+                    ResultData.ResultCommand.FAIL -> {
+
+                    }
+                }
+            }
+        })
     }
 
     fun writeReply() {

@@ -29,4 +29,7 @@ public interface HttpInterface {
 
     @GET("/api/events/reply/write")
     Call<ResultData> writeReply(@Query("pid") long pid, @Query("device_id") String deviceID, @Query("text") String text);
+
+    @GET("/api/events/feel")
+    Call<ResultData> setFeel(@Query("pid") long pid, @Query("device_id") String deviceID, @Query("feel") int feel, @Query("yn") boolean yn);
 }
