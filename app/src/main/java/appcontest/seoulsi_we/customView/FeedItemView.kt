@@ -10,6 +10,7 @@ import android.view.ViewTreeObserver
 import android.widget.*
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.Utils
+import appcontest.seoulsi_we.activity.MainActivity.Companion.mainWidth
 import appcontest.seoulsi_we.model.FeedData
 import appcontest.seoulsi_we.service.HttpUtil
 import com.squareup.picasso.Picasso
@@ -78,48 +79,57 @@ class FeedItemView : LinearLayout {
             image?.clipToOutline = true
         }
 
-        viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
+        if (null == mainWidth) {
+            viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
 
 
-                // 기기별 해상도가 달라서 wrap_content로 크기를 지정하면, 화면이 작은 기기에서는 뷰를 벗어나는 경우가 발생한다.
-                // 픽셀로 계산하여 직접 크기들을 지정한다.
+                    // 기기별 해상도가 달라서 wrap_content로 크기를 지정하면, 화면이 작은 기기에서는 뷰를 벗어나는 경우가 발생한다.
+                    // 픽셀로 계산하여 직접 크기들을 지정한다.
+                    if (0 < width) {
+                        mainWidth = width
+                    }
+                    changeViewSize(width)
 
-                layoutParams = AbsListView.LayoutParams(width, LayoutParams.WRAP_CONTENT)
-                imageContainer?.layoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, width)
-
-                // bottom 뷰 사이즈를 0.15배로 설정하고
-                val bottomSize = (width * 0.15).toInt()
-                val bottomLayoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, bottomSize)
-
-                // bottom 뷰의 top margin을 bottom Size의 0.3배로 설정
-                bottomLayoutParams.topMargin = (bottomSize * 0.3).toInt()
-                feedBottomView?.layoutParams = bottomLayoutParams
-
-                // 나머지 텍스트 뷰들의 텍스트 크기를 지정
-                val timerParams = ConstraintLayout.LayoutParams(bottomSize, bottomSize)
-                ivTimer?.layoutParams = timerParams
-                val timerPadding = (bottomSize * 0.12).toInt()
-                ivTimer?.setPadding(timerPadding, timerPadding, timerPadding, timerPadding)
-                val textDp = Utils.convertPixelsToDp((bottomSize * 0.4).toFloat(), mContext)
-                tvTime?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
-                tvTime?.setPadding((bottomSize * 0.2).toInt(), 0, 0, 0)
-                tvLikeCount?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
-                tvCommentCount?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
-
-
-                val tvCommentLayoutParams = btnComment?.layoutParams as ConstraintLayout.LayoutParams
-                tvCommentLayoutParams.leftMargin = (bottomSize * 0.1).toInt()
-
-
-                viewTreeObserver.removeOnGlobalLayoutListener(this)
-            }
-        })
-
+                    viewTreeObserver.removeOnGlobalLayoutListener(this)
+                }
+            })
+        } else {
+            changeViewSize(mainWidth!!)
+        }
     }
 
+    private fun changeViewSize(width: Int) {
+        layoutParams = AbsListView.LayoutParams(width, LayoutParams.WRAP_CONTENT)
+        imageContainer?.layoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, width)
+
+        // bottom 뷰 사이즈를 0.15배로 설정하고
+        val bottomSize = (width * 0.15).toInt()
+        val bottomLayoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, bottomSize)
+
+        // bottom 뷰의 top margin을 bottom Size의 0.3배로 설정
+        bottomLayoutParams.topMargin = (bottomSize * 0.3).toInt()
+        feedBottomView?.layoutParams = bottomLayoutParams
+
+        // 나머지 텍스트 뷰들의 텍스트 크기를 지정
+        val timerParams = ConstraintLayout.LayoutParams(bottomSize, bottomSize)
+        ivTimer?.layoutParams = timerParams
+        val timerPadding = (bottomSize * 0.12).toInt()
+        ivTimer?.setPadding(timerPadding, timerPadding, timerPadding, timerPadding)
+        val textDp = Utils.convertPixelsToDp((bottomSize * 0.4).toFloat(), mContext)
+        tvTime?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
+        tvTime?.setPadding((bottomSize * 0.2).toInt(), 0, 0, 0)
+        tvLikeCount?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
+        tvCommentCount?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textDp)
+
+
+        val tvCommentLayoutParams = btnComment?.layoutParams as ConstraintLayout.LayoutParams
+        tvCommentLayoutParams.leftMargin = (bottomSize * 0.1).toInt()
+    }
+
+
     private fun applyData(mData: FeedData?) {
-        Picasso.with(mContext).load(String.format("%s%s", HttpUtil.URL,mData?.imageUrl)).into(image)
+        Picasso.with(mContext).load(String.format("%s%s", HttpUtil.URL, mData?.imageUrl)).into(image)
         tvTitle?.text = mData?.title
         tvAddress?.text = mData?.address?.get(0)?.placeName
 
@@ -139,7 +149,7 @@ class FeedItemView : LinearLayout {
                 calendar.get(Calendar.DATE),
                 AmPmStr,
                 calendar.get(Calendar.HOUR)
-                )
+        )
 
         tvLikeCount?.text = mData?.likeCount.toString()
         // TODO 좋아요 여부도 표시해야 함. mData?.isLike 를 가지고...

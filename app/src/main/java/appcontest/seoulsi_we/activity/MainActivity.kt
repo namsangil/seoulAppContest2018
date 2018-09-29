@@ -40,6 +40,10 @@ import java.util.*
 class MainActivity : BaseActivity() {
     private val PERMISSIONS_CODE = 1101         // 위치 퍼미션
 
+    companion object {
+        var mainWidth : Int? = null
+    }
+
     private var mDrawer: DrawerLayout? = null
     private var toolbar: Toolbar? = null
     private var nvDrawer: NavigationView? = null
