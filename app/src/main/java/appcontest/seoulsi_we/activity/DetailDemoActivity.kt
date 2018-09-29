@@ -65,7 +65,7 @@ class DetailDemoActivity : AppCompatActivity() {
 
     private var commentContainer: LinearLayout? = null
 
-    private var feedData: FeedDetailData? = null
+    private var detailEventData: FeedDetailData? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,8 +93,8 @@ class DetailDemoActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<FeedDetailData>?, response: Response<FeedDetailData>?) {
-                feedData = response?.body()
-                updateUI(feedData!!)
+                detailEventData = response?.body()
+                updateUI(detailEventData!!)
             }
         })
     }
@@ -314,5 +314,29 @@ class DetailDemoActivity : AppCompatActivity() {
                 startActivity(chooser)
             }
         }
+    }
+
+    fun pan(v: View) {
+        when (v.id) {
+            R.id.detail_activity_start_location_container -> {
+                detailEventData?.feedData?.address ?: return
+                if (0 < detailEventData?.feedData?.address?.size!!) {
+                    val addressData = detailEventData?.feedData?.address!![0]
+                    setPosition(addressData.lat, addressData.lon)
+                }
+            }
+            R.id.detail_activity_end_location_container -> {
+                detailEventData?.feedData?.address ?: return
+                if (0 < detailEventData?.feedData?.address?.size!!) {
+                    val size = detailEventData?.feedData?.address?.size!!
+                    val addressData = detailEventData?.feedData?.address!![size-1]
+                    setPosition(addressData.lat, addressData.lon)
+                }
+            }
+        }
+    }
+
+    fun setPosition(lat: Double?, lon: Double?) {
+        webView?.loadUrl("javascript:panTo(" + lat + "," + lon + ")")
     }
 }

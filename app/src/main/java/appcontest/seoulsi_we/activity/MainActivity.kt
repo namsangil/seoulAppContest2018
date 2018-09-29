@@ -107,7 +107,6 @@ class MainActivity : BaseActivity() {
         feedAdapter = FeedListAdapter()
         feedListContainer?.adapter = feedAdapter
         feedListContainer?.setOnItemClickListener({ parent, view, position, id ->
-            Toast.makeText(this@MainActivity, "feed id : " + feedAdapter?.getItem(position)?.feedId, Toast.LENGTH_SHORT).show()
             val intent = Intent(this@MainActivity, DetailDemoActivity::class.java)
             intent.putExtra(FEED_ID_KEY, feedAdapter?.getItem(position)?.feedId)
             startActivity(intent)
@@ -178,7 +177,7 @@ class MainActivity : BaseActivity() {
             R.id.setting                  // 설정 버튼
             -> {
                 mDrawer!!.closeDrawers()
-                Toast.makeText(this@MainActivity, getString(R.string.setting), Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@MainActivity, getString(R.string.setting), Toast.LENGTH_SHORT).show()
             }
             R.id.btn_navigation_close
             -> {
