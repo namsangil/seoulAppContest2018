@@ -106,8 +106,7 @@
                             android:layout_height="wrap_content"
                             android:background="@null"
                             android:hint="@string/word_promoter"
-                            android:maxLength="10"
-                            android:maxLines="1"
+                            android:inputType="text"
                             android:padding="15dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#757778" />
@@ -140,6 +139,7 @@
                             android:layout_height="wrap_content"
                             android:background="@null"
                             android:hint="@string/word_title"
+                            android:inputType="text"
                             android:maxLength="10"
                             android:maxLines="1"
                             android:padding="15dp"
