@@ -65,7 +65,7 @@ class MapActivity : BaseActivity() {
         private var date: TextView? = null
         private var likeCount: TextView? = null
         private var commentCount: TextView? = null
-        private var feedID: Int? = null
+        private var feedID: Long? = null
 
         var view: View? = container
             get() = container
@@ -181,7 +181,7 @@ class MapActivity : BaseActivity() {
             handler.post({
                 Log.d("android", "onSelectItem(" + arg + ")")
                 try {
-                    val id = Integer.parseInt(arg)
+                    val id = arg.toLong()
 
                     val data: FeedData? = findFeed(id)
 
@@ -254,7 +254,7 @@ class MapActivity : BaseActivity() {
     }
 
 
-    private fun findFeed(id: Int): FeedData? {
+    private fun findFeed(id: Long): FeedData? {
 
         for (feedData in feedList) {
             if (feedData.feedId == id) {

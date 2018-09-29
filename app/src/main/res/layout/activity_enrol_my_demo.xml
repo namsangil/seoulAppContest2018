@@ -108,7 +108,6 @@
                             android:hint="@string/word_promoter"
                             android:maxLength="10"
                             android:maxLines="1"
-                            android:onClick="onClicked"
                             android:padding="15dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#757778" />
@@ -125,19 +124,42 @@
                     android:layout_marginTop="15dp"
                     android:background="@drawable/enrol_demo_border_normal">
 
-                    <EditText
-                        android:id="@+id/enrol_aim"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="1dp"
                         android:background="#f8f8f8"
-                        android:gravity="top"
-                        android:hint="@string/word_aim"
-                        android:minHeight="130dp"
-                        android:padding="15dp"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="#757778" />
+                        android:divider="@drawable/enrol_demo_list_divider"
+                        android:dividerPadding="1dp"
+                        android:orientation="vertical"
+                        android:showDividers="middle">
 
+                        <EditText
+                            android:id="@+id/enrol_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:hint="@string/word_title"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:padding="15dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#757778" />
+
+                        <EditText
+                            android:id="@+id/enrol_aim"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="1dp"
+                            android:background="@null"
+                            android:gravity="top"
+                            android:hint="@string/word_aim"
+                            android:minHeight="130dp"
+                            android:padding="15dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#757778" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <TextView
@@ -152,10 +174,10 @@
                     android:id="@+id/activity_enrol_photo_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:onClick="onClicked"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/enrol_demo_border_normal"
+                    android:onClick="onClicked"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -177,8 +199,7 @@
                 <ImageView
                     android:id="@+id/certificate_photo_image"
                     android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    />
+                    android:layout_height="120dp" />
 
             </LinearLayout>
 

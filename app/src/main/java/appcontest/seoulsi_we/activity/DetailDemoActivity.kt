@@ -72,7 +72,7 @@ class DetailDemoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_demo)
 
-        val feedID = intent.getIntExtra(FEED_ID_KEY, -1)
+        val feedID = intent.getLongExtra(FEED_ID_KEY, -1)
 
         if (feedID < 0) {
             throw IllegalArgumentException("0 이상이 피드 아이디를 넘겨받아야 합니다.")
@@ -86,7 +86,7 @@ class DetailDemoActivity : AppCompatActivity() {
 
     }
 
-    private fun getData(feedID: Int, deviceID : String) {
+    private fun getData(feedID: Long, deviceID : String) {
         HttpUtil.getHttpService().getEvent(feedID, deviceID).enqueue(object : Callback<FeedDetailData> {
             override fun onFailure(call: Call<FeedDetailData>?, t: Throwable?) {
 

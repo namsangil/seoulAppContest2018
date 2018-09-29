@@ -40,7 +40,7 @@ import com.google.gson.annotations.SerializedName
 
 class FeedData {
 
-    @SerializedName("pid") var feedId: Int? = null           // 등록번호
+    @SerializedName("pid") var feedId: Long? = null           // 등록번호
     @SerializedName("title") var title: String? = null
     @SerializedName("subtitle") var subTitle: String? = null
     @SerializedName("date") var date: Long? = null
@@ -83,8 +83,6 @@ class FeedData {
         {
             return false
         }
-
-        certImageUrl ?: return false
 
         return true
     }

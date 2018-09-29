@@ -1,15 +1,18 @@
 package appcontest.seoulsi_we.activity
 
-import android.app.Activity
-import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+import android.Manifest
+import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +22,19 @@ import android.widget.*
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.dialog.SelectLocationDialog
 import appcontest.seoulsi_we.model.FeedData
+import appcontest.seoulsi_we.model.ResultData
+import appcontest.seoulsi_we.service.HttpUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.enrol_place_view.view.*
+import org.json.JSONArray
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.*
+import java.net.HttpURLConnection
+import java.net.MalformedURLException
+import java.net.URL
 import java.util.*
 
 
@@ -33,6 +47,7 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
 
     private var dateTextView: TextView? = null
     private var promoterEditText: EditText? = null
+    private var titleEditText: EditText? = null
     private var aimEditText: EditText? = null
     private var addPlaceButton: ImageView? = null
 
@@ -43,8 +58,9 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
     private var photoUri: Uri? = null
     private var currentPhotoPath: String? = null //실제 사진 파일 경로
     private var mImageCaptureName: String? = null //이미지 이름
+    private var fileFullPath: String? = null
 
-    private var certificationImage : ImageView? = null
+    private var certificationImage: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +71,7 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
 
         dateTextView = findViewById(R.id.enrol_time)
         promoterEditText = findViewById(R.id.enrol_promoter)
+        titleEditText = findViewById(R.id.enrol_title)
         aimEditText = findViewById(R.id.enrol_aim)
 
         placeContainer = findViewById(R.id.enrol_location_container)
@@ -121,14 +138,29 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
                 dialog.show(fragmentManager, "DialogFragment")
             }
             R.id.send_demo -> {
+                val fileNameByDataBase = Calendar.getInstance().timeInMillis.toString() + ".jpg"
+
+                enrolFeedData.feedId = Calendar.getInstance().timeInMillis
+                enrolFeedData.title = titleEditText?.text.toString()
                 enrolFeedData.host = promoterEditText?.text.toString()
                 enrolFeedData.content = aimEditText?.text.toString()
                 if (enrolFeedData.isEmptyForEnrol()) {
                     // TODO 데이터를 전송한다.
-                    Toast.makeText(this@EnrolMyDemoActivity, "데이터를 전송합니다..", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@EnrolMyDemoActivity, "데이터를 전송합니다..", Toast.LENGTH_SHORT).show()
+                    if (null == fileFullPath) {
+
+                    } else {
+                        dialog = ProgressDialog.show(this@EnrolMyDemoActivity, "전송중", "")
+                        Thread({
+                            // 파일 전송부터 시작. 콜백으로 성공적으로 파일 업로드가 성공하면, 데이터베이스에 write를 한다.
+                            uploadFile(fileFullPath!!, fileNameByDataBase)
+                        }).start()
+                    }
                 } else {
                     Toast.makeText(this@EnrolMyDemoActivity, "입력되지 않은 데이터가 있습니다.", Toast.LENGTH_SHORT).show()
                 }
+
+
             }
             R.id.enrol_demo_add_place_button -> {
                 val dialog = SelectLocationDialog.newInstance()
@@ -136,7 +168,6 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
                 dialog.show(fragmentManager, "DialogFragment")
             }
             R.id.activity_enrol_photo_button -> {
-                Toast.makeText(this@EnrolMyDemoActivity, "사진을 등록하려고 합니다.", Toast.LENGTH_SHORT).show()
                 selectPhotoByGallery()
             }
 
@@ -144,10 +175,24 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
     }
 
     fun selectPhotoByGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.data = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        intent.type = "image/*"
-        startActivityForResult(intent, GALLERY_CODE)
+        if (true == checkLocationPermission()) {
+            Toast.makeText(this@EnrolMyDemoActivity, "사진을 등록합니다.", Toast.LENGTH_SHORT).show()
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.data = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            intent.type = "image/*"
+            startActivityForResult(intent, GALLERY_CODE)
+        }
+    }
+
+    fun checkLocationPermission(): Boolean {
+        // M 버전 이상이면 묻지 않고 true 리턴
+        if (Build.VERSION_CODES.M <= Build.VERSION.SDK_INT) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+                return false
+            }
+        }
+        return true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -160,16 +205,17 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
         }
     }
 
-    private fun sendPicture(imgUri : Uri){
+    private fun sendPicture(imgUri: Uri) {
+        fileFullPath = getRealPathFromURI(imgUri)
         Picasso.with(this@EnrolMyDemoActivity).load(imgUri).fit().centerCrop().into(certificationImage)
     }
 
 
-    private fun getRealPathFromURI(contentUri : Uri) : String{
+    private fun getRealPathFromURI(contentUri: Uri): String {
         var columnIndex = 0
-        var proj : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor : Cursor = contentResolver.query(contentUri, proj, null, null, null)
-        if(cursor.moveToFirst()){
+        var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor = contentResolver.query(contentUri, proj, null, null, null)
+        if (cursor.moveToFirst()) {
             columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         }
 
@@ -270,5 +316,172 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
         enrolFeedData.date = startCalendar.timeInMillis
         enrolFeedData.startTime = startCalendar.get(Calendar.HOUR_OF_DAY)
         enrolFeedData.endTime = endCalendar.get(Calendar.HOUR_OF_DAY)
+    }
+
+    var dialog: ProgressDialog? = null
+    var upLoadServerUri: String = HttpUtil.URL + "api/photo"
+    var serverResponseCode = 0
+
+    fun uploadFile(sourceFileUri: String, fileNameByDataBase: String): Int {
+
+
+        val fileName = sourceFileUri
+
+        var conn: HttpURLConnection? = null
+        var dos: DataOutputStream? = null
+        val lineEnd = "\r\n"
+        val twoHyphens = "--"
+        val boundary = "*****"
+        var bytesRead: Int
+        var bytesAvailable: Int
+        var bufferSize: Int
+        val buffer: ByteArray
+        val maxBufferSize = 1 * 1024 * 1024
+        val sourceFile = File(sourceFileUri)
+
+        if (!sourceFile.isFile()) {
+
+            dialog?.dismiss()
+
+            return 0
+
+        } else {
+            try {
+
+                // open a URL connection to the Servlet
+                val fileInputStream = FileInputStream(sourceFile)
+                val url = URL(upLoadServerUri)
+
+                // Open a HTTP  connection to  the URL
+                conn = url.openConnection() as HttpURLConnection
+                conn.setDoInput(true) // Allow Inputs
+                conn.setDoOutput(true) // Allow Outputs
+                conn.setUseCaches(false) // Don't use a Cached Copy
+                conn.setRequestMethod("POST")
+                conn.setRequestProperty("Connection", "Keep-Alive")
+                conn.setRequestProperty("ENCTYPE", "multipart/form-data")
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=$boundary")
+                conn.setRequestProperty("uploaded_file", fileName)
+
+                dos = DataOutputStream(conn.getOutputStream())
+
+                dos.writeBytes(twoHyphens + boundary + lineEnd)
+                dos.writeBytes("Content-Disposition: form-data; name=\"photo\";filename=\""
+                        + fileNameByDataBase + "\"" + lineEnd)
+
+                dos.writeBytes(lineEnd)
+
+                // create a buffer of  maximum size
+                bytesAvailable = fileInputStream.available()
+
+                bufferSize = Math.min(bytesAvailable, maxBufferSize)
+                buffer = ByteArray(bufferSize)
+
+                // read file and write it into form...
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize)
+
+                while (bytesRead > 0) {
+
+                    dos.write(buffer, 0, bufferSize)
+                    bytesAvailable = fileInputStream.available()
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize)
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize)
+
+                }
+
+                // send multipart form data necesssary after file data...
+                dos.writeBytes(lineEnd)
+                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd)
+
+                // Responses from the server (code and message)
+                serverResponseCode = conn.getResponseCode()
+                val serverResponseMessage = conn.getResponseMessage()
+
+                Log.i("uploadFile", "HTTP Response is : "
+                        + serverResponseMessage + ": " + serverResponseCode)
+
+                if (serverResponseCode === 200) {
+                    val input = BufferedReader(InputStreamReader(conn.getInputStream()), 8192)
+                    val response = StringBuilder()
+                    var strLine: String? = null
+                    while (run { strLine = input.readLine(); strLine != null }) {
+                        response.append(strLine)
+                    }
+                    input.close()
+
+                    val obj = JSONObject(response.toString())
+                    val resultCode = ResultData.ResultCommand.findCommand(obj.getInt("result"))
+
+                    if (resultCode == ResultData.ResultCommand.SUCCESS) {
+                        enrolFeedData.certImageUrl = fileNameByDataBase
+                        sendData()
+                    }
+
+                    runOnUiThread {
+                        val msg = "File Upload Completed.\n\n See uploaded file here : \n\n" + response.toString()
+
+//                        Toast.makeText(this@EnrolMyDemoActivity, "File Upload Complete. " + resultCode, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                //close the streams //
+                fileInputStream.close()
+                dos.flush()
+                dos.close()
+
+            } catch (ex: MalformedURLException) {
+
+                dialog?.dismiss()
+                ex.printStackTrace()
+
+                runOnUiThread {
+                    Toast.makeText(this@EnrolMyDemoActivity, "MalformedURLException", Toast.LENGTH_SHORT).show()
+                }
+
+                Log.e("Upload file to server", "error: " + ex.message, ex)
+            } catch (e: Exception) {
+
+                dialog?.dismiss()
+                e.printStackTrace()
+
+                runOnUiThread {
+//                    Toast.makeText(this@EnrolMyDemoActivity, "Got Exception : see logcat ", Toast.LENGTH_SHORT).show()
+                }
+                Log.e("Upload file Exception", "Exception : " + e.message, e)
+            }
+
+            dialog?.dismiss()
+            return serverResponseCode
+
+        } // End else block
+    }
+
+    fun sendData() {
+
+        val placeArray = JSONArray()
+        for (place in placeList) {
+            val placeObject = JSONObject()
+            placeObject.put("placeName", place.placeName)
+            placeObject.put("location", place.location)
+            placeObject.put("lat", place.lat)
+            placeObject.put("lon", place.lon)
+            placeArray.put(placeObject)
+        }
+
+        HttpUtil.getHttpService().writeEvent(enrolFeedData.feedId!!, enrolFeedData.date!!, enrolFeedData.startTime!!,
+                enrolFeedData.endTime!!, enrolFeedData.title, enrolFeedData.content, enrolFeedData.host, placeArray,
+                enrolFeedData.certImageUrl).enqueue(object : Callback<ResultData> {
+            override fun onFailure(call: Call<ResultData>?, t: Throwable?) {
+                Log.d("namsang", "nanana")
+            }
+
+            override fun onResponse(call: Call<ResultData>?, response: Response<ResultData>?) {
+                val resultData = response?.body()
+                val resultCommand = ResultData.ResultCommand.findCommand(resultData?.resultCode!!)
+                if (resultCommand == ResultData.ResultCommand.SUCCESS) {
+                    finish()
+                }
+            }
+        })
     }
 }

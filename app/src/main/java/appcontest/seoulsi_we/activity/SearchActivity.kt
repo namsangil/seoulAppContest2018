@@ -248,7 +248,7 @@ class SearchActivity : BaseActivity() {
             var dateTextView: TextView? = null
             var likeCountTextView: TextView? = null
             var replyCountTextView: TextView? = null
-            var feedID: Int = -1
+            var feedID: Long = -1
 
             init {
                 imageView = view.findViewById(R.id.map_feed_item_image)
@@ -291,7 +291,7 @@ class SearchActivity : BaseActivity() {
         }
     }
 
-    fun startDetailActivity(feedID: Int) {
+    fun startDetailActivity(feedID: Long) {
         val intent = Intent(this@SearchActivity, DetailDemoActivity::class.java)
         intent.putExtra(DetailDemoActivity.FEED_ID_KEY, feedID)
         startActivity(intent)
