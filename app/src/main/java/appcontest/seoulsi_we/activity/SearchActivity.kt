@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import appcontest.seoulsi_we.Consts
 import appcontest.seoulsi_we.R
@@ -31,6 +32,7 @@ import java.util.*
 class SearchActivity : BaseActivity() {
 
     private var searchEditText: EditText? = null
+    private var searchButton: ImageView? = null
     private val searchedData: ArrayList<FeedData> = ArrayList()
     private var searchedListView: RecyclerView? = null
     private var searchedFeedViewAdapter: SearchedFeedViewAdapter? = null
@@ -145,6 +147,9 @@ class SearchActivity : BaseActivity() {
             }
         })
 
+        searchButton = findViewById(R.id.navigation_toolbar_search_button)
+        searchButton?.setOnClickListener { search(searchEditText?.text.toString()) }
+
         fragmentContainer = findViewById(android.R.id.tabcontent)
         recommandContainer = findViewById(R.id.recommand_container)
         recentContainer = findViewById(R.id.recent_searched_container)
@@ -196,6 +201,11 @@ class SearchActivity : BaseActivity() {
     }
 
     private fun search(searchText: String?) {
+
+        // 키보드 숨김
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(searchEditText?.windowToken, 0)
+
         HttpUtil.getHttpService().searchEvents(searchText!!).enqueue(object : Callback<Array<FeedData>> {
             override fun onFailure(call: Call<Array<FeedData>>?, t: Throwable?) {
 
