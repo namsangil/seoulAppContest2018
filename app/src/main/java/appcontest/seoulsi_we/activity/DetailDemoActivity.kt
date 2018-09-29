@@ -86,7 +86,7 @@ class DetailDemoActivity : AppCompatActivity() {
 
     }
 
-    private fun getData(feedID: Long, deviceID : String) {
+    private fun getData(feedID: Long, deviceID: String) {
         HttpUtil.getHttpService().getEvent(feedID, deviceID).enqueue(object : Callback<FeedDetailData> {
             override fun onFailure(call: Call<FeedDetailData>?, t: Throwable?) {
 
@@ -155,7 +155,7 @@ class DetailDemoActivity : AppCompatActivity() {
 
     fun updateUI(data: FeedDetailData) {
         if (null != data.feedData?.imageUrl) {
-            Picasso.with(this@DetailDemoActivity).load(String.format("%s%s",HttpUtil.URL,data.feedData?.imageUrl)).into(feedImageView)
+            Picasso.with(this@DetailDemoActivity).load(String.format("%s%s", HttpUtil.URL, data.feedData?.imageUrl)).into(feedImageView)
         }
 
         if (null != data.feedData?.subTitle) {
@@ -186,11 +186,19 @@ class DetailDemoActivity : AppCompatActivity() {
 
         if (null != addArr) {
             if (addArr.isNotEmpty()) {
-                startLocationtextView?.text = addArr[0].placeName
+                if (addArr[0].placeName!!.isNotEmpty()) {
+                    startLocationtextView?.text = addArr[0].placeName
+                } else {
+                    startLocationtextView?.text = addArr[0].location
+                }
             }
 
             if (2 <= addArr.size) {
-                endLocationTextView?.text = addArr[addArr.size - 1].placeName
+                if (addArr[addArr.size - 1].placeName!!.isNotEmpty()) {
+                    endLocationTextView?.text = addArr[addArr.size - 1].placeName
+                } else {
+                    endLocationTextView?.text = addArr[addArr.size - 1].location
+                }
             } else {
                 endLocationContainer?.visibility = View.GONE
             }
@@ -227,7 +235,7 @@ class DetailDemoActivity : AppCompatActivity() {
 
         commentContainer?.removeAllViews()
 
-        for(comment in data.replyData!!){
+        for (comment in data.replyData!!) {
             val v = LayoutInflater.from(this@DetailDemoActivity).inflate(R.layout.demo_comment_view, null, false)
             v.comment_id.text = comment.deviceId
             v.comment_textbox.text = comment.text

@@ -463,8 +463,8 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
             val placeObject = JSONObject()
             placeObject.put("placeName", place.placeName)
             placeObject.put("location", place.location)
-            placeObject.put("lat", place.lat)
-            placeObject.put("lon", place.lon)
+            placeObject.put("lat", place.lat?.toString())
+            placeObject.put("lng", place.lon?.toString())
             placeArray.put(placeObject)
         }
 

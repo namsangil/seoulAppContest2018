@@ -38,8 +38,8 @@ class SelectLocationDialog : DialogFragment(), View.OnClickListener {
     private var locationManager: LocationManager? = null
     private var listener: SelectLocationDialogListener? = null
 
-    private var lat = ""            // 위도
-    private var lon = ""            // 경도
+    private var lat : Double? = null            // 위도
+    private var lon : Double? = null            // 경도
 
     var isFirstLocation = false
 
@@ -118,7 +118,7 @@ class SelectLocationDialog : DialogFragment(), View.OnClickListener {
         val handler = handler
 
         @JavascriptInterface
-        fun onSelectItem(lat: String, lon: String, loadAddress: String, address: String) { // must be final
+        fun onSelectItem(lon: Double, lat: Double, loadAddress: String, address: String) { // must be final
             handler.post({
 
                 this@SelectLocationDialog.lat = lat
@@ -168,7 +168,7 @@ class SelectLocationDialog : DialogFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         val textView = v as TextView
         val address = textView.text.toString()
-        listener?.onSelectedLocation(lat, lon, address, isFirstLocation)
+        listener?.onSelectedLocation(lat.toString(), lon.toString(), address, isFirstLocation)
 
         dismiss()
     }
