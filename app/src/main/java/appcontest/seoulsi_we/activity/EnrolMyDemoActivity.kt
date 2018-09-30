@@ -145,16 +145,22 @@ class EnrolMyDemoActivity : BaseActivity(), SelectLocationDialog.SelectLocationD
                 enrolFeedData.host = promoterEditText?.text.toString()
                 enrolFeedData.content = aimEditText?.text.toString()
                 if (enrolFeedData.isEmptyForEnrol()) {
-                    // TODO 데이터를 전송한다.
-//                    Toast.makeText(this@EnrolMyDemoActivity, "데이터를 전송합니다..", Toast.LENGTH_SHORT).show()
                     if (null == fileFullPath) {
 
                     } else {
-                        dialog = ProgressDialog.show(this@EnrolMyDemoActivity, "전송중", "")
-                        Thread({
-                            // 파일 전송부터 시작. 콜백으로 성공적으로 파일 업로드가 성공하면, 데이터베이스에 write를 한다.
-                            uploadFile(fileFullPath!!, fileNameByDataBase)
-                        }).start()
+                        val alertDialog = AlertDialog.Builder(this@EnrolMyDemoActivity)
+                        alertDialog.setMessage("집회 정보는 관리자의 최종 승인 후에 등록됩니다.\n전송하시겠습니까?")
+                        alertDialog.setPositiveButton("전송", {_, _->
+                            dialog = ProgressDialog.show(this@EnrolMyDemoActivity, "전송중", "")
+                            Thread({
+                                // 파일 전송부터 시작. 콜백으로 성공적으로 파일 업로드가 성공하면, 데이터베이스에 write를 한다.
+                                uploadFile(fileFullPath!!, fileNameByDataBase)
+                            }).start()
+                        })
+
+                        alertDialog.setNegativeButton("취소", null)
+                        alertDialog.create().show()
+
                     }
                 } else {
                     Toast.makeText(this@EnrolMyDemoActivity, "입력되지 않은 데이터가 있습니다.", Toast.LENGTH_SHORT).show()
