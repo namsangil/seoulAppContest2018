@@ -20,6 +20,7 @@ import android.widget.*
 import appcontest.seoulsi_we.Consts
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.model.FeedData
+import appcontest.seoulsi_we.model.SearchRecommendData
 import appcontest.seoulsi_we.service.HttpUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.searched_item_layout.view.*
@@ -45,7 +46,8 @@ class SearchActivity : BaseActivity() {
     private val SPLIT_CHAR_DATA = "&&"
     private val SPLIT_CHAR_OBJECT = "!!"
 
-    private val recentSearchedDataList: ArrayList<RecentSearchData> = ArrayList()
+    private val searchedKeywordDataList: ArrayList<SearchKeywordData> = ArrayList()
+    private val searchRecommendKeywordDataList: ArrayList<String> = ArrayList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,7 +108,7 @@ class SearchActivity : BaseActivity() {
 
                 var isExistKeyword = false
                 var idx = 0
-                for (searchData in recentSearchedDataList) {
+                for (searchData in searchedKeywordDataList) {
                     if (searchData.keyWord == text) {
                         isExistKeyword = true
                         break
@@ -119,13 +121,13 @@ class SearchActivity : BaseActivity() {
 
                 // 리스트에 존재하면 날짜만 변경하고 다시 저장
                 if (true == isExistKeyword) {
-                    recentSearchedDataList[idx] = RecentSearchData(text!!, date)
+                    searchedKeywordDataList[idx] = SearchKeywordData(text!!, date)
                 } else {
                     // 존재하지 않으면 추가로 저장
-                    recentSearchedDataList.add(RecentSearchData(text!!, date))
+                    searchedKeywordDataList.add(SearchKeywordData(text!!, date))
                 }
 
-                saveRecentSearchedKeywords(this@SearchActivity, recentSearchedDataList)
+                saveRecentSearchedKeywords(this@SearchActivity, searchedKeywordDataList)
 
                 search(text)
                 return@setOnEditorActionListener true
@@ -154,7 +156,7 @@ class SearchActivity : BaseActivity() {
         recommendContainer = findViewById(R.id.recommend_container)
         recentContainer = findViewById(R.id.recent_searched_container)
 
-        recentSearchedDataList.addAll(loadRecentSearchedKeywords(this@SearchActivity))
+        searchedKeywordDataList.addAll(loadRecentSearchedKeywords(this@SearchActivity))
 
         searchedListView = findViewById(R.id.searched_list_view)
         searchedListView?.adapter = searchedFeedViewAdapter
@@ -165,14 +167,32 @@ class SearchActivity : BaseActivity() {
 
         searchedFeedViewAdapter = SearchedFeedViewAdapter()
 
+        getRecommendData()
         updateUI()
+    }
+
+    private fun getRecommendData(){
+        searchRecommendKeywordDataList.clear()
+        HttpUtil.getHttpService().getRecommendList().enqueue(object: Callback<Array<SearchRecommendData>>{
+            override fun onFailure(call: Call<Array<SearchRecommendData>>?, t: Throwable?) {
+
+            }
+
+            override fun onResponse(call: Call<Array<SearchRecommendData>>?, response: Response<Array<SearchRecommendData>>?) {
+                for(data in response?.body()!!){
+                    searchRecommendKeywordDataList.add(data.keyword!!)
+                }
+                updateUI()
+            }
+        })
     }
 
     private fun updateUI() {
 
+        recommendContainer?.removeAllViews()
         recentContainer?.removeAllViews()
         var index = 0
-        for (data in recentSearchedDataList) {
+        for (data in searchedKeywordDataList) {
             val v = LayoutInflater.from(this@SearchActivity).inflate(R.layout.searched_item_layout, null, false)
             v.tag = index
             v.searched_view_keyword.text = data.keyWord
@@ -180,19 +200,37 @@ class SearchActivity : BaseActivity() {
             v.searched_view_delete.tag = index
             v.searched_view_delete.setOnClickListener({ view ->
                 val idx: Int = view.tag as Int
-                recentSearchedDataList.removeAt(idx)
-                saveRecentSearchedKeywords(this@SearchActivity, recentSearchedDataList)
+                searchedKeywordDataList.removeAt(idx)
+                saveRecentSearchedKeywords(this@SearchActivity, searchedKeywordDataList)
             })
 
             v.setOnClickListener({ view ->
                 val idx = view.tag as Int
-                searchEditText?.setText(recentSearchedDataList[idx].keyWord)
-                search(recentSearchedDataList[idx].keyWord)
+                searchEditText?.setText(searchedKeywordDataList[idx].keyWord)
+                search(searchedKeywordDataList[idx].keyWord)
 
-                val recentSearchedData = recentSearchedDataList[idx]
-                recentSearchedDataList.removeAt(idx)
-                recentSearchedDataList.add(0, recentSearchedData)
-                saveRecentSearchedKeywords(this@SearchActivity, recentSearchedDataList)
+                val recentSearchedData = searchedKeywordDataList[idx]
+                searchedKeywordDataList.removeAt(idx)
+                searchedKeywordDataList.add(0, recentSearchedData)
+                saveRecentSearchedKeywords(this@SearchActivity, searchedKeywordDataList)
+
+            })
+            recentContainer?.addView(v, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+            index++
+        }
+
+        index = 0
+        for(keyword in searchRecommendKeywordDataList){
+            val v = LayoutInflater.from(this@SearchActivity).inflate(R.layout.searched_item_layout, null, false)
+            v.tag = index
+            v.searched_view_keyword.text = keyword
+            v.searched_view_date.visibility = View.GONE
+            v.searched_view_delete.visibility = View.GONE
+
+            v.setOnClickListener({ view ->
+                val idx = view.tag as Int
+                searchEditText?.setText(searchRecommendKeywordDataList[idx])
+                search(searchRecommendKeywordDataList[idx])
 
             })
             recentContainer?.addView(v, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
@@ -310,8 +348,8 @@ class SearchActivity : BaseActivity() {
         startActivity(intent)
     }
 
-    fun loadRecentSearchedKeywords(activity: Activity): ArrayList<RecentSearchData> {
-        val list = ArrayList<RecentSearchData>()
+    fun loadRecentSearchedKeywords(activity: Activity): ArrayList<SearchKeywordData> {
+        val list = ArrayList<SearchKeywordData>()
         val sharedPreference = activity.getSharedPreferences(Consts.SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE)
         val data = sharedPreference.getString(Consts.RECENT_SEARCH_SHARED_PREFERENCE_KEY, "")
 
@@ -325,16 +363,16 @@ class SearchActivity : BaseActivity() {
                 break
             }
             val items = searchedData.split(SPLIT_CHAR_DATA)
-            val recentSearchedData = RecentSearchData(items[0], items[1])
+            val recentSearchedData = SearchKeywordData(items[0], items[1])
             list.add(recentSearchedData)
         }
 
         return list
     }
 
-    fun saveRecentSearchedKeywords(activity: Activity, recentSearchDatas: ArrayList<RecentSearchData>) {
+    fun saveRecentSearchedKeywords(activity: Activity, searchKeywordData: ArrayList<SearchKeywordData>) {
         val saveStr = StringBuilder()
-        for (recentSearchData in recentSearchDatas) {
+        for (recentSearchData in searchKeywordData) {
             saveStr.append(recentSearchData.keyWord)
                     .append(SPLIT_CHAR_DATA)
                     .append(recentSearchData.date)
@@ -350,7 +388,7 @@ class SearchActivity : BaseActivity() {
         updateUI()
     }
 
-    inner class RecentSearchData constructor(keyword: String, date: String) {
+    inner class SearchKeywordData constructor(keyword: String, date: String) {
         val keyWord = keyword
         val date = date
     }

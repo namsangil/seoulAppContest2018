@@ -7,6 +7,7 @@ import appcontest.seoulsi_we.model.BannerData;
 import appcontest.seoulsi_we.model.FeedData;
 import appcontest.seoulsi_we.model.FeedDetailData;
 import appcontest.seoulsi_we.model.ResultData;
+import appcontest.seoulsi_we.model.SearchRecommendData;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -36,4 +37,7 @@ public interface HttpInterface {
 
     @GET("/api/banner")
     Call<BannerData> getBanners();
+
+    @GET("/api/searchRecommend")
+    Call<SearchRecommendData[]> getRecommendList();
 }

@@ -206,6 +206,13 @@ class DetailDemoActivity : AppCompatActivity() {
             }
         }
 
+        if(true == data.eventsFeelData?.like){
+            likeImageView?.setImageResource(R.drawable.heart_red)
+        }
+        else{
+            likeImageView?.setImageResource(R.drawable.heart)
+        }
+
         cheerCountTextView?.text = data.feedData?.cheerCount?.toString()
         sadCountTextView?.text = data.feedData?.sadCount?.toString()
         angerCountTextView?.text = data.feedData?.angerCount?.toString()
