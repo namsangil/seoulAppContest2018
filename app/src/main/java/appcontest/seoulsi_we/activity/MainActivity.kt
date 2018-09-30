@@ -128,8 +128,11 @@ class MainActivity : BaseActivity() {
             override fun onResponse(call: Call<Array<FeedData>>, response: Response<Array<FeedData>>?) {
                 Log.d("namsang", "response")
                 for (data in response?.body()!!) {
-                    feedList.add(data)
+                    if (true == data.isConfirm) {
+                        feedList.add(data)
+                    }
                 }
+
                 feedAdapter!!.setData(feedList)
                 feedAdapter!!.notifyDataSetChanged()
             }

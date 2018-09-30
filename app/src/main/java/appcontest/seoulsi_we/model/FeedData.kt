@@ -60,6 +60,7 @@ class FeedData {
     @SerializedName("noLike_count") var noLikeCount : Int? = null
     @SerializedName("rimage") var imageUrl : String? = null
     @SerializedName("host") var host : String? = null
+    @SerializedName("confirm") var isConfirm : Boolean? = null
 
 
     class AddressData constructor(lat : Double, lon : Double, location : String, placeName : String){
