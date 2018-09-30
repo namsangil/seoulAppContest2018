@@ -70,6 +70,7 @@ class DetailDemoActivity : AppCompatActivity() {
     private var detailEventData: FeedDetailData? = null
 
     private var feedID: Long? = null
+    private var isInitialize : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -221,18 +222,20 @@ class DetailDemoActivity : AppCompatActivity() {
             arr.put(obj)
         }
 
-        Thread({
-            try {
-                Thread.sleep(1000)
-                runOnUiThread {
-                    webView?.loadUrl("javascript:setStartEndMarker(" + arr.toString() + ")")
+        if (!isInitialize) {
+            isInitialize = true
+            Thread({
+                try {
+                    Thread.sleep(1000)
+                    runOnUiThread {
+                        webView?.loadUrl("javascript:setStartEndMarker(" + arr.toString() + ")")
+                    }
+                } catch (e: InterruptedException) {
+
                 }
-            } catch (e: InterruptedException) {
 
-            }
-
-        }).start()
-
+            }).start()
+        }
 
         commentContainer?.removeAllViews()
 
