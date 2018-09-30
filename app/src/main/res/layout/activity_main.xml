@@ -119,6 +119,13 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1" />
 
+                    <CheckBox
+                        android:id="@+id/show_before_demo_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="지난 시위 보기"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"/>
                     <ImageView
                         android:id="@+id/iv_collect"
                         android:layout_width="80dp"

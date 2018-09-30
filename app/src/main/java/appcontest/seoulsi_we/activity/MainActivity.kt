@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
+import android.widget.CheckBox
 import android.widget.GridView
 import android.widget.TextView
 import android.widget.Toast
@@ -49,6 +50,9 @@ class MainActivity : BaseActivity() {
     private var nvDrawer: NavigationView? = null
     private var sliderShow: SliderLayout? = null
     private var feedListContainer: GridView? = null
+    private var showBeforeCheckBox: CheckBox? = null
+
+    private var isShowBeforeFeed = false
 
     private var feedAdapter: FeedListAdapter? = null
 
@@ -97,6 +101,12 @@ class MainActivity : BaseActivity() {
 
         sliderShow?.setCustomIndicator(findViewById(R.id.custom_indicator))
 
+        showBeforeCheckBox = findViewById(R.id.show_before_demo_checkbox)
+        showBeforeCheckBox?.setOnCheckedChangeListener({ button, isChecked ->
+            isShowBeforeFeed = isChecked
+            updateFeedList()
+        })
+
         // 피드 컨테이너
         feedListContainer = findViewById(R.id.feed_list_container)
         feedAdapter = FeedListAdapter()
@@ -113,6 +123,24 @@ class MainActivity : BaseActivity() {
         getData(0)
         getBanner()
 
+    }
+
+    private fun updateFeedList(){
+        val tmpFeedData = ArrayList<FeedData>()
+        if (isShowBeforeFeed) {
+            feedAdapter?.setData(feedList)
+        } else {
+            val currentTime = Calendar.getInstance()
+            for (feed in feedList) {
+
+                if(currentTime.timeInMillis < feed.date!!){
+                    tmpFeedData.add(feed)
+                }
+            }
+            feedAdapter?.setData(tmpFeedData)
+        }
+
+        feedAdapter?.notifyDataSetChanged()
     }
 
     private fun getData(condition: Int) {
@@ -133,8 +161,7 @@ class MainActivity : BaseActivity() {
                     }
                 }
 
-                feedAdapter!!.setData(feedList)
-                feedAdapter!!.notifyDataSetChanged()
+                updateFeedList()
             }
         })
 
