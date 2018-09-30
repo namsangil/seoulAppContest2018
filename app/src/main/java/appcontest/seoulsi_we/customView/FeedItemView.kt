@@ -131,10 +131,15 @@ class FeedItemView : LinearLayout {
     private fun applyData(mData: FeedData?) {
         Picasso.with(mContext).load(String.format("%s%s", HttpUtil.URL, mData?.imageUrl)).into(image)
         tvTitle?.text = mData?.title
-        tvAddress?.text = mData?.address?.get(0)?.placeName
+        if (mData?.address?.get(0)?.placeName!!.isNotEmpty()) {
+            tvAddress?.text = mData.address?.get(0)?.placeName
+        }
+        else{
+            tvAddress?.text = mData.address?.get(0)?.location
+        }
 
         val calendar = Calendar.getInstance()
-        calendar.timeInMillis = mData?.date!!
+        calendar.timeInMillis = mData.date!!
         val AmPmStr: String
 //        calendar.get(Calendar.AM_PM)
         if (Calendar.AM == calendar.get(Calendar.AM_PM)) {
@@ -151,8 +156,8 @@ class FeedItemView : LinearLayout {
                 calendar.get(Calendar.HOUR)
         )
 
-        tvLikeCount?.text = mData?.likeCount.toString()
+        tvLikeCount?.text = mData.likeCount.toString()
         // TODO 좋아요 여부도 표시해야 함. mData?.isLike 를 가지고...
-        tvCommentCount?.text = mData?.commentCount.toString()
+        tvCommentCount?.text = mData.commentCount.toString()
     }
 }

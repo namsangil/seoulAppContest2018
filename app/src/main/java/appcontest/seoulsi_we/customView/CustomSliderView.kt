@@ -9,7 +9,6 @@ import android.widget.TextView
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.model.BannerData
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
-import com.squareup.picasso.Picasso
 
 /**
  * Created by nam on 2018. 8. 12..
@@ -26,15 +25,15 @@ class CustomSliderView constructor(context: Context, data : BannerData, listener
         val tvTitleTime = view.findViewById<TextView>(R.id.slider_item_title_time)
         val tvTitleInfo = view.findViewById<TextView>(R.id.slider_item_title_info)
         val imageView = view.findViewById<ImageView>(R.id.slider_item_image)
-        Picasso.with(mContext).load(mData.imageUrl).into(imageView)
+//        Picasso.with(mContext).load(mData.imageUrl).into(imageView)
 
 
         title.setOnClickListener(this@CustomSliderView)
         imageView.setOnClickListener(this@CustomSliderView)
 
 
-        tvTitleTime.text = mData.time.toString()
-        tvTitleInfo.text = mData.description
+        tvTitleTime.text = mData.todayBanner?.date?.toString()
+        tvTitleInfo.text = "집회"
 
         return view
     }
