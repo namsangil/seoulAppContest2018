@@ -30,12 +30,6 @@
             android:orientation="vertical"
             android:showDividers="middle|end">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="오전 4시30분 공공연대노조 강서지회, 인천공항 국내선 앞, 임금인상 쟁취 집회" />
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

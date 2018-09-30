@@ -40,7 +40,7 @@ class BannerActivity : BaseActivity() {
 
         for (demo in demoList!!) {
             val textView = TextView(this@BannerActivity)
-            textView.setPadding(15, 40, 15, 40)
+            textView.setPadding(30, 60, 30, 60)
             textView.text = demo
             demoListContainer?.addView(textView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
         }
