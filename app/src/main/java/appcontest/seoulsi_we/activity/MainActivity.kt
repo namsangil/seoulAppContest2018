@@ -54,7 +54,7 @@ class MainActivity : BaseActivity() {
 
     private var drawerToggle: ActionBarDrawerToggle? = null     // 메뉴 버튼
 
-    private var toggleFeedOrderTextViews: Array<TextView>? = null   // 최신순, 인기순, 댓글순 ui변경을 위함
+    private var toggleFeedOrderTextViews: Array<TextView>? = null   // 등록순, 인기순, 댓글순 ui변경을 위함
 
     private var feedList: ArrayList<FeedData> = ArrayList()
     private var bannerData: BannerData? = null
@@ -92,7 +92,7 @@ class MainActivity : BaseActivity() {
         // 메인 슬라이드 뷰
         sliderShow = findViewById(R.id.slider)
 
-        // 최신순, 인기순, 댓글순 버튼
+        // 등록순, 인기순, 댓글순 버튼
         toggleFeedOrderTextViews = arrayOf(findViewById(R.id.tv_order_by_recent), findViewById(R.id.tv_order_by_join), findViewById(R.id.tv_order_by_comment))
 
         sliderShow?.setCustomIndicator(findViewById(R.id.custom_indicator))
@@ -237,11 +237,11 @@ class MainActivity : BaseActivity() {
         drawerToggle!!.syncState()
     }
 
-    // 최신순, 참여순, 댓글순 버튼 이벤트
+    // 등록순, 참여순, 댓글순 버튼 이벤트
     fun onClickFeedOrder(v: View) {
         when (v.id) {
             R.id.tv_order_by_recent -> {
-//                Toast.makeText(this@MainActivity, "최신순", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@MainActivity, "등록순", Toast.LENGTH_SHORT).show()
                 getData(0)
             }
             R.id.tv_order_by_join -> {

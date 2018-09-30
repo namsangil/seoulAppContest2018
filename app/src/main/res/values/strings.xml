@@ -8,12 +8,13 @@
     <string name="about_demo">집회시위 관련정보</string>
     <string name="promotion_demo">집회시위 홍보하기</string>
     <string name="setting">설정</string>
-    <string name="order_by_recent">최신순</string>
+    <string name="order_by_recent">등록순</string>
     <string name="order_by_bit">인기순</string>
     <string name="order_by_comment">댓글순</string>
     <string name="line_two">2018.7.20\n오후 7시</string>
 
     <string name="realtime_map">실시간 지도</string>
+    <string name="demo_location_map">등록 집회 위치</string>
     <string name="word_around">주변</string>
 
     <string name="test">아시아나 항공 \n4차 집회</string>

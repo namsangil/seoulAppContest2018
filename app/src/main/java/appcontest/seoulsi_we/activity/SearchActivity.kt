@@ -40,7 +40,7 @@ class SearchActivity : BaseActivity() {
     private var tabHost: TabHost? = null
 
     private var recentContainer: LinearLayout? = null
-    private var recommandContainer: LinearLayout? = null
+    private var recommendContainer: LinearLayout? = null
 
     private val SPLIT_CHAR_DATA = "&&"
     private val SPLIT_CHAR_OBJECT = "!!"
@@ -77,7 +77,7 @@ class SearchActivity : BaseActivity() {
 
         //Tab 1
         var spec: TabHost.TabSpec = host.newTabSpec("0")
-        spec.setContent(R.id.recommand_container_scrollview)
+        spec.setContent(R.id.recommend_container_scrollview)
         spec.setIndicator("추천 검색어")
         host.addTab(spec)
 
@@ -151,18 +151,19 @@ class SearchActivity : BaseActivity() {
         searchButton?.setOnClickListener { search(searchEditText?.text.toString()) }
 
         fragmentContainer = findViewById(android.R.id.tabcontent)
-        recommandContainer = findViewById(R.id.recommand_container)
+        recommendContainer = findViewById(R.id.recommend_container)
         recentContainer = findViewById(R.id.recent_searched_container)
 
         recentSearchedDataList.addAll(loadRecentSearchedKeywords(this@SearchActivity))
 
         searchedListView = findViewById(R.id.searched_list_view)
-        searchedFeedViewAdapter = SearchedFeedViewAdapter()
         searchedListView?.adapter = searchedFeedViewAdapter
         searchedListView?.layoutManager = LinearLayoutManager(this@SearchActivity)
         val divider = DividerItemDecoration(this@SearchActivity, LinearLayoutManager(this@SearchActivity).orientation)
         searchedListView?.addItemDecoration(divider)
         searchedFeedViewAdapter?.notifyDataSetChanged()
+
+        searchedFeedViewAdapter = SearchedFeedViewAdapter()
 
         updateUI()
     }

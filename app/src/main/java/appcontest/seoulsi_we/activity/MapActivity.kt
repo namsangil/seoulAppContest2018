@@ -13,6 +13,7 @@ import android.view.View
 import android.webkit.*
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.model.FeedData
 import appcontest.seoulsi_we.service.HttpUtil
@@ -46,11 +47,12 @@ class MapActivity : BaseActivity() {
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         val textView: TextView = findViewById(R.id.navigation_toolbar_title)
-        textView.text = getString(R.string.realtime_map)
+        textView.text = getString(R.string.demo_location_map)
 
 
         webView = findViewById<WebView>(R.id.webview)
         initWebView(webView)
+        Toast.makeText(this@MapActivity, "빨강(정체), 노랑(서행), 초록(원활)로\n실시간 교통정보가 표시됩니다", Toast.LENGTH_LONG).show()
 
         itemView = ItemView(this@MapActivity, findViewById(R.id.map_feed_item))
         itemView?.view?.visibility = View.GONE
