@@ -140,7 +140,12 @@ class MainActivity : BaseActivity() {
     fun addSlideView(view: SliderLayout?, data: BannerData.Banner) {
         val sliderView = CustomSliderView(this@MainActivity, data, object : CustomSliderView.CustomSliderViewListener {
             override fun onSliderClicked(data: BannerData.Banner) {
-//                Toast.makeText(this@MainActivity, String.format("banner id : %s", data.bannerId), Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@MainActivity, BannerActivity::class.java)
+
+                intent.putExtra(BannerActivity.DEMO_DATA_KEY, data.contents)
+                intent.putExtra(BannerActivity.DEMO_DATE_KEY, data.date)
+
+                startActivity(intent)
             }
         })
         sliderView.scaleType = BaseSliderView.ScaleType.CenterCrop

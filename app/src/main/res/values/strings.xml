@@ -22,7 +22,7 @@
     <string name="enrol_demo">집회시위 등록</string>
     <string name="description_enrol_demo"> ‘서울시위(WE)’ 앱을 통해 진행 예정인 집회시위를 등록하여 홍보 하실 수 있습니다. 아래 내용을 작성하여 ‘보내기’를눌러주세요.</string>
     <string name="description_enrol_demo_must_input_cert"> “신고 접수증을 첨부” 하셔야만 등록이 가능합니다.</string>
-        <string name="word_title">제목</string>
+    <string name="word_title">제목</string>
     <string name="word_aim">목적</string>
     <string name="word_date">일시</string>
     <string name="word_location">장소</string>
@@ -37,6 +37,7 @@
     <string name="word_today">오늘</string>
     <string name="word_yesterday">어제</string>
     <string name="format_date">%d년 %d월 %d일</string>
+    <string name="format_date_for_banner_activity">%d년 %d월 %d일 집회</string>
     <string name="time_format_end_hour">%d년 %d월 %d일 %d시</string>
     <string name="enrol_demo_time_format">%d년 %d월 %d일 %d시 - %d시</string>
     <string name="feed_list_time_format">%d.%d.%d\n%s %d시</string>
