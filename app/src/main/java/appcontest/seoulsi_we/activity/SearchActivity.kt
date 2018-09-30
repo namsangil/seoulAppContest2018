@@ -233,7 +233,7 @@ class SearchActivity : BaseActivity() {
                 search(searchRecommendKeywordDataList[idx])
 
             })
-            recentContainer?.addView(v, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+            recommendContainer?.addView(v, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
             index++
         }
 
