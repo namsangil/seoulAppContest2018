@@ -86,7 +86,7 @@ class MapActivity : BaseActivity() {
         }
 
         fun setData(data: FeedData?) {
-            Picasso.with(context).load(String.format("%s%s",HttpUtil.URL,data?.imageUrl)).into(imageView)
+            Picasso.with(context).load(String.format("%s%s", HttpUtil.URL, data?.imageUrl)).into(imageView)
             title?.text = data?.title
 
             val calendar = Calendar.getInstance()
@@ -159,7 +159,9 @@ class MapActivity : BaseActivity() {
                 Log.d("namsang", "response")
                 feedList.clear()
                 for (data in response?.body()!!) {
-                    feedList.add(data)
+                    if (true == data.isConfirm) {
+                        feedList.add(data)
+                    }
                 }
                 setMarker()
             }

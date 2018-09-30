@@ -214,7 +214,9 @@ class SearchActivity : BaseActivity() {
             override fun onResponse(call: Call<Array<FeedData>>?, response: Response<Array<FeedData>>?) {
                 searchedData.clear()
                 for (data in response?.body()!!) {
-                    searchedData.add(data)
+                    if (true == data.isConfirm) {
+                        searchedData.add(data)
+                    }
                 }
                 searchedFeedViewAdapter?.setData(searchedData)
                 searchedFeedViewAdapter?.notifyDataSetChanged()
