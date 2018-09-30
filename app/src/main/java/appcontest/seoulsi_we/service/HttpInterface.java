@@ -3,6 +3,7 @@ package appcontest.seoulsi_we.service;
 
 import org.json.JSONArray;
 
+import appcontest.seoulsi_we.model.BannerData;
 import appcontest.seoulsi_we.model.FeedData;
 import appcontest.seoulsi_we.model.FeedDetailData;
 import appcontest.seoulsi_we.model.ResultData;
@@ -32,4 +33,7 @@ public interface HttpInterface {
 
     @GET("/api/events/feel")
     Call<ResultData> setFeel(@Query("pid") long pid, @Query("device_id") String deviceID, @Query("feel") int feel, @Query("yn") boolean yn);
+
+    @GET("/api/banner")
+    Call<BannerData> getBanners();
 }

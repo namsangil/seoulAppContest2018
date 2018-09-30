@@ -9,11 +9,12 @@ import android.widget.TextView
 import appcontest.seoulsi_we.R
 import appcontest.seoulsi_we.model.BannerData
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
+import java.util.*
 
 /**
  * Created by nam on 2018. 8. 12..
  */
-class CustomSliderView constructor(context: Context, data : BannerData, listener: CustomSliderViewListener) : BaseSliderView(context), View.OnClickListener {
+class CustomSliderView constructor(context: Context, data: BannerData.Banner, listener: CustomSliderViewListener) : BaseSliderView(context), View.OnClickListener {
 
     val mListener = listener
     val mData = data
@@ -31,9 +32,46 @@ class CustomSliderView constructor(context: Context, data : BannerData, listener
         title.setOnClickListener(this@CustomSliderView)
         imageView.setOnClickListener(this@CustomSliderView)
 
+        val date = Calendar.getInstance()
+        date.time = mData.date!!
+        date.add(Calendar.HOUR_OF_DAY, -9)
+        val todayDate = Calendar.getInstance()
 
-        tvTitleTime.text = mData.todayBanner?.date?.toString()
-        tvTitleInfo.text = "집회"
+        var printText = ""
+
+        tvTitleInfo.text = mContext.getString(R.string.demo_list)
+
+        if(date.get(Calendar.YEAR) == todayDate.get(Calendar.YEAR)){
+            if(date.get(Calendar.MONTH)+1 == todayDate.get(Calendar.MONTH) +1){
+                if(date.get(Calendar.DATE) == todayDate.get(Calendar.DATE)){
+                    printText = mContext.getString(R.string.word_today)
+                }
+                else {
+                    // 어제일 수 있고, 그 이전일 수 있다.
+                    val tmpDate = Calendar.getInstance()
+                    tmpDate.add(Calendar.DATE, -1)
+                    if(date.get(Calendar.DATE) == tmpDate.get(Calendar.DATE)){
+                        printText = mContext.getString(R.string.word_yesterday)
+                    }
+                    else{
+                        printText = String.format(mContext.getString(R.string.format_date),
+                                date.get(Calendar.YEAR),
+                                date.get(Calendar.MONTH)+1,
+                                date.get(Calendar.DATE))
+                    }
+                }
+                tvTitleTime.text = printText
+                return view
+            }
+        }
+
+        printText = String.format(mContext.getString(R.string.format_date),
+                date.get(Calendar.YEAR),
+                date.get(Calendar.MONTH)+1,
+                date.get(Calendar.DATE))
+
+        tvTitleTime.text = printText
+
 
         return view
     }
@@ -43,6 +81,6 @@ class CustomSliderView constructor(context: Context, data : BannerData, listener
     }
 
     interface CustomSliderViewListener {
-        fun onSliderClicked(data : BannerData)
+        fun onSliderClicked(data: BannerData.Banner)
     }
 }

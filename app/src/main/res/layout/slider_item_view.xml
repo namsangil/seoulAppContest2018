@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#dddddd">
+    android:background="#2b2b2b">
 
 
     <FrameLayout
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="대규모 집회 리스트"
+                android:text="@string/demo_list"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textStyle="bold" />

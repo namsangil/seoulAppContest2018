@@ -41,7 +41,7 @@ class MainActivity : BaseActivity() {
     private val PERMISSIONS_CODE = 1101         // 위치 퍼미션
 
     companion object {
-        var mainWidth : Int? = null
+        var mainWidth: Int? = null
     }
 
     private var mDrawer: DrawerLayout? = null
@@ -57,6 +57,7 @@ class MainActivity : BaseActivity() {
     private var toggleFeedOrderTextViews: Array<TextView>? = null   // 최신순, 인기순, 댓글순 ui변경을 위함
 
     private var feedList: ArrayList<FeedData> = ArrayList()
+    private var bannerData: BannerData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,12 +95,6 @@ class MainActivity : BaseActivity() {
         // 최신순, 인기순, 댓글순 버튼
         toggleFeedOrderTextViews = arrayOf(findViewById(R.id.tv_order_by_recent), findViewById(R.id.tv_order_by_join), findViewById(R.id.tv_order_by_comment))
 
-        // 임시데이터) BannerData 클래스를 넘겨서 채운다.
-        addSlideView(sliderShow, BannerData(10, "https://search2.kakaocdn.net/argon/0x200_85_hr/ETtjfwGegTb", 10203, "대규모 집회 리스트"))
-        addSlideView(sliderShow, BannerData(15, "https://search2.kakaocdn.net/argon/0x200_85_hr/HJf5a3OiJXf", 5553, "시위정보"))
-        addSlideView(sliderShow, BannerData(1, "https://search4.kakaocdn.net/argon/0x200_85_hr/DCtJ1xT47kH", 2314, "테스트 데이터"))
-        addSlideView(sliderShow, BannerData(7, "https://search1.kakaocdn.net/argon/0x200_85_hr/LfVZqwj6fZI", 23331, "안녕하세요"))
-
         sliderShow?.setCustomIndicator(findViewById(R.id.custom_indicator))
 
         // 피드 컨테이너
@@ -116,24 +111,23 @@ class MainActivity : BaseActivity() {
         feedAdapter!!.notifyDataSetChanged()
 
         getData(0)
-
-
+        getBanner()
 
     }
 
-    private fun getData(condition : Int){
+    private fun getData(condition: Int) {
         feedList.clear()
         feedAdapter!!.setData(feedList)
         feedAdapter!!.notifyDataSetChanged()
 
         HttpUtil.getHttpService().getEvents(condition).enqueue(object : Callback<Array<FeedData>> {
             override fun onFailure(call: Call<Array<FeedData>>?, t: Throwable?) {
-                Log.d("namsang","fail")
+                Log.d("namsang", "fail")
             }
 
             override fun onResponse(call: Call<Array<FeedData>>, response: Response<Array<FeedData>>?) {
-                Log.d("namsang","response")
-                for(data in response?.body()!!){
+                Log.d("namsang", "response")
+                for (data in response?.body()!!) {
                     feedList.add(data)
                 }
                 feedAdapter!!.setData(feedList)
@@ -143,10 +137,10 @@ class MainActivity : BaseActivity() {
 
     }
 
-    fun addSlideView(view: SliderLayout?, data: BannerData) {
+    fun addSlideView(view: SliderLayout?, data: BannerData.Banner) {
         val sliderView = CustomSliderView(this@MainActivity, data, object : CustomSliderView.CustomSliderViewListener {
-            override fun onSliderClicked(data: BannerData) {
-                Toast.makeText(this@MainActivity, String.format("banner id : %s", data.bannerId), Toast.LENGTH_SHORT).show()
+            override fun onSliderClicked(data: BannerData.Banner) {
+//                Toast.makeText(this@MainActivity, String.format("banner id : %s", data.bannerId), Toast.LENGTH_SHORT).show()
             }
         })
         sliderView.scaleType = BaseSliderView.ScaleType.CenterCrop
@@ -187,6 +181,37 @@ class MainActivity : BaseActivity() {
 
         }
         mDrawer!!.closeDrawers()
+    }
+
+    private fun getBanner() {
+        HttpUtil.getHttpService().getBanners().enqueue(object : Callback<BannerData> {
+            override fun onFailure(call: Call<BannerData>?, t: Throwable?) {
+
+            }
+
+            override fun onResponse(call: Call<BannerData>?, response: Response<BannerData>?) {
+                bannerData = response?.body()
+                updateBanner()
+            }
+        })
+    }
+
+    private fun updateBanner() {
+        // 임시데이터) BannerData 클래스를 넘겨서 채운다.
+        if (null != bannerData?.todayBanner) {
+            addSlideView(sliderShow, bannerData?.todayBanner!!)
+        }
+
+        if (null != bannerData?.yesterdayBanner) {
+            addSlideView(sliderShow, bannerData?.yesterdayBanner!!)
+        }
+
+        if (null != bannerData?.recentWeekBanner) {
+            for (banner in bannerData?.recentWeekBanner!!) {
+                addSlideView(sliderShow, banner)
+            }
+        }
+
     }
 
 //region 슬라이드 메뉴 관련 메소드
