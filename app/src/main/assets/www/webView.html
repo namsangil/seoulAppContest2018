@@ -132,7 +132,7 @@ function setStartEndMarker(positions){
 
         addStartEndMarker(positions[0], startImage);
 
-        panTo(positions[0].lat, positions[1].lon);
+        panTo(positions[0].lat, positions[0].lon);
 
         if(2 <= positions.length){
             var endImageSize = new daum.maps.Size(80,90);
