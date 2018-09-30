@@ -241,7 +241,12 @@ class DetailDemoActivity : AppCompatActivity() {
 
         for (comment in data.replyData!!) {
             val v = LayoutInflater.from(this@DetailDemoActivity).inflate(R.layout.demo_comment_view, null, false)
-            v.comment_id.text = comment.deviceId
+            var deviceID = comment.deviceId
+            if(6 < deviceID?.length!!){
+                deviceID = deviceID.substring(deviceID.length - 6, deviceID.length)
+            }
+
+            v.comment_id.text = deviceID
             v.comment_textbox.text = comment.text
 
             commentContainer?.addView(v, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
