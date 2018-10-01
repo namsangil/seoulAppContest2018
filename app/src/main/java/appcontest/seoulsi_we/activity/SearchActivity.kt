@@ -159,13 +159,13 @@ class SearchActivity : BaseActivity() {
         searchedKeywordDataList.addAll(loadRecentSearchedKeywords(this@SearchActivity))
 
         searchedListView = findViewById(R.id.searched_list_view)
+        searchedFeedViewAdapter = SearchedFeedViewAdapter()
         searchedListView?.adapter = searchedFeedViewAdapter
         searchedListView?.layoutManager = LinearLayoutManager(this@SearchActivity)
         val divider = DividerItemDecoration(this@SearchActivity, LinearLayoutManager(this@SearchActivity).orientation)
         searchedListView?.addItemDecoration(divider)
         searchedFeedViewAdapter?.notifyDataSetChanged()
 
-        searchedFeedViewAdapter = SearchedFeedViewAdapter()
 
         getRecommendData()
         updateUI()
