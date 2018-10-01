@@ -12,7 +12,7 @@ public class HttpUtil {
 
     private Retrofit retrofit;
 
-    public static final String URL = "http://ec2-52-78-138-9.ap-northeast-2.compute.amazonaws.com:3000/";
+    public static final String URL = "http://2018appcontestseoul.tk:3000/";
 
 
     private HttpUtil() {
